@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Team Travel Budget — Sign In</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  background:#1d1d1f;min-height:100vh;display:flex;align-items:center;justify-content:center;}
+.card{background:#fff;border-radius:16px;padding:40px 44px;width:100%;max-width:380px;
+  box-shadow:0 20px 60px rgba(0,0,0,.4);}
+.logo{font-size:28px;text-align:center;margin-bottom:6px;}
+h1{font-size:20px;font-weight:700;text-align:center;color:#1d1d1f;margin-bottom:4px;}
+.sub{font-size:13px;color:#6e6e73;text-align:center;margin-bottom:28px;}
+label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;
+  letter-spacing:.07em;color:#6e6e73;margin-bottom:5px;}
+input{width:100%;border:1px solid #d2d2d7;border-radius:9px;padding:11px 14px;
+  font-size:14px;outline:none;font-family:inherit;color:#1d1d1f;transition:border-color .15s;}
+input:focus{border-color:#0071e3;box-shadow:0 0 0 3px rgba(0,113,227,.15);}
+.field{margin-bottom:16px;}
+.btn{width:100%;background:#0071e3;color:#fff;border:none;border-radius:9px;
+  padding:12px;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;
+  font-family:inherit;transition:opacity .15s;}
+.btn:hover{opacity:.88;}
+.btn:disabled{opacity:.5;cursor:default;}
+.error{background:#fde8e6;color:#c0392b;border-radius:8px;padding:10px 14px;
+  font-size:13px;margin-top:14px;display:none;}
+.error.show{display:block;}
+.footer{text-align:center;font-size:11px;color:#a1a1a6;margin-top:20px;}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">✈</div>
+  <h1>Team Travel Budget</h1>
+  <p class="sub">Sign in to your team workspace</p>
+  <form id="form" autocomplete="on">
+    <div class="field">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" placeholder="username" autocomplete="username" required autofocus/>
+    </div>
+    <div class="field">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password" required/>
+    </div>
+    <button type="submit" class="btn" id="submit-btn">Sign In</button>
+    <div class="error" id="error-msg"></div>
+  </form>
+  <p class="footer">FY 2026 · IS&amp;T Travel Planning</p>
+</div>
+<script>
+document.getElementById('form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  const err = document.getElementById('error-msg');
+  btn.disabled = true;
+  btn.textContent = 'Signing in…';
+  err.classList.remove('show');
+
+  try {
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: document.getElementById('username').value.trim(),
+        password: document.getElementById('password').value,
+      }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      window.location.href = '/app/';
+    } else {
+      err.textContent = data.error || 'Sign in failed';
+      err.classList.add('show');
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
+    }
+  } catch {
+    err.textContent = 'Network error — check your connection';
+    err.classList.add('show');
+    btn.disabled = false;
+    btn.textContent = 'Sign In';
+  }
+});
+</script>
+</body>
+</html>

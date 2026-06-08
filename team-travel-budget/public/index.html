@@ -1,0 +1,2783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Team Travel Budget</title>
+<meta name="robots" content="noindex"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --navy:#1d1d1f;--blue:#0071e3;--blue-lt:#f0f4ff;
+  --green:#1a7f4e;--green-lt:#d1ede0;--green-dk:#0f5132;
+  --amber:#92400e;--amber-lt:#fef3c7;
+  --red:#c0392b;--red-lt:#fde8e6;--red-dk:#9b1c1c;
+  --purple:#5b21b6;--purple-lt:#ede9fe;
+  --g1:#f5f5f7;--g2:#e8e8ed;--g3:#d2d2d7;--g4:#6e6e73;--g5:#3a3a3c;
+  --white:#fff;--r:10px;--sh:0 2px 12px rgba(0,0,0,.09);
+}
+body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  background:#eef0f5;color:var(--navy);font-size:13px;line-height:1.5;}
+
+/* TOP BAR */
+.topbar{background:var(--navy);color:#f5f5f7;padding:0 20px;display:flex;align-items:center;
+  gap:12px;height:52px;position:sticky;top:0;z-index:200;box-shadow:0 1px 8px rgba(0,0,0,.35);}
+.topbar h1{font-size:14px;font-weight:700;white-space:nowrap;}
+.fy-selector{position:relative;}
+.fy-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:8px;
+  padding:5px 12px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.fy-btn:hover{background:rgba(255,255,255,.2);}
+.fy-dropdown{display:none;position:absolute;top:calc(100% + 6px);left:0;background:var(--white);
+  border-radius:var(--r);box-shadow:0 8px 30px rgba(0,0,0,.2);min-width:160px;overflow:hidden;z-index:300;}
+.fy-dropdown.open{display:block;}
+.fy-option{padding:9px 14px;font-size:13px;cursor:pointer;border-bottom:1px solid var(--g2);}
+.fy-option:last-child{border:none;}
+.fy-option:hover{background:var(--blue-lt);}
+.fy-option.active{font-weight:700;color:var(--blue);}
+.btn-new-fy{background:transparent;border:1px solid rgba(255,255,255,.3);border-radius:8px;
+  padding:5px 11px;color:#fff;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;}
+.btn-new-fy:hover{background:rgba(255,255,255,.15);}
+.tb-sep{width:1px;height:28px;background:rgba(255,255,255,.15);flex-shrink:0;}
+.spacer{flex:1;}
+.awarded-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:1px;}
+.ts-label{font-size:10px;color:#a1a1a6;text-transform:uppercase;letter-spacing:.06em;}
+.awarded-input{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+  border-radius:7px;padding:4px 10px;color:#fff;font-size:13px;font-weight:700;
+  width:110px;text-align:right;outline:none;font-family:inherit;}
+.awarded-input:focus{border-color:var(--blue);background:rgba(0,113,227,.25);}
+.tb-stat{display:flex;flex-direction:column;align-items:flex-end;gap:1px;}
+.ts-val{font-size:13px;font-weight:700;}
+.var-pill{border-radius:20px;padding:4px 10px;font-size:11px;font-weight:700;white-space:nowrap;}
+.var-under{background:#d1ede0;color:var(--green-dk);}
+.var-over{background:var(--red-lt);color:var(--red-dk);}
+.var-zero{background:var(--g2);color:var(--g5);}
+
+/* TABS */
+.tabs{background:var(--white);border-bottom:1px solid var(--g3);
+  padding:0 20px;display:flex;gap:0;position:sticky;top:52px;z-index:100;}
+.tab{padding:11px 18px;cursor:pointer;font-size:13px;font-weight:500;color:var(--g4);
+  border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;}
+.tab:hover{color:var(--navy);}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue);}
+
+/* BUDGET OVERVIEW BAR */
+.bov{background:var(--white);border-bottom:1px solid var(--g2);padding:10px 20px;
+  display:flex;align-items:center;gap:20px;}
+.bov-pct-col{display:flex;flex-direction:column;align-items:flex-start;min-width:88px;flex-shrink:0;}
+.bov-label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--g4);white-space:nowrap;}
+.bov-big-pct{font-size:26px;font-weight:800;line-height:1.1;color:var(--navy);margin-top:1px;}
+.bov-big-pct.over{color:var(--red);}
+.bov-big-pct.full{color:var(--amber);}
+.bov-bar-col{flex:1;display:flex;flex-direction:column;gap:3px;min-width:0;}
+.bov-track{height:22px;background:var(--g2);border-radius:11px;position:relative;overflow:visible;}
+.bov-bar{position:absolute;left:0;top:0;height:100%;border-radius:11px;transition:width .4s;}
+.bov-planned{background:#3b82f6;}
+.bov-actual{background:var(--green);top:5px;height:12px;border-radius:6px;}
+.bov-bar-lbl{position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  font-size:11px;font-weight:700;color:#fff;white-space:nowrap;pointer-events:none;line-height:1;}
+.bov-tick-line{position:absolute;top:0;height:100%;width:1px;
+  background:rgba(255,255,255,.45);pointer-events:none;z-index:2;}
+.bov-tick-marks{display:flex;justify-content:space-between;
+  font-size:10px;color:var(--g4);padding:2px 0 0;letter-spacing:.02em;}
+.bov-stats{display:flex;gap:14px;white-space:nowrap;flex-wrap:wrap;flex-shrink:0;}
+.bov-stat{font-size:11px;color:var(--g5);}
+.bov-stat strong{font-weight:700;color:var(--navy);}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle;}
+.dot-aw{background:var(--g3);} .dot-pl{background:#3b82f6;} .dot-ac{background:var(--green);}
+.dot-cx{background:var(--red);} .dot-df{background:var(--amber);}
+.bov-pct-tag{display:inline-block;font-size:10px;font-weight:700;
+  padding:1px 5px;border-radius:8px;margin-left:3px;vertical-align:middle;
+  background:#e0ecff;color:#1e40af;}
+.bov-pct-tag.over{background:var(--red-lt);color:var(--red);}
+.bov-pct-tag.actual{background:var(--green-lt);color:var(--green-dk);}
+.bov-rem-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;
+  padding:3px 10px;border-radius:20px;background:var(--green-lt);color:var(--green-dk);}
+.bov-over-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;
+  padding:3px 10px;border-radius:20px;background:var(--red-lt);color:var(--red);}
+.bov-full-badge{background:var(--amber-lt);color:var(--amber);
+  display:inline-flex;align-items:center;font-size:11px;font-weight:700;
+  padding:3px 10px;border-radius:20px;}
+
+/* PAGES */
+.page{display:none;padding:18px 20px;}
+.page.active{display:block;}
+
+/* CARDS */
+.card{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:16px;}
+.card-head{padding:12px 18px;border-bottom:1px solid var(--g2);display:flex;align-items:center;
+  justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.card-head h2{font-size:14px;font-weight:700;}
+.hint{font-size:11px;color:var(--g4);}
+.card-body{padding:0;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;border:none;border-radius:7px;
+  padding:6px 13px;font-size:12px;font-weight:600;cursor:pointer;transition:opacity .15s;font-family:inherit;}
+.btn:hover{opacity:.85;}
+.btn-blue{background:var(--blue);color:#fff;}
+.btn-ghost{background:var(--g2);color:var(--g5);}
+.btn-green{background:var(--green-lt);color:var(--green-dk);}
+.btn-sm{padding:4px 10px;font-size:11px;}
+
+/* STATUS */
+.status-sel{border:none;border-radius:12px;padding:3px 9px;font-size:11px;font-weight:700;
+  cursor:pointer;outline:none;font-family:inherit;appearance:none;-webkit-appearance:none;text-align:center;}
+.st-Proposed{background:#dbeafe;color:#1e40af;}
+.st-Approved{background:var(--green-lt);color:var(--green-dk);}
+.st-Cancelled{background:var(--red-lt);color:var(--red);}
+.st-Deferred{background:var(--amber-lt);color:var(--amber);}
+
+/* BUDGET TABLE */
+.tbl-wrap{overflow-x:auto;max-height:calc(100vh - 260px);}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+thead th{background:var(--navy);color:#f5f5f7;padding:7px 8px;text-align:left;
+  font-weight:600;font-size:10px;letter-spacing:.05em;white-space:nowrap;
+  position:sticky;top:0;z-index:10;}
+thead th.r{text-align:right;}
+tbody tr{border-bottom:1px solid var(--g2);}
+tbody tr:hover:not(.row-cx):not(.row-df){background:#fafafe;}
+tbody td{padding:4px 5px;vertical-align:middle;}
+tbody td input,tbody td select:not(.status-sel){width:100%;border:1px solid transparent;
+  border-radius:5px;padding:4px 6px;font-size:12px;background:transparent;color:var(--navy);
+  outline:none;font-family:inherit;transition:border-color .12s;}
+tbody td input:focus,tbody td select:not(.status-sel):focus{border-color:var(--blue);background:var(--blue-lt);}
+tbody td input[type=number]{text-align:right;}
+.row-cx{opacity:.36;} .row-cx td:not(.td-st):not(.td-del){text-decoration:line-through;}
+.row-df{opacity:.5;}
+.col-pl{font-weight:700;color:var(--blue);background:var(--blue-lt)!important;text-align:right;padding-right:7px;}
+.col-ac{background:#f0faf5!important;text-align:right;}
+.col-vr{text-align:right;padding-right:7px;font-weight:700;}
+.vr-pos{color:var(--green);background:#f0faf5!important;}
+.vr-neg{color:var(--red);background:var(--red-lt)!important;}
+.vr-neu{color:var(--g4);background:#f9f0ff!important;}
+.td-calc{text-align:right;padding-right:7px;color:var(--g5);font-size:11px;}
+.td-st{text-align:center;padding:3px 5px;}
+.td-del{text-align:center;}
+.del-btn{background:none;border:none;cursor:pointer;color:var(--g4);font-size:13px;padding:3px 5px;border-radius:4px;}
+.del-btn:hover{color:var(--red);background:var(--red-lt);}
+.row-delconfirm{background:#fff5f5!important;outline:2px solid var(--red);outline-offset:-2px;}
+.del-confirm{display:flex;align-items:center;gap:4px;}
+.del-yes{background:var(--red);color:#fff;border:none;border-radius:5px;padding:3px 8px;font-size:11px;font-weight:700;cursor:pointer;}
+.del-yes:hover{opacity:.85;}
+.del-no{background:var(--g2);color:var(--g5);border:none;border-radius:5px;padding:3px 7px;font-size:11px;font-weight:600;cursor:pointer;}
+.del-no:hover{background:var(--g3);}
+.btn-undo,.btn-redo{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:8px;
+  padding:5px 11px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:opacity .15s;}
+.btn-undo:hover:not(:disabled),.btn-redo:hover:not(:disabled){background:rgba(255,255,255,.22);}
+.btn-undo:disabled,.btn-redo:disabled{opacity:.3;cursor:default;}
+tfoot td{padding:6px 8px;font-weight:700;font-size:11px;background:var(--g1);border-top:2px solid var(--g3);}
+tfoot tr:not(:first-child) td{border-top:1px solid var(--g2);}
+tfoot td.lbl{color:var(--g4);font-weight:400;}
+.tf-pl{background:var(--blue-lt)!important;color:var(--blue);}
+.tf-ac{background:#f0faf5!important;color:var(--green-dk);}
+.tf-vp{background:#f0faf5!important;color:var(--green);}
+.tf-vn{background:var(--red-lt)!important;color:var(--red);}
+.add-bar{padding:9px 16px;border-top:1px solid var(--g2);display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+
+/* BADGES */
+.badge{display:inline-block;border-radius:12px;padding:2px 8px;font-size:11px;font-weight:600;}
+.r-na{background:#dbeafe;color:#1e40af;} .r-eu{background:#ede9fe;color:#5b21b6;}
+.r-as{background:#dcfce7;color:#166534;} .r-af{background:#fef9c3;color:#854d0e;}
+.r-la{background:#ffe4e6;color:#9f1239;}
+
+/* DASHBOARD */
+.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin-bottom:16px;}
+.kpi{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);padding:14px 16px;
+  position:relative;overflow:hidden;}
+.kpi::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;}
+.kpi-aw::after{background:#a1a1a6;} .kpi-pl::after{background:#3b82f6;}
+.kpi-ac::after{background:var(--green);} .kpi-rm::after{background:#f59e0b;}
+.kpi-vr::after{background:var(--purple);}
+.kpi-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--g4);margin-bottom:4px;}
+.kpi-val{font-size:20px;font-weight:700;line-height:1.2;}
+.kpi-sub{font-size:11px;color:var(--g4);margin-top:2px;}
+.kpi-tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;margin-top:3px;}
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.bar-table{width:100%;border-collapse:collapse;font-size:12px;}
+.bar-table tr{border-bottom:1px solid var(--g2);}
+.bar-table tr:last-child{border:none;}
+.bar-table td{padding:7px 9px;vertical-align:middle;}
+.bar-table .lbl{font-weight:600;white-space:nowrap;width:130px;}
+.bar-table .amt{text-align:right;font-weight:700;white-space:nowrap;width:85px;color:var(--blue);}
+.bar-table .amt2{text-align:right;font-weight:700;white-space:nowrap;width:82px;color:var(--green);}
+.bar-table .cnt{text-align:right;white-space:nowrap;width:50px;color:var(--g4);font-size:11px;}
+.bw{position:relative;height:12px;background:var(--g2);border-radius:6px;overflow:visible;}
+.bf{position:absolute;left:0;top:0;height:100%;border-radius:6px;transition:width .4s;}
+.bf2{position:absolute;left:0;top:2px;height:8px;border-radius:4px;opacity:.9;transition:width .4s;}
+.bq1{background:#3b82f6;} .bq2{background:#8b5cf6;} .bq3{background:#10b981;} .bq4{background:#f59e0b;}
+.bna{background:#3b82f6;} .beu{background:#8b5cf6;} .bas{background:#10b981;}
+.baf{background:#f59e0b;} .bla{background:#ef4444;} .bow{background:var(--blue);} .bac{background:var(--green);}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;padding:13px;}
+.cat-item{background:var(--g1);border-radius:8px;padding:10px 12px;}
+.cat-lbl{font-size:10px;color:var(--g4);text-transform:uppercase;letter-spacing:.06em;}
+.cat-val{font-size:16px;font-weight:700;margin-top:2px;}
+.cat-pct{font-size:11px;color:var(--g4);margin-top:1px;}
+.wf-row{display:flex;align-items:center;gap:10px;margin-bottom:9px;padding:0 18px;}
+.wf-lbl{font-size:12px;font-weight:600;width:110px;text-align:right;white-space:nowrap;}
+.wf-track{flex:1;height:18px;background:var(--g2);border-radius:9px;position:relative;overflow:hidden;}
+.wf-fill{position:absolute;left:0;top:0;height:100%;border-radius:9px;transition:width .5s;}
+.wf-aw{background:var(--g3);} .wf-pl{background:#3b82f6;} .wf-ac{background:var(--green);}
+.wf-cx{background:var(--red-lt);} .wf-df{background:var(--amber-lt);}
+.wf-amt{font-size:12px;font-weight:700;width:80px;text-align:right;white-space:nowrap;}
+.wf-pct{font-size:11px;color:var(--g4);width:36px;text-align:right;}
+.st-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;padding:14px;}
+.st-item{border-radius:8px;padding:11px 13px;text-align:center;}
+.si-Proposed{background:#dbeafe;} .si-Approved{background:var(--green-lt);}
+.si-Cancelled{background:var(--red-lt);} .si-Deferred{background:var(--amber-lt);}
+.si-count{font-size:22px;font-weight:800;line-height:1;}
+.si-label{font-size:11px;font-weight:700;margin-top:3px;}
+.si-amt{font-size:11px;margin-top:2px;opacity:.8;}
+.si-Proposed .si-count,.si-Proposed .si-label{color:#1e40af;}
+.si-Approved .si-count,.si-Approved .si-label{color:var(--green-dk);}
+.si-Cancelled .si-count,.si-Cancelled .si-label{color:var(--red);}
+.si-Deferred .si-count,.si-Deferred .si-label{color:var(--amber);}
+
+/* YEAR COMPARISON */
+.fy-checks{display:flex;gap:8px;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--g2);}
+.fy-check-label{display:flex;align-items:center;gap:6px;padding:6px 13px;
+  border-radius:20px;cursor:pointer;font-size:12px;font-weight:600;
+  border:2px solid var(--g3);background:var(--white);transition:all .15s;}
+.fy-check-label input{display:none;}
+.fy-check-label.checked{border-color:var(--blue);color:var(--blue);background:var(--blue-lt);}
+.cmp-table{width:100%;border-collapse:collapse;font-size:12px;}
+.cmp-table th{background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:right;
+  font-size:11px;font-weight:600;letter-spacing:.04em;}
+.cmp-table th:first-child{text-align:left;width:170px;}
+.cmp-table td{padding:8px 12px;border-bottom:1px solid var(--g2);text-align:right;}
+.cmp-table td:first-child{text-align:left;color:var(--g5);font-weight:500;}
+.cmp-table tr:last-child td{border:none;}
+.cmp-table tr.cmp-section td{background:var(--navy);color:#f5f5f7;font-weight:700;
+  font-size:11px;letter-spacing:.06em;text-transform:uppercase;}
+.cmp-table tr.cmp-section td:first-child{text-align:left;}
+.cmp-table tr:nth-child(even):not(.cmp-section){background:var(--g1);}
+.cmp-chg{font-size:11px;font-weight:700;}
+.chg-pos{color:var(--green);} .chg-neg{color:var(--red);} .chg-neu{color:var(--g4);}
+.yr-bar-group{display:flex;flex-direction:column;gap:3px;}
+.yr-bar{display:flex;align-items:center;gap:7px;font-size:11px;}
+.yr-bar-fill{height:10px;border-radius:5px;transition:width .4s;min-width:2px;}
+.yr-bar-lbl{font-size:10px;color:var(--g4);white-space:nowrap;}
+.yr-bar-amt{font-size:11px;font-weight:700;white-space:nowrap;}
+
+/* RATE GUIDE */
+.rate-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;padding:16px;}
+.rate-card{background:var(--g1);border-radius:var(--r);padding:13px;}
+.rate-card .flag{font-size:18px;margin-bottom:3px;}
+.rate-card .rn{font-size:13px;font-weight:700;margin-bottom:7px;}
+.rate-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--g3);}
+.rate-row:last-child{border:none;}
+.rate-row input{width:90px;border:1px solid transparent;border-radius:4px;padding:2px 5px;
+  font-size:11px;background:transparent;text-align:right;outline:none;font-family:inherit;}
+.rate-row input:focus{border-color:var(--blue);background:var(--blue-lt);}
+.rate-changed{background:#fff3cd;border-radius:4px;padding:1px 4px;}
+
+/* BLS fetch panel */
+.bls-panel{background:var(--g1);border:1px solid var(--g3);border-radius:var(--r);margin:14px 18px;padding:14px;}
+.bls-panel h3{font-size:13px;font-weight:700;margin-bottom:8px;}
+.bls-status{font-size:12px;color:var(--g4);margin-bottom:10px;}
+.bls-changes{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:10px;}
+.bls-change-item{background:var(--white);border-radius:7px;padding:8px 12px;font-size:12px;}
+.bls-change-item .bci-cat{color:var(--g4);font-size:11px;}
+.bls-change-item .bci-val{font-weight:700;font-size:14px;}
+.bci-up{color:var(--red);} .bci-dn{color:var(--green);}
+.rate-before{color:var(--g4);font-size:10px;text-decoration:line-through;margin-right:4px;}
+
+/* MODAL */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);
+  z-index:500;backdrop-filter:blur(3px);}
+.modal-backdrop.open{display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;}
+.modal{background:var(--white);border-radius:14px;width:100%;max-width:780px;
+  box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden;}
+.modal-head{background:var(--navy);color:#f5f5f7;padding:18px 24px;display:flex;
+  align-items:center;justify-content:space-between;}
+.modal-head h2{font-size:16px;font-weight:700;}
+.modal-close{background:none;border:none;color:#f5f5f7;font-size:20px;cursor:pointer;padding:4px 8px;border-radius:6px;}
+.modal-close:hover{background:rgba(255,255,255,.15);}
+.modal-body{padding:22px 24px;display:flex;flex-direction:column;gap:20px;}
+.modal-section h3{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--g4);margin-bottom:10px;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-field label{display:block;font-size:11px;font-weight:600;color:var(--g4);
+  text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+.form-field input,.form-field select{width:100%;border:1px solid var(--g3);border-radius:8px;
+  padding:8px 12px;font-size:13px;outline:none;font-family:inherit;color:var(--navy);}
+.form-field input:focus,.form-field select:focus{border-color:var(--blue);}
+.modal-rates-table{width:100%;border-collapse:collapse;font-size:12px;}
+.modal-rates-table th{background:var(--g1);padding:7px 10px;text-align:left;
+  font-size:11px;font-weight:600;color:var(--g4);text-transform:uppercase;letter-spacing:.05em;}
+.modal-rates-table th.r{text-align:right;}
+.modal-rates-table td{padding:6px 10px;border-bottom:1px solid var(--g2);}
+.modal-rates-table input{width:80px;border:1px solid transparent;border-radius:5px;padding:3px 6px;
+  font-size:12px;text-align:right;outline:none;font-family:inherit;background:transparent;}
+.modal-rates-table input:focus{border-color:var(--blue);background:var(--blue-lt);}
+.seed-options{display:flex;gap:10px;}
+.seed-opt{flex:1;border:2px solid var(--g3);border-radius:var(--r);padding:13px;cursor:pointer;
+  text-align:center;transition:all .15s;}
+.seed-opt:hover{border-color:var(--blue);}
+.seed-opt.selected{border-color:var(--blue);background:var(--blue-lt);}
+.seed-opt .seed-icon{font-size:24px;margin-bottom:5px;}
+.seed-opt .seed-title{font-weight:700;font-size:13px;}
+.seed-opt .seed-desc{font-size:11px;color:var(--g4);margin-top:3px;}
+.modal-foot{padding:16px 24px;border-top:1px solid var(--g2);display:flex;justify-content:flex-end;gap:10px;}
+
+/* Auto-fill flash */
+@keyframes afFlash{0%{background:#fffbe6;}100%{background:transparent;}}
+.af-flash{animation:afFlash .8s ease-out;}
+/* Datalist inputs look identical to regular inputs */
+input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236e6e73'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 6px center;padding-right:20px!important;}
+/* Master data tags */
+.md-tag{display:inline-flex;align-items:center;gap:3px;background:var(--g1);border:1px solid var(--g3);
+  border-radius:20px;padding:3px 10px 3px 12px;font-size:12px;font-weight:500;color:var(--navy);margin:2px;}
+.md-tag-del{background:none;border:none;cursor:pointer;color:var(--g4);font-size:15px;
+  line-height:1;padding:0 1px;border-radius:50%;}
+.md-tag-del:hover{color:var(--red);background:var(--red-lt);}
+.md-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.md-list{display:flex;flex-wrap:wrap;min-height:38px;margin-bottom:10px;
+  border:1px solid var(--g2);border-radius:8px;padding:6px;background:var(--g1);}
+.md-empty{font-size:12px;color:var(--g4);font-style:italic;padding:4px 2px;}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid var(--g3);
+  border-top-color:var(--blue);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* YEAR COLORS (consistent across charts) */
+.yc0{background:#8b5cf6;} .yc1{background:#3b82f6;} .yc2{background:#10b981;}
+.yc3{background:#f59e0b;} .yc4{background:#ef4444;}
+.yt0{color:#5b21b6;} .yt1{color:#1e40af;} .yt2{color:#166534;}
+.yt3{color:#854d0e;} .yt4{color:#9f1239;}
+
+@media(max-width:900px){.kpi-grid{grid-template-columns:repeat(3,1fr);}
+  .dash-grid{grid-template-columns:1fr;}.rate-grid{grid-template-columns:repeat(2,1fr);}}
+
+/* ── SAVE INDICATOR ── */
+.save-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle;}
+.save-idle .save-dot{background:#a1a1a6;}
+.save-saving .save-dot{background:#f59e0b;animation:pulse .7s ease-in-out infinite;}
+.save-ok .save-dot{background:#34d399;}
+.save-err .save-dot{background:#f87171;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+
+/* ── USER MANAGEMENT ── */
+.user-table{width:100%;border-collapse:collapse;font-size:13px;}
+.user-table th{background:var(--navy);color:#f5f5f7;padding:8px 14px;text-align:left;font-size:11px;letter-spacing:.05em;}
+.user-table td{padding:9px 14px;border-bottom:1px solid var(--g2);vertical-align:middle;}
+.user-table tr:last-child td{border:none;}
+.user-table tr:hover td{background:var(--g1);}
+.role-badge{display:inline-block;border-radius:12px;padding:2px 9px;font-size:11px;font-weight:700;}
+.role-admin{background:#dbeafe;color:#1e40af;}.role-viewer{background:var(--g1);color:var(--g5);}
+.user-form{display:grid;grid-template-columns:1fr 1fr auto auto;gap:10px;align-items:end;margin-top:16px;padding:16px;background:var(--g1);border-radius:var(--r);}
+.user-form input,.user-form select{border:1px solid var(--g3);border-radius:7px;padding:7px 10px;font-size:13px;outline:none;font-family:inherit;width:100%;}
+.user-form input:focus,.user-form select:focus{border-color:var(--blue);}
+.viewer-lock{display:none;position:fixed;inset:0;background:transparent;z-index:50;cursor:not-allowed;}
+
+/* ══ DATA MANAGER ══════════════════════════════════════ */
+.dm-nav{display:flex;align-items:center;gap:8px;padding:10px 0 14px;flex-wrap:wrap;}
+.dm-navbtn{background:var(--white);border:1px solid var(--g3);border-radius:8px;
+  padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;color:var(--g5);
+  font-family:inherit;transition:all .15s;}
+.dm-navbtn:hover{border-color:var(--blue);color:var(--blue);}
+.dm-navbtn.active{background:var(--blue);border-color:var(--blue);color:#fff;}
+.dm-db-info{margin-left:auto;font-size:11px;color:var(--g4);background:var(--g1);
+  border-radius:20px;padding:4px 12px;}
+.dm-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.dm-search{border:1px solid var(--g3);border-radius:8px;padding:7px 12px;font-size:12px;
+  outline:none;font-family:inherit;width:220px;}
+.dm-search:focus{border-color:var(--blue);}
+.dm-fsel{border:1px solid var(--g3);border-radius:8px;padding:5px 10px;font-size:12px;
+  outline:none;font-family:inherit;background:var(--white);}
+.dm-fsel:focus{border-color:var(--blue);}
+.dm-count{font-size:11px;color:var(--g4);padding-left:4px;}
+.dm-tbl{width:100%;border-collapse:collapse;font-size:12px;}
+.dm-tbl thead th{background:var(--navy);color:#f5f5f7;padding:7px 9px;text-align:left;
+  font-size:10px;letter-spacing:.05em;white-space:nowrap;cursor:pointer;user-select:none;}
+.dm-tbl thead th:hover{background:#2d2d35;}
+.dm-tbl thead th.r{text-align:right;}
+.dm-tbl thead th.sorted{background:#1a3a8f;}
+.dm-tbl tbody tr{border-bottom:1px solid var(--g2);}
+.dm-tbl tbody tr:hover{background:#f0f4ff;}
+.dm-tbl tbody td{padding:6px 9px;vertical-align:middle;}
+.dm-tbl tbody td.r{text-align:right;font-weight:700;}
+.dm-tbl tbody td.muted{color:var(--g4);font-size:11px;}
+.dm-tbl tfoot td{padding:6px 9px;font-weight:700;font-size:11px;background:var(--g1);border-top:2px solid var(--g3);}
+.dm-row-act{display:flex;gap:4px;}
+.dm-act-btn{background:none;border:1px solid var(--g3);border-radius:5px;padding:2px 8px;
+  font-size:11px;cursor:pointer;font-family:inherit;transition:all .12s;white-space:nowrap;}
+.dm-act-btn:hover{background:var(--blue-lt);border-color:var(--blue);color:var(--blue);}
+.dm-act-btn.danger:hover{background:var(--red-lt);border-color:var(--red);color:var(--red);}
+.dm-act-btn.warn:hover{background:var(--amber-lt);border-color:var(--amber);color:var(--amber);}
+.dm-pager{display:flex;align-items:center;gap:6px;padding:10px 16px;border-top:1px solid var(--g2);font-size:12px;}
+.dm-pager button{background:var(--g1);border:1px solid var(--g3);border-radius:6px;
+  padding:4px 10px;font-size:12px;cursor:pointer;font-family:inherit;}
+.dm-pager button:hover:not(:disabled){background:var(--blue-lt);border-color:var(--blue);}
+.dm-pager button:disabled{opacity:.35;cursor:default;}
+.dm-pager .pag-info{color:var(--g4);margin:0 8px;}
+.arc-empty{padding:24px;text-align:center;color:var(--g4);font-size:13px;font-style:italic;}
+.io-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.io-card{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;}
+.io-head{background:var(--navy);color:#f5f5f7;padding:12px 18px;font-size:14px;font-weight:700;}
+.io-body{padding:16px 18px;display:flex;flex-direction:column;gap:14px;}
+.io-label{font-size:11px;font-weight:700;color:var(--g4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;}
+.io-opt-group{display:flex;gap:6px;flex-wrap:wrap;}
+.io-opt{display:flex;align-items:center;gap:5px;padding:5px 10px;border:1px solid var(--g3);
+  border-radius:6px;cursor:pointer;font-size:12px;background:var(--white);transition:all .12s;}
+.io-opt:has(input:checked){border-color:var(--blue);background:var(--blue-lt);color:var(--blue);font-weight:600;}
+.io-opt input{accent-color:var(--blue);cursor:pointer;}
+.io-textarea{width:100%;border:1px solid var(--g3);border-radius:8px;padding:9px 11px;
+  font-size:11px;font-family:monospace;resize:vertical;min-height:90px;outline:none;color:var(--navy);}
+.io-textarea:focus{border-color:var(--blue);}
+.io-status{font-size:12px;padding:7px 12px;border-radius:7px;}
+.io-ok{background:var(--green-lt);color:var(--green-dk);}
+.io-err{background:var(--red-lt);color:var(--red-dk);}
+.io-warn{background:var(--amber-lt);color:var(--amber);}
+.audit-tbl{width:100%;border-collapse:collapse;font-size:12px;}
+.audit-tbl th{background:var(--navy);color:#f5f5f7;padding:7px 12px;text-align:left;font-size:10px;letter-spacing:.05em;}
+.audit-tbl td{padding:7px 12px;border-bottom:1px solid var(--g2);vertical-align:top;}
+.audit-tbl tr:nth-child(even){background:var(--g1);}
+.aud-create{color:var(--green-dk);font-weight:700;}
+.aud-update{color:var(--blue);font-weight:700;}
+.aud-delete{color:var(--red);font-weight:700;}
+.aud-archive{color:var(--amber);font-weight:700;}
+.aud-restore{color:var(--purple);font-weight:700;}
+.aud-import{color:#0891b2;font-weight:700;}
+.aud-export{color:#6d28d9;font-weight:700;}
+@media(max-width:900px){.io-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <h1>Team Travel Budget</h1>
+  <div class="fy-selector" id="fy-selector">
+    <button class="fy-btn" onclick="toggleFYDropdown()">
+      <span id="fy-active-label">FY2026</span> ▾
+    </button>
+    <div class="fy-dropdown" id="fy-dropdown"></div>
+  </div>
+  <button class="btn-new-fy" onclick="openNewFYModal()">+ New FY</button>
+  <button class="btn-undo" id="btn-undo" onclick="History.undo()" disabled title="Nothing to undo">↩ Undo</button>
+  <button class="btn-redo" id="btn-redo" onclick="History.redo()" disabled title="Nothing to redo">↪ Redo</button>
+  <div class="tb-sep"></div>
+  <div class="spacer"></div>
+  <div class="awarded-wrap">
+    <span class="ts-label">Awarded Budget</span>
+    <input class="awarded-input" id="awarded-input" type="text" value="$40,000"
+      onblur="saveAwarded(this.value)" onkeydown="if(event.key==='Enter')saveAwarded(this.value)"/>
+  </div>
+  <div class="tb-sep"></div>
+  <div class="tb-stat"><span class="ts-label">Active Planned</span><span class="ts-val" id="tb-planned">$0</span></div>
+  <div class="tb-sep"></div>
+  <div class="tb-stat"><span class="ts-label">Actual Spent</span><span class="ts-val" id="tb-actual">—</span></div>
+  <div class="tb-sep"></div>
+  <div class="tb-stat" style="align-items:center;">
+    <span class="ts-label">vs. Awarded</span>
+    <span id="tb-var-pill" class="var-pill var-zero">—</span>
+  </div>
+  <div class="tb-sep"></div>
+  <span id="save-indicator" class="save-idle" style="font-size:11px;color:#a1a1a6;white-space:nowrap;display:flex;align-items:center;">
+    <span class="save-dot"></span><span class="save-text">Ready</span>
+  </span>
+  <div class="tb-sep"></div>
+  <span style="font-size:11px;color:#a1a1a6;white-space:nowrap;">👤 <strong id="user-display" style="color:#f5f5f7;font-size:12px;"></strong></span>
+  <button class="btn-new-fy" id="btn-signout" onclick="doSignOut()" style="border-color:rgba(255,120,120,.4);color:#ffb3b3;">Sign Out</button>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active"  onclick="showTab('budget')">Budget Entry</div>
+  <div class="tab"         onclick="showTab('dashboard')">Dashboard</div>
+  <div class="tab"         onclick="showTab('compare')">Year Comparison</div>
+  <div class="tab"         onclick="showTab('rates')">Rate Guide</div>
+  <div class="tab"         onclick="showTab('data')">Data Manager</div>
+</div>
+
+<!-- BUDGET OVERVIEW BAR -->
+<div class="bov" id="bov-bar">
+  <div class="bov-pct-col">
+    <span class="bov-label">Utilization</span>
+    <span class="bov-big-pct" id="bov-big-pct">—</span>
+  </div>
+  <div class="bov-bar-col">
+    <div class="bov-track">
+      <div class="bov-bar bov-planned" id="bov-pl" style="width:0%">
+        <span class="bov-bar-lbl" id="bov-pl-lbl"></span>
+      </div>
+      <div class="bov-bar bov-actual" id="bov-ac" style="width:0%"></div>
+      <span class="bov-tick-line" style="left:25%"></span>
+      <span class="bov-tick-line" style="left:50%"></span>
+      <span class="bov-tick-line" style="left:75%"></span>
+    </div>
+    <div class="bov-tick-marks">
+      <span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span>
+    </div>
+  </div>
+  <div class="bov-stats" id="bov-stats"></div>
+</div>
+
+<!-- PAGE: BUDGET ENTRY -->
+<div class="page active" id="page-budget">
+  <div class="card">
+    <div class="card-head">
+      <h2>Travel Requests — <span id="budget-fy-label">FY2026</span></h2>
+      <span class="hint">Click any cell to edit · Cancelled &amp; Deferred excluded from budget totals · <strong>Apple FY:</strong> Q1=Oct–Dec · Q2=Jan–Mar · Q3=Apr–Jun · Q4=Jul–Sep</span>
+    </div>
+    <div class="card-body">
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th style="width:28px">#</th>
+            <th style="width:90px">STATUS</th>
+            <th>IS&amp;T UNIT</th><th>MANAGER</th><th>TRAVELER</th><th>COUNTRY</th>
+            <th>REGION</th><th>CITY</th><th>PURPOSE</th><th style="width:50px">QTR</th>
+            <th class="r">DEPART</th><th class="r">RETURN</th>
+            <th class="r">AIRFARE</th><th class="r">NIGHTS</th><th class="r">HTL/NT</th>
+            <th class="r">HTL TOT</th><th class="r">VISA</th><th class="r">CAR/TAXI</th>
+            <th class="r">FOOD/DAY</th><th class="r">DAYS</th><th class="r">FOOD TOT</th>
+            <th class="r">REG FEES</th>
+            <th class="r" style="background:#1a3050!important;">PLANNED $</th>
+            <th class="r" style="background:#1a3a2a!important;">ACTUAL $</th>
+            <th class="r" style="background:#2a1a3a!important;">VARIANCE</th>
+            <th style="width:28px"></th>
+          </tr></thead>
+          <tbody id="budget-tbody"></tbody>
+          <tfoot id="budget-tfoot"></tfoot>
+        </table>
+      </div>
+      <div class="add-bar">
+        <button class="btn btn-blue" onclick="addRow()">+ Add Row</button>
+        <button class="btn btn-ghost" onclick="showTab('dashboard')">View Dashboard →</button>
+        <span style="font-size:11px;color:var(--g4);">
+          <span class="badge" style="background:#dbeafe;color:#1e40af;">Proposed</span>
+          <span class="badge" style="background:#d1ede0;color:#0f5132;">Approved</span>
+          <span class="badge" style="background:#fde8e6;color:#c0392b;">Cancelled</span>
+          <span class="badge" style="background:#fef3c7;color:#92400e;">Deferred</span>
+          — Cancelled &amp; Deferred excluded from totals
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: DASHBOARD -->
+<div class="page" id="page-dashboard">
+  <div class="kpi-grid" id="kpi-grid"></div>
+  <div class="card"><div class="card-head"><h2>Budget Waterfall</h2></div>
+    <div class="card-body" style="padding:14px 0 6px" id="dash-wf"></div></div>
+  <div class="card"><div class="card-head"><h2>Trip Status Breakdown</h2></div>
+    <div class="card-body"><div class="st-grid" id="dash-st"></div></div></div>
+  <div class="dash-grid">
+    <div class="card"><div class="card-head"><h2>By Quarter <span class="hint">(active only)</span></h2></div>
+      <div class="card-body"><table class="bar-table" id="dash-q"></table></div></div>
+    <div class="card"><div class="card-head"><h2>By Region <span class="hint">(active only)</span></h2></div>
+      <div class="card-body"><table class="bar-table" id="dash-r"></table></div></div>
+  </div>
+  <div class="card"><div class="card-head"><h2>By Team Owner <span class="hint">(planned vs. actual)</span></h2></div>
+    <div class="card-body"><table class="bar-table" id="dash-o"></table></div></div>
+  <div class="card"><div class="card-head"><h2>Spend Category Breakdown</h2></div>
+    <div class="card-body"><div class="cat-grid" id="dash-cats"></div></div></div>
+  <div class="card"><div class="card-head"><h2>Top Trips by Planned Cost</h2></div>
+    <div class="card-body"><table class="bar-table" id="dash-top"></table></div></div>
+</div>
+
+<!-- PAGE: YEAR COMPARISON -->
+<div class="page" id="page-compare">
+  <div class="card">
+    <div class="card-head">
+      <h2>Year-over-Year Comparison</h2>
+      <span class="hint">Toggle fiscal years to include in comparison</span>
+    </div>
+    <div class="card-body">
+      <div class="fy-checks" id="cmp-checks"></div>
+      <div id="cmp-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: RATE GUIDE -->
+<div class="page" id="page-rates">
+  <div class="card">
+    <div class="card-head">
+      <h2>Rate Guide — <span id="rates-fy-label">FY2026</span></h2>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <span class="hint" id="rates-source-note"></span>
+        <button class="btn btn-green btn-sm" onclick="fetchBLSRates()">⟳ Fetch Rate Updates from Internet</button>
+        <button class="btn btn-ghost btn-sm" onclick="resetRatesToDefault()">Reset to Defaults</button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div id="bls-panel-wrap"></div>
+      <div class="rate-grid" id="rate-grid"></div>
+      <div style="padding:0 16px 16px;">
+        <table style="width:100%;border-collapse:collapse;font-size:12px;" id="dest-table-wrap">
+          <thead><tr>
+            <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:left;">Region</th>
+            <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:left;">Example Cities</th>
+            <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:right;">Economy ($)</th>
+            <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:right;">Business ($)</th>
+            <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:right;">Hotel/Night ($)</th>
+            <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:right;">Food/Day ($)</th>
+            <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:right;">Visa ($)</th>
+          </tr></thead>
+          <tbody id="dest-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: DATA MANAGER -->
+<div class="page" id="page-data">
+  <div class="dm-nav">
+    <button class="dm-navbtn active" id="dmnav-records" onclick="showDMTab('records')">Records</button>
+    <button class="dm-navbtn" id="dmnav-archive" onclick="showDMTab('archive')">Archive</button>
+    <button class="dm-navbtn" id="dmnav-io"      onclick="showDMTab('io')">Import / Export</button>
+    <button class="dm-navbtn" id="dmnav-audit"   onclick="showDMTab('audit')">Audit Log</button>
+    <button class="dm-navbtn" id="dmnav-masterdata" onclick="showDMTab('masterdata')">Master Data</button>
+    <button class="dm-navbtn" id="dmnav-users"      onclick="showDMTab('users')" style="display:none">Users</button>
+    <span class="dm-db-info" id="dm-db-info"></span>
+  </div>
+  <div id="dm-panel-records">
+    <div class="card">
+      <div class="card-head">
+        <h2>All Records</h2>
+        <div class="dm-toolbar">
+          <input type="search" class="dm-search" id="dm-search" placeholder="Search traveler, owner, city…" oninput="buildRecordsBrowser()"/>
+          <select class="dm-fsel" id="dm-filter-fy"     onchange="buildRecordsBrowser()"><option value="">All Fiscal Years</option></select>
+          <select class="dm-fsel" id="dm-filter-status" onchange="buildRecordsBrowser()">
+            <option value="">All Statuses</option>
+            <option>Proposed</option><option>Approved</option><option>Cancelled</option><option>Deferred</option>
+          </select>
+          <select class="dm-fsel" id="dm-filter-region" onchange="buildRecordsBrowser()"><option value="">All Regions</option></select>
+          <select class="dm-fsel" id="dm-filter-owner"  onchange="buildRecordsBrowser()"><option value="">All Owners</option></select>
+          <button class="btn btn-ghost btn-sm" onclick="clearDMFilters()">Clear</button>
+          <span class="dm-count" id="dm-rec-count"></span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div id="dm-records-table" style="overflow-x:auto;max-height:calc(100vh - 310px);overflow-y:auto;"></div>
+        <div id="dm-records-pager" class="dm-pager"></div>
+      </div>
+    </div>
+  </div>
+  <div id="dm-panel-archive" style="display:none">
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-head"><h2>Archived Rows</h2><span class="hint">Excluded from budget calculations — restore to make active again</span></div>
+      <div class="card-body"><div id="dm-arc-rows"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>Archived Fiscal Years</h2><span class="hint">Hidden from FY selector and Year Comparison</span></div>
+      <div class="card-body"><div id="dm-arc-fys-wrap"></div></div>
+    </div>
+  </div>
+  <div id="dm-panel-io" style="display:none">
+    <div class="io-grid">
+      <div class="io-card">
+        <div class="io-head">Export Data</div>
+        <div class="io-body">
+          <div>
+            <div class="io-label">Scope</div>
+            <div class="io-opt-group">
+              <label class="io-opt"><input type="radio" name="exp-scope" value="active-fy" checked/> Current FY only</label>
+              <label class="io-opt"><input type="radio" name="exp-scope" value="all-fys"/> All Fiscal Years</label>
+              <label class="io-opt"><input type="radio" name="exp-scope" value="active-rows"/> Active rows only</label>
+            </div>
+          </div>
+          <div>
+            <div class="io-label">Download</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="btn btn-blue" onclick="exportCSV()">⬇ CSV (Excel)</button>
+              <button class="btn btn-ghost" onclick="exportJSON()">⬇ JSON Backup</button>
+              <button class="btn btn-ghost" onclick="exportJSONClipboard()">⎘ Copy JSON</button>
+            </div>
+          </div>
+          <div id="exp-status"></div>
+        </div>
+      </div>
+      <div class="io-card">
+        <div class="io-head">Import Data</div>
+        <div class="io-body">
+          <div>
+            <div class="io-label">Import Mode</div>
+            <div class="io-opt-group">
+              <label class="io-opt"><input type="radio" name="imp-mode" value="merge" checked/> Merge (add new, keep existing)</label>
+              <label class="io-opt"><input type="radio" name="imp-mode" value="replace"/> Replace all ⚠</label>
+            </div>
+          </div>
+          <div>
+            <div class="io-label">File Upload</div>
+            <input type="file" id="imp-file" accept=".json,.csv" onchange="handleImportFile(this)" style="font-size:12px"/>
+          </div>
+          <div>
+            <div class="io-label">Or Paste JSON / CSV</div>
+            <textarea class="io-textarea" id="imp-paste" placeholder="Paste a JSON backup or CSV rows here…" rows="5"></textarea>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-blue" onclick="runImport()">Import</button>
+            <button class="btn btn-ghost" onclick="previewImport()">Preview</button>
+          </div>
+          <div id="imp-status"></div>
+          <div id="imp-preview"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <div class="card-head"><h2>CSV Column Reference</h2><span class="hint">Required header row for CSV import</span></div>
+      <div class="card-body" style="padding:14px 18px">
+        <code style="font-size:11px;color:var(--g5);line-height:2.2;display:block">
+          Status, Team Owner, Traveler, City, Country, Region, Purpose, Quarter, Depart, Return, Airfare, Nights, Hotel/Night, Visa, Car/Taxi, Food/Day, Days, Reg Fees, Actual
+        </code>
+        <div style="margin-top:10px"><button class="btn btn-ghost btn-sm" onclick="downloadCSVTemplate()">⬇ Download Blank Template</button></div>
+      </div>
+    </div>
+  </div>
+  <div id="dm-panel-audit" style="display:none">
+    <div class="card">
+      <div class="card-head">
+        <h2>Audit Log</h2>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="hint" id="audit-count"></span>
+          <button class="btn btn-ghost btn-sm" onclick="clearAuditLog()">Clear Log</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div style="overflow-x:auto;max-height:calc(100vh - 240px);overflow-y:auto">
+          <table class="audit-tbl">
+            <thead><tr>
+              <th style="width:165px">Timestamp</th>
+              <th style="width:95px">Action</th>
+              <th style="width:80px">FY</th>
+              <th>Detail</th>
+            </tr></thead>
+            <tbody id="audit-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Master Data -->
+  <div id="dm-panel-masterdata" style="display:none">
+    <div class="md-grid">
+      <div class="card">
+        <div class="card-head" style="display:flex;justify-content:space-between;align-items:center">
+          <span>IS&amp;T Units</span><span class="hint" id="md-count-owners"></span>
+        </div>
+        <div class="card-body" style="padding:12px 16px">
+          <div class="md-list" id="md-list-owners"></div>
+          <div style="display:flex;gap:6px">
+            <input type="text" id="md-input-owners" class="dm-search" style="flex:1" placeholder="Add IS&amp;T Unit…" onkeydown="if(event.key==='Enter')addMasterEntry('owners',this)"/>
+            <button class="btn btn-blue btn-sm" onclick="addMasterEntry('owners',document.getElementById('md-input-owners'))">Add</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head" style="display:flex;justify-content:space-between;align-items:center">
+          <span>Travelers</span><span class="hint" id="md-count-travelers"></span>
+        </div>
+        <div class="card-body" style="padding:12px 16px">
+          <div class="md-list" id="md-list-travelers"></div>
+          <div style="display:flex;gap:6px">
+            <input type="text" id="md-input-travelers" class="dm-search" style="flex:1" placeholder="Add Traveler…" onkeydown="if(event.key==='Enter')addMasterEntry('travelers',this)"/>
+            <button class="btn btn-blue btn-sm" onclick="addMasterEntry('travelers',document.getElementById('md-input-travelers'))">Add</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head" style="display:flex;justify-content:space-between;align-items:center">
+          <span>Managers</span><span class="hint" id="md-count-managers"></span>
+        </div>
+        <div class="card-body" style="padding:12px 16px">
+          <div class="md-list" id="md-list-managers"></div>
+          <div style="display:flex;gap:6px">
+            <input type="text" id="md-input-managers" class="dm-search" style="flex:1" placeholder="Add Manager…" onkeydown="if(event.key==='Enter')addMasterEntry('managers',this)"/>
+            <button class="btn btn-blue btn-sm" onclick="addMasterEntry('managers',document.getElementById('md-input-managers'))">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--blue-lt);border-left:4px solid var(--blue);border-radius:8px;padding:12px 16px;margin-top:14px;font-size:13px;color:var(--navy)">
+      Names added here appear as dropdown suggestions in the budget table. Typing a new name directly in a table cell also adds it here automatically. Click × to remove a name from suggestions (existing rows are not changed).
+    </div>
+  </div>
+
+  <!-- Users panel (admin only — shown after login check) -->
+  <div id="dm-panel-users" style="display:none">
+    <div class="card">
+      <div class="card-head">
+        <h2>Team Members</h2>
+        <span class="hint">Manage who can access the Team Travel Budget app</span>
+      </div>
+      <div class="card-body">
+        <div style="overflow-x:auto" id="users-table-wrap">
+          <p style="padding:20px;color:var(--g4)">Loading…</p>
+        </div>
+        <div class="user-form" id="add-user-form">
+          <div>
+            <label style="font-size:11px;font-weight:600;color:var(--g4);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Username</label>
+            <input type="text" id="new-username" placeholder="e.g. jsmith"/>
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:600;color:var(--g4);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Password</label>
+            <input type="password" id="new-password" placeholder="Temporary password"/>
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:600;color:var(--g4);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Role</label>
+            <select id="new-role">
+              <option value="viewer">Viewer (read-only)</option>
+              <option value="admin">Admin (full access)</option>
+            </select>
+          </div>
+          <button class="btn btn-blue" onclick="addUser()">Add User</button>
+        </div>
+        <div id="user-action-status" style="padding:0 16px 12px;font-size:12px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<datalist id="dl-travelers"></datalist>
+<datalist id="dl-owners"></datalist>
+<datalist id="dl-managers"></datalist>
+
+<!-- MODAL: NEW FISCAL YEAR -->
+<div class="modal-backdrop" id="modal-backdrop" onclick="if(event.target===this)closeNewFYModal()">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="modal-title">Create New Fiscal Year</h2>
+      <button class="modal-close" onclick="closeNewFYModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- FY Details -->
+      <div class="modal-section">
+        <h3>Fiscal Year Details</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Fiscal Year Label</label>
+            <input type="text" id="mfy-label" value="FY2027"/>
+          </div>
+          <div class="form-field">
+            <label>Awarded Budget</label>
+            <input type="text" id="mfy-awarded" value="$40,000"/>
+          </div>
+          <div class="form-field">
+            <label>Start Date (Oct 1)</label>
+            <input type="date" id="mfy-start" value="2026-10-01"/>
+          </div>
+          <div class="form-field">
+            <label>End Date (Sep 30)</label>
+            <input type="date" id="mfy-end" value="2027-09-30"/>
+          </div>
+        </div>
+      </div>
+      <!-- Rate Guide -->
+      <div class="modal-section">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <h3 style="margin:0;">Rate Guide for New FY</h3>
+          <button class="btn btn-green btn-sm" onclick="fetchBLSForModal()">⟳ Fetch Rate Updates from Internet</button>
+        </div>
+        <div id="modal-bls-status" style="font-size:12px;color:var(--g4);margin-bottom:8px;"></div>
+        <table class="modal-rates-table" id="modal-rates-table">
+          <thead><tr>
+            <th>Region</th>
+            <th class="r">Airfare Eco Low</th><th class="r">Airfare Eco High</th>
+            <th class="r">Airfare Biz Low</th><th class="r">Airfare Biz High</th>
+            <th class="r">Hotel Low</th><th class="r">Hotel High</th>
+            <th class="r">Food Low</th><th class="r">Food High</th>
+            <th class="r">Visa</th>
+          </tr></thead>
+          <tbody id="modal-rates-tbody"></tbody>
+        </table>
+      </div>
+      <!-- Seed Options -->
+      <div class="modal-section">
+        <h3>Starting Point</h3>
+        <div class="seed-options">
+          <div class="seed-opt selected" id="seed-fresh" onclick="selectSeed('fresh')">
+            <div class="seed-icon">✦</div>
+            <div class="seed-title">Start Fresh</div>
+            <div class="seed-desc">Empty budget — add trips manually</div>
+          </div>
+          <div class="seed-opt" id="seed-copy" onclick="selectSeed('copy')">
+            <div class="seed-icon">⎘</div>
+            <div class="seed-title">Copy Prior Year Trips</div>
+            <div class="seed-desc">Copy all trips from previous FY as Proposed (clears actuals)</div>
+          </div>
+        </div>
+        <div id="seed-copy-source" style="display:none;margin-top:10px;">
+          <div class="form-field">
+            <label>Copy trips from</label>
+            <select id="mfy-copy-from" style="border:1px solid var(--g3);border-radius:8px;padding:7px 10px;font-size:13px;width:100%;outline:none;font-family:inherit;"></select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeNewFYModal()">Cancel</button>
+      <button class="btn btn-blue" onclick="confirmNewFY()">Create Fiscal Year</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// CONSTANTS
+// ═══════════════════════════════════════════════════════
+const REGIONS  = ['North America','Europe','Asia','Africa','Latin America'];
+const QUARTERS = ['Q1','Q2','Q3','Q4'];
+const PURPOSES = ['Conference','Team Offsite','Customer Meeting','Training','Sales','Field Visit','Recruiting','Other'];
+const STATUSES = ['Proposed','Approved','Cancelled','Deferred'];
+const REGION_BADGE = {
+  'North America':'r-na','Europe':'r-eu','Asia':'r-as','Africa':'r-af','Latin America':'r-la'};
+const REGION_BAR = {
+  'North America':'bna','Europe':'beu','Asia':'bas','Africa':'baf','Latin America':'bla'};
+const QBAR = {Q1:'bq1',Q2:'bq2',Q3:'bq3',Q4:'bq4'};
+const YR_COLORS = ['#8b5cf6','#3b82f6','#10b981','#f59e0b','#ef4444'];
+const DEST_CITIES = {
+  'North America':'New York, Chicago, San Francisco, Toronto, Mexico City',
+  'Europe':'London, Paris, Amsterdam, Berlin, Dublin, Zürich',
+  'Asia':'Tokyo, Singapore, Seoul, Beijing, Mumbai, Hong Kong',
+  'Africa':'Nairobi, Lagos, Cairo, Cape Town, Accra',
+  'Latin America':'São Paulo, Buenos Aires, Bogotá, Lima, Santiago'
+};
+
+// Per-day taxi/ground estimate by region (USD)
+const TAXI_PER_DAY = {
+  'North America':35, 'Europe':30, 'Asia':35, 'Africa':25, 'Latin America':25};
+
+// Geographic hierarchy: Region → Country → [Cities]
+const GEO_DATA = {
+  'North America':{
+    'USA':['Atlanta','Austin','Boston','Chicago','Dallas','Denver','Houston','Las Vegas','Los Angeles','Miami','Minneapolis','Nashville','New York','Philadelphia','Phoenix','Portland','San Diego','San Francisco','Seattle','Washington DC'],
+    'Canada':['Calgary','Edmonton','Montreal','Ottawa','Quebec City','Toronto','Vancouver','Winnipeg'],
+    'Mexico':['Cancún','Guadalajara','Mexico City','Monterrey','Tijuana'],
+  },
+  'Europe':{
+    'Austria':['Graz','Innsbruck','Salzburg','Vienna'],
+    'Belgium':['Antwerp','Bruges','Brussels','Ghent'],
+    'Czech Republic':['Brno','Ostrava','Prague'],
+    'Denmark':['Aarhus','Copenhagen','Odense'],
+    'Finland':['Helsinki','Tampere','Turku'],
+    'France':['Bordeaux','Lyon','Marseille','Nice','Paris','Strasbourg','Toulouse'],
+    'Germany':['Berlin','Cologne','Düsseldorf','Frankfurt','Hamburg','Munich','Stuttgart'],
+    'Greece':['Athens','Heraklion','Thessaloniki'],
+    'Hungary':['Budapest','Debrecen'],
+    'Ireland':['Cork','Dublin','Galway','Limerick'],
+    'Italy':['Bologna','Florence','Milan','Naples','Rome','Turin','Venice'],
+    'Netherlands':['Amsterdam','Eindhoven','Rotterdam','The Hague','Utrecht'],
+    'Norway':['Bergen','Oslo','Stavanger','Trondheim'],
+    'Poland':['Gdańsk','Kraków','Poznań','Warsaw','Wrocław'],
+    'Portugal':['Lisbon','Porto'],
+    'Romania':['Bucharest','Cluj-Napoca'],
+    'Spain':['Barcelona','Bilbao','Madrid','Seville','Valencia'],
+    'Sweden':['Gothenburg','Malmö','Stockholm','Uppsala'],
+    'Switzerland':['Basel','Bern','Geneva','Lausanne','Zurich'],
+    'Turkey':['Ankara','Istanbul','Izmir'],
+    'UK':['Birmingham','Edinburgh','Glasgow','Leeds','London','Manchester'],
+  },
+  'Asia':{
+    'Bangladesh':['Chittagong','Dhaka'],
+    'China':["Beijing","Chengdu","Guangzhou","Hangzhou","Nanjing","Shanghai","Shenzhen","Wuhan","Xi'an"],
+    'Hong Kong':['Hong Kong'],
+    'India':['Ahmedabad','Bangalore','Chennai','Delhi','Hyderabad','Kolkata','Mumbai','Pune'],
+    'Indonesia':['Bali','Jakarta','Medan','Surabaya','Yogyakarta'],
+    'Israel':['Haifa','Jerusalem','Tel Aviv'],
+    'Japan':['Fukuoka','Hiroshima','Kyoto','Nagoya','Osaka','Sapporo','Tokyo','Yokohama'],
+    'Malaysia':['Johor Bahru','Kuala Lumpur','Penang'],
+    'Pakistan':['Islamabad','Karachi','Lahore'],
+    'Philippines':['Cebu','Manila'],
+    'Saudi Arabia':['Dhahran','Jeddah','Riyadh'],
+    'Singapore':['Singapore'],
+    'South Korea':['Busan','Daegu','Incheon','Seoul'],
+    'Taiwan':['Kaohsiung','Taipei','Taichung'],
+    'Thailand':['Bangkok','Chiang Mai','Pattaya','Phuket'],
+    'UAE':['Abu Dhabi','Dubai','Sharjah'],
+    'Vietnam':['Da Nang','Hanoi','Ho Chi Minh City'],
+  },
+  'Africa':{
+    'Egypt':['Alexandria','Cairo','Luxor'],
+    'Ethiopia':['Addis Ababa','Dire Dawa'],
+    'Ghana':['Accra','Kumasi','Tamale'],
+    'Ivory Coast':['Abidjan','Yamoussoukro'],
+    'Kenya':['Mombasa','Nairobi'],
+    'Morocco':['Casablanca','Fez','Marrakech','Rabat','Tangier'],
+    'Nigeria':['Abuja','Ibadan','Lagos','Port Harcourt'],
+    'Rwanda':['Kigali'],
+    'Senegal':['Dakar','Saint-Louis'],
+    'South Africa':['Cape Town','Durban','Johannesburg','Pretoria'],
+    'Tanzania':['Arusha','Dar es Salaam','Zanzibar'],
+    'Uganda':['Entebbe','Kampala'],
+  },
+  'Latin America':{
+    'Argentina':['Buenos Aires','Córdoba','Mendoza','Rosario'],
+    'Bolivia':['La Paz','Santa Cruz'],
+    'Brazil':['Belo Horizonte','Brasília','Curitiba','Manaus','Porto Alegre','Recife','Rio de Janeiro','Salvador','São Paulo'],
+    'Chile':['Concepción','Santiago','Valparaíso'],
+    'Colombia':['Bogotá','Cali','Cartagena','Medellín'],
+    'Costa Rica':['San José'],
+    'Ecuador':['Guayaquil','Quito'],
+    'Panama':['Panama City'],
+    'Paraguay':['Asunción','Ciudad del Este'],
+    'Peru':['Arequipa','Cusco','Lima'],
+    'Uruguay':['Montevideo','Punta del Este'],
+    'Venezuela':['Caracas','Maracaibo','Valencia'],
+  },
+};
+
+// Derived country → region lookup (auto-generated from GEO_DATA)
+const COUNTRY_TO_REGION = {};
+Object.entries(GEO_DATA).forEach(([region,countries])=>{
+  Object.keys(countries).forEach(c=>{ COUNTRY_TO_REGION[c]=region; });
+});
+
+const DEFAULT_RATES = [
+  {region:'North America',flag:'🌎',airfare_eco:[350,650],airfare_biz:[900,1800],hotel:[150,250],food:[80,120],visa:0},
+  {region:'Europe',       flag:'🌍',airfare_eco:[700,1300],airfare_biz:[2200,4500],hotel:[180,280],food:[90,140],visa:0},
+  {region:'Asia',         flag:'🌏',airfare_eco:[900,1600],airfare_biz:[3500,7000],hotel:[120,220],food:[60,100],visa:25},
+  {region:'Africa',       flag:'🌍',airfare_eco:[1100,1800],airfare_biz:[3800,7500],hotel:[100,190],food:[50,90],visa:50},
+  {region:'Latin America',flag:'🌎',airfare_eco:[600,1100],airfare_biz:[1800,4000],hotel:[100,180],food:[55,90],visa:0},
+];
+
+// ═══════════════════════════════════════════════════════
+// SAMPLE DATA
+// ═══════════════════════════════════════════════════════
+const SAMPLE_FY2025 = [
+  {id:1,owner:'Platform Eng',traveler:'Alice Park',        city:'New York',    country:'USA',         region:'North America',purpose:'Conference',      quarter:'Q1',depart:'2024-10-15',ret:'2024-10-18',airfare:420, nights:3,hrate:215,visa:0, taxi:110,fpd:95, days:4,reg:750, status:'Approved',actual:2510},
+  {id:2,owner:'Sales',       traveler:'Michael Torres',    city:'London',      country:'UK',          region:'Europe',       purpose:'Customer Meeting', quarter:'Q1',depart:'2024-11-04',ret:'2024-11-08',airfare:890, nights:4,hrate:240,visa:0, taxi:190,fpd:115,days:5,reg:0,   status:'Approved',actual:2760},
+  {id:3,owner:'Platform Eng',traveler:'Jana Novak',        city:'Toronto',     country:'Canada',      region:'North America',purpose:'Training',        quarter:'Q1',depart:'2024-12-09',ret:'2024-12-12',airfare:390, nights:3,hrate:200,visa:0, taxi:100,fpd:88, days:4,reg:280, status:'Approved',actual:1680},
+  {id:4,owner:'Product',     traveler:'Wei Zhang',         city:'Tokyo',       country:'Japan',       region:'Asia',         purpose:'Conference',      quarter:'Q2',depart:'2025-01-20',ret:'2025-01-24',airfare:1050,nights:4,hrate:180,visa:0, taxi:150,fpd:85, days:5,reg:1100,status:'Approved',actual:3540},
+  {id:5,owner:'Marketing',   traveler:'Amara Johnson',     city:'Nairobi',     country:'Kenya',       region:'Africa',       purpose:'Field Visit',     quarter:'Q2',depart:'2025-02-10',ret:'2025-02-15',airfare:1380,nights:5,hrate:150,visa:50,taxi:140,fpd:65, days:6,reg:0,   status:'Approved',actual:3100},
+  {id:6,owner:'Platform Eng',traveler:'David Lee',         city:'Amsterdam',   country:'Netherlands', region:'Europe',       purpose:'Training',        quarter:'Q2',depart:'2025-03-03',ret:'2025-03-06',airfare:840, nights:3,hrate:220,visa:0, taxi:150,fpd:105,days:4,reg:480, status:'Approved',actual:2520},
+  {id:7,owner:'Sales',       traveler:'Natasha Ivanova',   city:'São Paulo',   country:'Brazil',      region:'Latin America', purpose:'Sales',           quarter:'Q3',depart:'2025-04-14',ret:'2025-04-17',airfare:800, nights:3,hrate:140,visa:0, taxi:130,fpd:75, days:4,reg:0,   status:'Approved',actual:1870},
+  {id:8,owner:'Product',     traveler:'Kevin Murphy',      city:'Singapore',   country:'Singapore',   region:'Asia',         purpose:'Customer Meeting', quarter:'Q3',depart:'2025-05-06',ret:'2025-05-10',airfare:1150,nights:4,hrate:190,visa:0, taxi:165,fpd:80, days:5,reg:0,   status:'Approved',actual:2310},
+  {id:9,owner:'Marketing',   traveler:'Zara Ahmed',        city:'Chicago',     country:'USA',         region:'North America',purpose:'Conference',      quarter:'Q3',depart:'2025-06-17',ret:'2025-06-20',airfare:360, nights:3,hrate:195,visa:0, taxi:95, fpd:90, days:4,reg:620, status:'Approved',actual:1740},
+  {id:10,owner:'Sales',      traveler:'Omar Hassan',       city:'Lagos',       country:'Nigeria',     region:'Africa',       purpose:'Field Visit',     quarter:'Q4',depart:'2025-07-07',ret:'2025-07-12',airfare:1480,nights:5,hrate:148,visa:50,taxi:135,fpd:62, days:6,reg:0,   status:'Approved',actual:3180},
+  {id:11,owner:'Product',    traveler:'Claire Dubois',     city:'Paris',       country:'France',      region:'Europe',       purpose:'Conference',      quarter:'Q4',depart:'2025-08-11',ret:'2025-08-14',airfare:820, nights:3,hrate:250,visa:0, taxi:165,fpd:125,days:4,reg:700, status:'Approved',actual:2890},
+  {id:12,owner:'Marketing',  traveler:'Ryan Chen',         city:'Seoul',       country:'South Korea', region:'Asia',         purpose:'Recruiting',      quarter:'Q4',depart:'2025-08-25',ret:'2025-08-29',airfare:1100,nights:4,hrate:175,visa:0, taxi:145,fpd:80, days:5,reg:0,   status:'Approved',actual:2620},
+  {id:13,owner:'Platform Eng',traveler:'Maria Santos',     city:'Buenos Aires',country:'Argentina',   region:'Latin America', purpose:'Sales',           quarter:'Q4',depart:'2025-09-08',ret:'2025-09-12',airfare:760, nights:4,hrate:135,visa:0, taxi:115,fpd:68, days:5,reg:0,   status:'Approved',actual:1840},
+  {id:14,owner:'Sales',      traveler:'Priya Patel',       city:'Berlin',      country:'Germany',     region:'Europe',       purpose:'Team Offsite',    quarter:'Q4',depart:'2025-09-22',ret:'2025-09-26',airfare:875, nights:4,hrate:205,visa:0, taxi:155,fpd:110,days:5,reg:0,   status:'Approved',actual:2830},
+];
+
+const SAMPLE_FY2026 = [
+  {id:1,owner:'Platform Eng',traveler:'Sarah Chen',       city:'New York',     country:'USA',         region:'North America',purpose:'Conference',      quarter:'Q1',depart:'2026-01-14',ret:'2026-01-17',airfare:450, nights:3,hrate:220,visa:0, taxi:120,fpd:100,days:4,reg:799, status:'Approved',actual:2501},
+  {id:2,owner:'Platform Eng',traveler:'Marcus Thompson',  city:'London',       country:'UK',          region:'Europe',       purpose:'Team Offsite',    quarter:'Q1',depart:'2026-02-03',ret:'2026-02-07',airfare:950, nights:4,hrate:250,visa:0, taxi:200,fpd:120,days:5,reg:0,   status:'Approved',actual:2890},
+  {id:3,owner:'Sales',       traveler:'Priya Patel',      city:'Singapore',    country:'Singapore',   region:'Asia',         purpose:'Customer Meeting', quarter:'Q1',depart:'2026-03-10',ret:'2026-03-14',airfare:1200,nights:4,hrate:200,visa:25,taxi:180,fpd:85, days:5,reg:0,   status:'Approved',actual:2780},
+  {id:4,owner:'Sales',       traveler:'James Okafor',     city:'Nairobi',      country:'Kenya',       region:'Africa',       purpose:'Field Visit',     quarter:'Q1',depart:'2026-03-22',ret:'2026-03-28',airfare:1450,nights:5,hrate:160,visa:50,taxi:150,fpd:70, days:6,reg:0,   status:'Approved',actual:3110},
+  {id:5,owner:'Product',     traveler:'Elena Vasquez',    city:'São Paulo',    country:'Brazil',      region:'Latin America', purpose:'Customer Meeting', quarter:'Q2',depart:'2026-04-07',ret:'2026-04-10',airfare:850, nights:3,hrate:150,visa:0, taxi:140,fpd:80, days:4,reg:0,   status:'Approved',actual:1940},
+  {id:6,owner:'Product',     traveler:'Daniel Kim',       city:'Tokyo',        country:'Japan',       region:'Asia',         purpose:'Conference',      quarter:'Q2',depart:'2026-04-21',ret:'2026-04-25',airfare:1100,nights:4,hrate:190,visa:0, taxi:160,fpd:90, days:5,reg:1200,status:'Approved',actual:3990},
+  {id:7,owner:'Platform Eng',traveler:'Amy Rodriguez',    city:'Amsterdam',    country:'Netherlands', region:'Europe',       purpose:'Training',        quarter:'Q2',depart:'2026-05-12',ret:'2026-05-15',airfare:880, nights:3,hrate:230,visa:0, taxi:160,fpd:110,days:4,reg:500, status:'Cancelled',actual:0},
+  {id:8,owner:'Marketing',   traveler:'Tom Nguyen',       city:'Chicago',      country:'USA',         region:'North America',purpose:'Conference',      quarter:'Q2',depart:'2026-06-02',ret:'2026-06-05',airfare:380, nights:3,hrate:200,visa:0, taxi:100,fpd:95, days:4,reg:650, status:'Approved',actual:2230},
+  {id:9,owner:'Sales',       traveler:'Fatima Al-Rashid', city:'Dubai',        country:'UAE',         region:'Asia',         purpose:'Sales',           quarter:'Q3',depart:'2026-07-08',ret:'2026-07-12',airfare:1350,nights:4,hrate:210,visa:0, taxi:200,fpd:100,days:5,reg:0,   status:'Proposed',actual:0},
+  {id:10,owner:'Marketing',  traveler:'Chris Obi',        city:'Cape Town',    country:'South Africa',region:'Africa',       purpose:'Conference',      quarter:'Q3',depart:'2026-07-28',ret:'2026-08-01',airfare:1600,nights:4,hrate:175,visa:0, taxi:130,fpd:75, days:5,reg:900, status:'Deferred',actual:0},
+  {id:11,owner:'Product',    traveler:'Lin Wei',          city:'Berlin',       country:'Germany',     region:'Europe',       purpose:'Team Offsite',    quarter:'Q3',depart:'2026-08-17',ret:'2026-08-21',airfare:920, nights:4,hrate:210,visa:0, taxi:150,fpd:115,days:5,reg:0,   status:'Proposed',actual:0},
+  {id:12,owner:'Platform Eng',traveler:'Raj Mehta',       city:'Mumbai',       country:'India',       region:'Asia',         purpose:'Field Visit',     quarter:'Q3',depart:'2026-09-09',ret:'2026-09-14',airfare:1050,nights:5,hrate:140,visa:25,taxi:120,fpd:65, days:6,reg:0,   status:'Proposed',actual:0},
+  {id:13,owner:'Sales',      traveler:'Anna Kowalski',    city:'Warsaw',       country:'Poland',      region:'Europe',       purpose:'Customer Meeting', quarter:'Q4',depart:'2026-10-06',ret:'2026-10-09',airfare:790, nights:3,hrate:190,visa:0, taxi:140,fpd:100,days:4,reg:0,   status:'Proposed',actual:0},
+  {id:14,owner:'Marketing',  traveler:'Carlos Morales',   city:'Bogotá',       country:'Colombia',    region:'Latin America', purpose:'Sales',           quarter:'Q4',depart:'2026-10-20',ret:'2026-10-24',airfare:720, nights:4,hrate:140,visa:0, taxi:120,fpd:70, days:5,reg:0,   status:'Cancelled',actual:0},
+  {id:15,owner:'Product',    traveler:'Yuki Tanaka',      city:'Seoul',        country:'South Korea', region:'Asia',         purpose:'Recruiting',      quarter:'Q4',depart:'2026-11-10',ret:'2026-11-14',airfare:1150,nights:4,hrate:180,visa:0, taxi:150,fpd:85, days:5,reg:0,   status:'Proposed',actual:0},
+  {id:16,owner:'Platform Eng',traveler:'Mia Johansson',   city:'Toronto',      country:'Canada',      region:'North America',purpose:'Training',        quarter:'Q4',depart:'2026-11-30',ret:'2026-12-03',airfare:420, nights:3,hrate:210,visa:0, taxi:110,fpd:95, days:4,reg:300, status:'Proposed',actual:0},
+  {id:17,owner:'Sales',      traveler:'Isaac Dlamini',    city:'Lagos',        country:'Nigeria',     region:'Africa',       purpose:'Field Visit',     quarter:'Q4',depart:'2026-12-08',ret:'2026-12-13',airfare:1550,nights:5,hrate:155,visa:50,taxi:140,fpd:65, days:6,reg:0,   status:'Deferred',actual:0},
+  {id:18,owner:'Marketing',  traveler:'Sophie Lambert',   city:'Paris',        country:'France',      region:'Europe',       purpose:'Conference',      quarter:'Q4',depart:'2026-12-01',ret:'2026-12-04',airfare:870, nights:3,hrate:260,visa:0, taxi:170,fpd:130,days:4,reg:750, status:'Proposed',actual:0},
+];
+
+// ═══════════════════════════════════════════════════════
+// DATABASE (localStorage)
+// ═══════════════════════════════════════════════════════
+const DB_KEY = 'ttb_v3';  // kept for legacy migration only
+let db;
+
+// ─── Save state to server (debounced 400ms) ───────────────────────────────────
+let _saveTimer = null;
+let _saving = false;
+
+function setSaveUI(state, msg = '') {
+  const el = document.getElementById('save-indicator');
+  if (!el) return;
+  el.className = 'save-' + state;
+  const dot  = el.querySelector('.save-dot');
+  const text = el.querySelector('.save-text');
+  const labels = { idle:'Ready', saving:'Saving…', ok:'Saved', err:'Save failed' };
+  if (text) text.textContent = msg || labels[state] || '';
+  if (state === 'err') el.title = msg;
+}
+
+async function _flushSave() {
+  if (_saving) return;
+  _saving = true;
+  setSaveUI('saving');
+  try {
+    const res = await fetch('/api/state', {
+      method:  'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(db),
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    setSaveUI('ok');
+    setTimeout(() => setSaveUI('idle'), 2500);
+  } catch (e) {
+    console.error('[saveDB]', e);
+    setSaveUI('err', e.message);
+  } finally {
+    _saving = false;
+  }
+}
+
+function saveDB() {
+  clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(_flushSave, 400);
+}
+
+// ═══════════════════════════════════════════════════════
+// UNDO / REDO HISTORY
+// ═══════════════════════════════════════════════════════
+const History = {
+  _undo: [], _redo: [], MAX: 50,
+  _snap() {
+    const yd = getYD();
+    return { rows: JSON.parse(JSON.stringify(yd.rows || [])), awarded: yd.awarded };
+  },
+  push() {
+    this._undo.push(this._snap());
+    if(this._undo.length > this.MAX) this._undo.shift();
+    this._redo = [];
+    this._update();
+  },
+  undo() {
+    if(!this._undo.length) return;
+    this._redo.push(this._snap());
+    this._apply(this._undo.pop());
+  },
+  redo() {
+    if(!this._redo.length) return;
+    this._undo.push(this._snap());
+    this._apply(this._redo.pop());
+  },
+  _apply(snap) {
+    const yd = getYD();
+    yd.rows = snap.rows;
+    yd.awarded = snap.awarded;
+    document.getElementById('awarded-input').value = fmt(snap.awarded);
+    pendingDeleteId = null;
+    saveDB(); renderTable(); this._update();
+  },
+  clear() { this._undo = []; this._redo = []; this._update(); },
+  _update() {
+    const u = document.getElementById('btn-undo');
+    const r = document.getElementById('btn-redo');
+    if(u){ u.disabled = !this._undo.length; u.title = this._undo.length ? `Undo (${this._undo.length})` : 'Nothing to undo'; }
+    if(r){ r.disabled = !this._redo.length; r.title = this._redo.length ? `Redo (${this._redo.length})` : 'Nothing to redo'; }
+  }
+};
+
+let pendingDeleteId = null;
+
+async function initDB(){
+  // 1. Try server
+  try {
+    const serverState = await fetch('/api/state').then(r => r.json());
+    if (serverState && serverState.years) {
+      db = serverState;
+      migrateDB();
+      return;
+    }
+  } catch(e) { console.warn('[initDB] server fetch failed:', e); }
+
+  // 2. Fall back to a legacy localStorage snapshot (one-time migration)
+  const raw = localStorage.getItem(DB_KEY);
+  if (raw) {
+    try {
+      db = JSON.parse(raw);
+      migrateDB();
+      saveDB(); // push legacy data up to the server
+      localStorage.removeItem(DB_KEY);
+      return;
+    } catch(e) { console.warn('[initDB] localStorage parse failed:', e); }
+  }
+
+  // 3. Fresh defaults
+  db = {
+    activeFY: 'FY2026',
+    auditLog: [],
+    years: {
+      'FY2025': { label:'FY2025', start:'2024-10-01', end:'2025-09-30',
+        awarded:36000, rows:SAMPLE_FY2025, rates:null, ratesSource:'Defaults',
+        archived:false, created:Date.now(), modified:Date.now() },
+      'FY2026': { label:'FY2026', start:'2025-10-01', end:'2026-09-30',
+        awarded:40000, rows:SAMPLE_FY2026, rates:null, ratesSource:'Defaults',
+        archived:false, created:Date.now(), modified:Date.now() },
+    }
+  };
+  migrateDB();
+  saveDB();
+}
+
+function saveDB(){ localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+function getYD(fy){ return db.years[fy || db.activeFY]; }
+function currentRows(){ return getYD().rows; }
+let nextId = 100;
+
+// ═══════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════
+function num(v){ return parseFloat(v)||0; }
+function fmt(n){ return n==null||isNaN(n)?'$0':'$'+Math.round(n).toLocaleString(); }
+function fmtD(n){ if(!n) return '—'; const s=n>0?'+':'-'; return s+'$'+Math.abs(Math.round(n)).toLocaleString(); }
+function fmtPct(n){ if(!n||isNaN(n)) return '—'; return (n>0?'+':'')+n.toFixed(1)+'%'; }
+function escH(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+function isActive(r){ return r.status==='Proposed'||r.status==='Approved'; }
+function calcP(r){ return num(r.airfare)+num(r.nights)*num(r.hrate)+num(r.visa)+num(r.taxi)+num(r.fpd)*num(r.days)+num(r.reg); }
+function parseAmt(s){ return parseFloat(String(s||'').replace(/[$,\s]/g,''))||0; }
+function getFYRates(fy){ return getYD(fy).rates || DEFAULT_RATES; }
+
+// ═══════════════════════════════════════════════════════
+// FY SELECTOR
+// ═══════════════════════════════════════════════════════
+function renderFYSelector(){
+  const fys = Object.keys(db.years).filter(k => !db.years[k].archived).sort();
+  document.getElementById('fy-active-label').textContent = db.activeFY;
+  document.getElementById('fy-dropdown').innerHTML = fys.map(fy=>`
+    <div class="fy-option${fy===db.activeFY?' active':''}" onclick="switchFY('${fy}')">${fy}</div>`).join('');
+  document.getElementById('budget-fy-label').textContent = db.activeFY;
+  document.getElementById('rates-fy-label').textContent  = db.activeFY;
+}
+
+function toggleFYDropdown(){
+  document.getElementById('fy-dropdown').classList.toggle('open');
+}
+document.addEventListener('click', e=>{
+  if(!e.target.closest('.fy-selector')) document.getElementById('fy-dropdown').classList.remove('open');
+});
+
+function switchFY(fy){
+  db.activeFY = fy;
+  saveDB();
+  History.clear();
+  pendingDeleteId = null;
+  const yd = getYD();
+  document.getElementById('awarded-input').value = fmt(yd.awarded);
+  renderFYSelector();
+  renderTable();
+  buildRateGuide();
+  document.getElementById('fy-dropdown').classList.remove('open');
+}
+
+// ═══════════════════════════════════════════════════════
+// TABLE RENDERING
+// ═══════════════════════════════════════════════════════
+function mkSel(opts, val, field, rid){
+  return `<select onchange="upd(${rid},'${field}',this.value)">`
+    +opts.map(o=>`<option value="${o}"${o===val?' selected':''}>${o}</option>`).join('')+'</select>';
+}
+function mkIn(val,type,field,rid,w,extra=''){
+  return `<input type="${type}" value="${escH(val)}" style="width:${w}" ${extra} onchange="upd(${rid},'${field}',this.value)"/>`;
+}
+function mkTxt(val,field,rid){ return `<input type="text" value="${escH(val)}" onchange="upd(${rid},'${field}',this.value)"/>`; }
+function mkDL(val,field,rid,listId){ return `<input type="text" value="${escH(val)}" list="${listId}" onchange="upd(${rid},'${field}',this.value)" autocomplete="off"/>`; }
+function mkCountrySel(val,rid,region){
+  const countries=Object.keys(GEO_DATA[region]||{}).sort();
+  const extra=val&&!countries.includes(val)?`<option value="${escH(val)}" selected>${escH(val)}</option>`:'';
+  return `<select onchange="upd(${rid},'country',this.value)"><option value="">— Country —</option>${extra}`
+    +countries.map(c=>`<option value="${c}"${c===val?' selected':''}>${c}</option>`).join('')+'</select>';
+}
+function mkCitySel(val,rid,country,region){
+  const cities=((GEO_DATA[region]||{})[country])||[];
+  const extra=val&&!cities.includes(val)?`<option value="${escH(val)}" selected>${escH(val)}</option>`:'';
+  return `<select onchange="upd(${rid},'city',this.value)"><option value="">— City —</option>${extra}`
+    +cities.map(c=>`<option value="${c}"${c===val?' selected':''}>${c}</option>`).join('')+'</select>';
+}
+function stSel(status,rid){
+  return `<select class="status-sel st-${status}"
+    onchange="upd(${rid},'status',this.value);this.className='status-sel st-'+this.value">`
+    +STATUSES.map(s=>`<option value="${s}"${s===status?' selected':''}>${s}</option>`).join('')+'</select>';
+}
+
+function renderTable(){
+  const rows = currentRows().filter(r => !r.archived);
+  const yd   = getYD();
+  const tbody= document.getElementById('budget-tbody');
+  const tfoot= document.getElementById('budget-tfoot');
+  let tP=0,tA=0,tCx=0,tDf=0,tAir=0,tHtl=0,tVis=0,tTx=0,tFd=0,tRg=0;
+
+  tbody.innerHTML = rows.map((r,i)=>{
+    const hotel=num(r.nights)*num(r.hrate), food=num(r.fpd)*num(r.days);
+    const planned=calcP(r), actual=num(r.actual), active=isActive(r);
+    const vari = (actual>0&&active)?actual-planned:null;
+    if(active){ tP+=planned; tAir+=num(r.airfare); tHtl+=hotel; tVis+=num(r.visa); tTx+=num(r.taxi); tFd+=food; tRg+=num(r.reg); }
+    if(actual>0&&active) tA+=actual;
+    if(r.status==='Cancelled') tCx+=planned;
+    if(r.status==='Deferred')  tDf+=planned;
+    const rcls = r.status==='Cancelled'?'row-cx':r.status==='Deferred'?'row-df':r.id===pendingDeleteId?'row-delconfirm':'';
+    const vc = vari==null?'vr-neu':vari<=0?'vr-pos':'vr-neg';
+    const delCell = r.id===pendingDeleteId
+      ? `<td class="td-del"><div class="del-confirm"><button class="del-yes" onclick="requestDelRow(${r.id})">Delete</button><button class="del-no" onclick="cancelDel()">Cancel</button></div></td>`
+      : `<td class="td-del"><button class="del-btn" onclick="requestDelRow(${r.id})" title="Delete row">✕</button></td>`;
+    return `<tr class="${rcls}">
+      <td style="text-align:center;color:var(--g4);font-size:11px">${i+1}</td>
+      <td class="td-st">${stSel(r.status,r.id)}</td>
+      <td>${mkDL(r.owner,'owner',r.id,'dl-owners')}</td>
+      <td>${mkDL(r.manager,'manager',r.id,'dl-managers')}</td>
+      <td>${mkDL(r.traveler,'traveler',r.id,'dl-travelers')}</td>
+      <td>${mkCountrySel(r.country,r.id,r.region)}</td>
+      <td>${mkSel(REGIONS,r.region,'region',r.id)}</td>
+      <td>${mkCitySel(r.city,r.id,r.country,r.region)}</td>
+      <td>${mkSel(PURPOSES,r.purpose,'purpose',r.id)}</td>
+      <td>${mkSel(QUARTERS,r.quarter,'quarter',r.id)}</td>
+      <td>${mkIn(r.depart,'date','depart',r.id,'118px')}</td>
+      <td>${mkIn(r.ret,'date','ret',r.id,'118px')}</td>
+      <td>${mkIn(r.airfare,'number','airfare',r.id,'68px')}</td>
+      <td>${mkIn(r.nights,'number','nights',r.id,'44px')}</td>
+      <td>${mkIn(r.hrate,'number','hrate',r.id,'56px')}</td>
+      <td class="td-calc">${fmt(hotel)}</td>
+      <td>${mkIn(r.visa,'number','visa',r.id,'48px')}</td>
+      <td>${mkIn(r.taxi,'number','taxi',r.id,'56px')}</td>
+      <td>${mkIn(r.fpd,'number','fpd',r.id,'50px')}</td>
+      <td>${mkIn(r.days,'number','days',r.id,'40px')}</td>
+      <td class="td-calc">${fmt(food)}</td>
+      <td>${mkIn(r.reg,'number','reg',r.id,'62px')}</td>
+      <td class="col-pl" style="${active?'':'opacity:.38'}">${fmt(planned)}</td>
+      <td class="col-ac">${mkIn(r.actual,'number','actual',r.id,'76px','placeholder="0"')}</td>
+      <td class="col-vr ${vc}">${vari!=null?fmtD(vari):'—'}</td>
+      ${delCell}
+    </tr>`;
+  }).join('');
+
+  const awarded = yd.awarded||0;
+  const vPA = awarded-tP, vAA = awarded-tA, vAP = tA-tP;
+  tfoot.innerHTML = `
+  <tr>
+    <td colspan="12" class="lbl">ACTIVE TOTALS (${rows.filter(isActive).length} trips — Proposed + Approved)</td>
+    <td style="text-align:right">${fmt(tAir)}</td><td></td><td></td>
+    <td style="text-align:right">${fmt(tHtl)}</td>
+    <td style="text-align:right">${fmt(tVis)}</td>
+    <td style="text-align:right">${fmt(tTx)}</td>
+    <td></td><td></td>
+    <td style="text-align:right">${fmt(tFd)}</td>
+    <td style="text-align:right">${fmt(tRg)}</td>
+    <td class="tf-pl">${fmt(tP)}</td>
+    <td class="tf-ac">${tA?fmt(tA):'—'}</td>
+    <td class="${tA?(vAP<=0?'tf-vp':'tf-vn'):''}">
+      ${tA?fmtD(vAP):'—'}</td><td></td>
+  </tr>
+  <tr>
+    <td colspan="23" class="lbl" style="padding-left:10px">
+      Awarded: <strong>${fmt(awarded)}</strong> &nbsp;·&nbsp;
+      Cancelled: <strong style="color:var(--red)">${fmt(tCx)}</strong> &nbsp;·&nbsp;
+      Deferred: <strong style="color:var(--amber)">${fmt(tDf)}</strong> &nbsp;·&nbsp;
+      Active Planned vs. Awarded:
+    </td>
+    <td class="${vPA>=0?'tf-vp':'tf-vn'}" colspan="2">${fmtD(vPA)}</td><td></td>
+  </tr>
+  ${tA?`<tr><td colspan="23" class="lbl" style="padding-left:10px">Actual Spent vs. Awarded Budget:</td>
+    <td class="${vAA>=0?'tf-vp':'tf-vn'}" colspan="2">${fmtD(vAA)}</td><td></td></tr>`:''}`;
+
+  document.getElementById('tb-planned').textContent = fmt(tP);
+  document.getElementById('tb-actual').textContent  = tA ? fmt(tA) : '—';
+  const pill = document.getElementById('tb-var-pill');
+  const d = awarded - tP;
+  pill.textContent = d>=0 ? fmt(d)+' under' : fmt(Math.abs(d))+' OVER';
+  pill.className   = 'var-pill ' + (d>0?'var-under':d<0?'var-over':'var-zero');
+  updateBOV(tP, tA, tCx+tDf, awarded);
+}
+
+function updateBOV(pl,ac,ex,aw){
+  const base   = Math.max(aw,pl,1);
+  const plPct  = aw>0 ? Math.round(pl/aw*100) : 0;
+  const acPct  = aw>0 ? Math.round(ac/aw*100) : 0;
+  const remPct = Math.max(0, 100-plPct);
+  const isOver = pl>aw;
+  const isFull = pl===aw;
+
+  document.getElementById('bov-pl').style.width = Math.min(pl/base*100,100)+'%';
+  document.getElementById('bov-ac').style.width = Math.min(ac/base*100,100)+'%';
+
+  // Big percentage
+  const bigEl = document.getElementById('bov-big-pct');
+  if(bigEl){
+    bigEl.textContent = aw>0 ? plPct+'%' : '—';
+    bigEl.className = 'bov-big-pct'+(isOver?' over':isFull?' full':'');
+  }
+
+  // Label inside the planned bar (only shown when bar is wide enough)
+  const lblEl = document.getElementById('bov-pl-lbl');
+  if(lblEl) lblEl.textContent = plPct>=18 ? plPct+'% planned' : '';
+
+  // Stats row
+  const remBadge = isOver
+    ? `<span class="bov-over-badge">▲ ${plPct-100}% over budget</span>`
+    : isFull
+    ? `<span class="bov-full-badge">⚠ 100% allocated</span>`
+    : `<span class="bov-rem-badge">▼ ${remPct}% remaining</span>`;
+
+  document.getElementById('bov-stats').innerHTML = `
+    <span class="bov-stat"><span class="dot dot-aw"></span>Awarded <strong>${fmt(aw)}</strong></span>
+    <span class="bov-stat"><span class="dot dot-pl"></span>Planned <strong>${fmt(pl)}</strong><span class="bov-pct-tag${isOver?' over':''}">${plPct}%</span></span>
+    ${ac?`<span class="bov-stat"><span class="dot dot-ac"></span>Actual <strong>${fmt(ac)}</strong><span class="bov-pct-tag actual">${acPct}%</span></span>`:''}
+    ${ex?`<span class="bov-stat"><span class="dot dot-cx"></span>Excluded <strong>${fmt(ex)}</strong></span>`:''}
+    <span class="bov-stat" style="margin-left:8px">${remBadge}</span>`;
+}
+
+function upd(id,field,value){
+  const rows = currentRows(); const r=rows.find(r=>r.id===id);
+  if(r){
+    History.push();
+    const prev = r[field];
+    r[field]=value; r.modified=Date.now();
+    autoFillRow(id, field);   // runs BEFORE saveDB/renderTable — modifies r in place
+    if(field==='traveler'||field==='owner'||field==='manager') addToList(field, value);
+    logAudit('update', db.activeFY, `${r.traveler||'Row '+id}: ${field} changed${prev!==undefined?' from "'+prev+'"':''} to "${value}"`);
+    saveDB(); renderTable();
+  }
+}
+function requestDelRow(id){
+  if(pendingDeleteId===id){
+    const r = currentRows().find(r=>r.id===id);
+    History.push();
+    logAudit('delete', db.activeFY, `Deleted: ${r?r.traveler+' → '+r.city:id}`);
+    getYD().rows = currentRows().filter(r=>r.id!==id);
+    pendingDeleteId=null;
+    saveDB(); renderTable();
+  } else {
+    pendingDeleteId=id;
+    renderTable();
+    clearTimeout(window._delTimer);
+    window._delTimer=setTimeout(()=>{ if(pendingDeleteId===id){pendingDeleteId=null;renderTable();} },4000);
+  }
+}
+function cancelDel(){ pendingDeleteId=null; renderTable(); }
+function addRow(){
+  History.push();
+  const rows = currentRows();
+  const now = Date.now();
+  rows.push({id:++nextId,owner:'',manager:'',traveler:'',city:'',country:'',
+    region:'North America',purpose:'Conference',quarter:'Q1',
+    depart:'',ret:'',airfare:0,nights:0,hrate:0,visa:0,
+    taxi:0,fpd:75,days:1,reg:0,status:'Proposed',actual:0,
+    archived:false,created:now,modified:now});
+  logAudit('create', db.activeFY, `New row added (id ${nextId})`);
+  saveDB(); renderTable();
+  const w=document.querySelector('.tbl-wrap'); if(w) w.scrollTop=w.scrollHeight;
+}
+function saveAwarded(val){
+  History.push();
+  const prev = getYD().awarded;
+  getYD().awarded = parseAmt(val);
+  document.getElementById('awarded-input').value = fmt(getYD().awarded);
+  logAudit('update', db.activeFY, `Awarded budget changed: ${fmt(prev)} → ${fmt(getYD().awarded)}`);
+  saveDB(); renderTable();
+}
+
+// ═══════════════════════════════════════════════════════
+// TRAVELER / OWNER SUGGESTION LISTS
+// ═══════════════════════════════════════════════════════
+function renderDataLists(){
+  const tDL = document.getElementById('dl-travelers');
+  const oDL = document.getElementById('dl-owners');
+  const mDL = document.getElementById('dl-managers');
+  if(tDL) tDL.innerHTML = (db.travelers||[]).map(n=>`<option value="${escH(n)}">`).join('');
+  if(oDL) oDL.innerHTML = (db.owners||[]).map(n=>`<option value="${escH(n)}">`).join('');
+  if(mDL) mDL.innerHTML = (db.managers||[]).map(n=>`<option value="${escH(n)}">`).join('');
+}
+function addToList(field, val){
+  if(!val||!val.trim()) return;
+  const key = field==='traveler'?'travelers':field==='manager'?'managers':'owners';
+  if(!db[key]) db[key]=[];
+  const v = val.trim();
+  if(!db[key].includes(v)){ db[key].push(v); db[key].sort(); saveDB(); renderDataLists(); }
+}
+
+// ═══════════════════════════════════════════════════════
+// AUTO-FILL ENGINE
+// Triggers: depart, ret, region, country
+// Modifies r in-place — caller (upd) must saveDB/renderTable
+// ═══════════════════════════════════════════════════════
+function autoFillRow(rowId, changedField){
+  const AUTO_TRIGGERS = new Set(['depart','ret','region','country']);
+  if(!AUTO_TRIGGERS.has(changedField)) return;
+  const r = currentRows().find(r=>r.id===rowId);
+  if(!r) return;
+
+  // 1. Infer region from country
+  if(changedField==='country' && r.country){
+    const detected = COUNTRY_TO_REGION[r.country];
+    if(detected && detected!==r.region) r.region = detected;
+  }
+
+  // Clear country/city if they no longer belong to the new region
+  if(changedField==='region'){
+    const validCountries = Object.keys(GEO_DATA[r.region]||{});
+    if(r.country && !validCountries.includes(r.country)){ r.country=''; r.city=''; }
+  }
+  // Clear city if it no longer belongs to the new country
+  if(changedField==='country'){
+    const validCities = ((GEO_DATA[r.region]||{})[r.country])||[];
+    if(r.city && !validCities.includes(r.city)) r.city='';
+  }
+
+  const rates = getFYRates();
+  const rate  = rates.find(rt=>rt.region===r.region)||rates[0];
+
+  // 2. Calculate days & nights from depart/return (always when either date changes)
+  if(r.depart && r.ret){
+    const d1  = new Date(r.depart+'T00:00:00');
+    const d2  = new Date(r.ret  +'T00:00:00');
+    const diff = Math.round((d2-d1)/86400000);
+    if(diff>=0){ r.nights=Math.max(0,diff); r.days=Math.max(1,diff+1); }
+  }
+
+  // Food/day — enforce $75 allowance only if still at zero (never override a user-set value)
+  if(r.fpd===0) r.fpd=75;
+
+  if(rate){
+    const ecoMid   = Math.round((rate.airfare_eco[0]+rate.airfare_eco[1])/2);
+    const hotelMid = Math.round((rate.hotel[0]      +rate.hotel[1]      )/2);
+    const days     = Math.max(1, r.days||1);
+    const txDay    = TAXI_PER_DAY[r.region]||30;
+    const regionChanged = changedField==='region'||changedField==='country';
+
+    // 4. Airfare — fill if zero, or always on region/country change
+    if(regionChanged||r.airfare===0) r.airfare=ecoMid;
+
+    // 5. Hotel/night — fill if zero, or on region/country change
+    if(regionChanged||r.hrate===0||r.hrate===150) r.hrate=hotelMid;
+
+    // 6. Taxi — recalculate whenever dates or region change, or still zero
+    if(regionChanged||changedField==='depart'||changedField==='ret'||r.taxi===0)
+      r.taxi=Math.round(txDay*days);
+
+    // 7. Visa — apply from rate guide on region/country change if still zero
+    if(regionChanged&&r.visa===0) r.visa=rate.visa||0;
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════════
+function buildDashboard(){
+  const yd=getYD(), rows=(yd.rows||[]).filter(r=>!r.archived), active=rows.filter(isActive);
+  const tP=active.reduce((s,r)=>s+calcP(r),0);
+  const tA=active.filter(r=>num(r.actual)>0).reduce((s,r)=>s+num(r.actual),0);
+  const aw=yd.awarded||0, rem=aw-tP;
+  const kpis=[
+    {cls:'kpi-aw',lbl:'Awarded Budget',   val:fmt(aw),      sub:`FY ${db.activeFY}`},
+    {cls:'kpi-pl',lbl:'Active Planned',   val:fmt(tP),      sub:`${active.length} active trips`},
+    {cls:'kpi-ac',lbl:'Actual Spent',     val:tA?fmt(tA):'—', sub:tA?`${active.filter(r=>num(r.actual)>0).length} actualized`:'No actuals yet'},
+    {cls:'kpi-rm',lbl:'Budget Remaining', val:fmt(Math.max(rem,0)),
+      sub:rem>=0?'Under budget':'OVER BUDGET',
+      tag:rem>=0?{t:'On Track',s:'background:#d1ede0;color:#0f5132'}:{t:'Over Budget',s:'background:#fde8e6;color:#c0392b'}},
+    {cls:'kpi-vr',lbl:'Plan vs. Awarded', val:fmtD(rem), sub:rem>=0?'Headroom':'Over by '+fmt(Math.abs(rem))},
+  ];
+  document.getElementById('kpi-grid').innerHTML=kpis.map(k=>`
+    <div class="kpi ${k.cls}">
+      <div class="kpi-lbl">${k.lbl}</div>
+      <div class="kpi-val">${k.val}</div>
+      ${k.tag?`<span class="kpi-tag" style="${k.tag.s}">${k.tag.t}</span>`:''}
+      <div class="kpi-sub">${k.sub}</div>
+    </div>`).join('');
+
+  // Waterfall
+  const tCx=rows.filter(r=>r.status==='Cancelled').reduce((s,r)=>s+calcP(r),0);
+  const tDf=rows.filter(r=>r.status==='Deferred').reduce((s,r)=>s+calcP(r),0);
+  const base=Math.max(aw,tP,1);
+  const wfRows=[
+    {lbl:'Awarded',      val:aw,            cls:'wf-aw'},
+    {lbl:'Active Planned',val:tP,           cls:'wf-pl'},
+    ...(tA?[{lbl:'Actual Spent',val:tA,     cls:'wf-ac'}]:[]),
+    ...(tCx?[{lbl:'Cancelled',  val:tCx,   cls:'wf-cx'}]:[]),
+    ...(tDf?[{lbl:'Deferred',   val:tDf,   cls:'wf-df'}]:[]),
+    {lbl:'Remaining',    val:Math.max(rem,0),cls:'wf-aw'},
+  ];
+  document.getElementById('dash-wf').innerHTML = wfRows.map(w=>`
+    <div class="wf-row">
+      <span class="wf-lbl">${w.lbl}</span>
+      <div class="wf-track"><div class="wf-fill ${w.cls}" style="width:${Math.min(w.val/base*100,100)}%"></div></div>
+      <span class="wf-amt">${fmt(w.val)}</span>
+      <span class="wf-pct">${Math.round(w.val/base*100)}%</span>
+    </div>`).join('');
+
+  // Status breakdown
+  const bySt={Proposed:{n:0,a:0},Approved:{n:0,a:0},Cancelled:{n:0,a:0},Deferred:{n:0,a:0}};
+  rows.forEach(r=>{ if(bySt[r.status]){bySt[r.status].n++;bySt[r.status].a+=calcP(r);} });
+  document.getElementById('dash-st').innerHTML=STATUSES.map(s=>`
+    <div class="st-item si-${s}">
+      <div class="si-count">${bySt[s].n}</div>
+      <div class="si-label">${s}</div>
+      <div class="si-amt">${fmt(bySt[s].a)}</div>
+    </div>`).join('');
+
+  // Quarter
+  const byQ={};QUARTERS.forEach(q=>byQ[q]={p:0,a:0,n:0});
+  active.forEach(r=>{if(byQ[r.quarter]){byQ[r.quarter].p+=calcP(r);byQ[r.quarter].a+=num(r.actual);byQ[r.quarter].n++;}});
+  const qMax=Math.max(...Object.values(byQ).map(v=>v.p),1);
+  document.getElementById('dash-q').innerHTML=QUARTERS.map(q=>`
+    <tr><td class="lbl">${q}</td>
+    <td><div class="bw"><div class="bf ${QBAR[q]}" style="width:${byQ[q].p/qMax*100}%"></div>
+      ${byQ[q].a?`<div class="bf2 bac" style="width:${byQ[q].a/qMax*100}%"></div>`:''}</div></td>
+    <td class="amt">${fmt(byQ[q].p)}</td>
+    ${byQ[q].a?`<td class="amt2">${fmt(byQ[q].a)}</td>`:`<td class="cnt">—</td>`}
+    <td class="cnt">${byQ[q].n}t</td></tr>`).join('');
+
+  // Region
+  const byR={};REGIONS.forEach(r=>byR[r]={p:0,a:0,n:0});
+  active.forEach(r=>{if(byR[r.region]){byR[r.region].p+=calcP(r);byR[r.region].a+=num(r.actual);byR[r.region].n++;}});
+  const rMax=Math.max(...Object.values(byR).map(v=>v.p),1);
+  document.getElementById('dash-r').innerHTML=REGIONS.map(r=>`
+    <tr><td class="lbl"><span class="badge ${REGION_BADGE[r]}">${r}</span></td>
+    <td><div class="bw"><div class="bf ${REGION_BAR[r]}" style="width:${byR[r].p/rMax*100}%"></div>
+      ${byR[r].a?`<div class="bf2 bac" style="width:${byR[r].a/rMax*100}%"></div>`:''}</div></td>
+    <td class="amt">${fmt(byR[r].p)}</td>
+    ${byR[r].a?`<td class="amt2">${fmt(byR[r].a)}</td>`:`<td class="cnt">—</td>`}
+    <td class="cnt">${byR[r].n}t</td></tr>`).join('');
+
+  // Owner
+  const byO={};
+  active.forEach(r=>{const o=r.owner||'(unassigned)';if(!byO[o])byO[o]={p:0,a:0,n:0};byO[o].p+=calcP(r);byO[o].a+=num(r.actual);byO[o].n++;});
+  const oEnt=Object.entries(byO).sort((a,b)=>b[1].p-a[1].p);
+  const oMax=Math.max(...oEnt.map(e=>e[1].p),1);
+  document.getElementById('dash-o').innerHTML=oEnt.map(([o,v])=>`
+    <tr><td class="lbl" style="width:130px">${o}</td>
+    <td><div class="bw"><div class="bf bow" style="width:${v.p/oMax*100}%"></div>
+      ${v.a?`<div class="bf2 bac" style="width:${v.a/oMax*100}%"></div>`:''}</div></td>
+    <td class="amt">${fmt(v.p)}</td>
+    ${v.a?`<td class="amt2">${fmt(v.a)}</td>`:`<td class="cnt">—</td>`}
+    <td class="cnt">${v.n}t</td></tr>`).join('');
+
+  // Categories
+  const cats={Airfare:{v:active.reduce((s,r)=>s+num(r.airfare),0),i:'✈️'},
+    Hotel:{v:active.reduce((s,r)=>s+num(r.nights)*num(r.hrate),0),i:'🏨'},
+    'Car/Taxi':{v:active.reduce((s,r)=>s+num(r.taxi),0),i:'🚕'},
+    Food:{v:active.reduce((s,r)=>s+num(r.fpd)*num(r.days),0),i:'🍽️'},
+    Visa:{v:active.reduce((s,r)=>s+num(r.visa),0),i:'🛂'},
+    'Reg. Fees':{v:active.reduce((s,r)=>s+num(r.reg),0),i:'🎟️'}};
+  document.getElementById('dash-cats').innerHTML=Object.entries(cats).map(([n,c])=>`
+    <div class="cat-item"><div class="cat-lbl">${c.i} ${n}</div>
+    <div class="cat-val">${fmt(c.v)}</div>
+    <div class="cat-pct">${tP?Math.round(c.v/tP*100):0}% of planned</div></div>`).join('');
+
+  // Top trips
+  const top=[...active].sort((a,b)=>calcP(b)-calcP(a)).slice(0,8);
+  document.getElementById('dash-top').innerHTML=`
+    <thead><tr>${['Traveler','Destination','Owner','Region','Qtr','Status','Planned','Actual','Var'].map((h,i)=>`
+      <th style="background:var(--navy);color:#f5f5f7;padding:7px 9px;font-size:10px;letter-spacing:.05em;
+        text-align:${i>=6?'right':'left'}">${h}</th>`).join('')}</tr></thead>
+    <tbody>${top.map((r,i)=>{
+      const p=calcP(r),a=num(r.actual),v=a>0?a-p:null;
+      return `<tr style="background:${i%2?'var(--g1)':'#fff'}">
+        <td style="padding:7px 9px">${r.traveler}</td>
+        <td style="padding:7px 9px">${r.city}, ${r.country}</td>
+        <td style="padding:7px 9px">${r.owner}</td>
+        <td style="padding:7px 9px"><span class="badge ${REGION_BADGE[r.region]}">${r.region}</span></td>
+        <td style="padding:7px 9px">${r.quarter}</td>
+        <td style="padding:7px 9px"><span class="badge st-${r.status}">${r.status}</span></td>
+        <td style="padding:7px 9px;text-align:right;font-weight:700;color:var(--blue)">${fmt(p)}</td>
+        <td style="padding:7px 9px;text-align:right;font-weight:700;color:var(--green)">${a?fmt(a):'—'}</td>
+        <td style="padding:7px 9px;text-align:right;font-weight:700;color:${v==null?'var(--g4)':v<=0?'var(--green)':'var(--red)'}">${v!=null?fmtD(v):'—'}</td>
+      </tr>`;}).join('')}</tbody>`;
+}
+
+// ═══════════════════════════════════════════════════════
+// YEAR COMPARISON
+// ═══════════════════════════════════════════════════════
+let cmpSelected = [];
+
+function summarizeFY(fy){
+  const yd=getYD(fy); if(!yd) return null;
+  const rows=yd.rows||[], active=rows.filter(isActive);
+  const tP=active.reduce((s,r)=>s+calcP(r),0);
+  const tA=active.filter(r=>num(r.actual)>0).reduce((s,r)=>s+num(r.actual),0);
+  const aw=yd.awarded||0;
+  const byQ={},byR={},byO={},bySt={};
+  QUARTERS.forEach(q=>byQ[q]={p:0,a:0,n:0});
+  REGIONS.forEach(r=>byR[r]={p:0,a:0,n:0});
+  STATUSES.forEach(s=>bySt[s]={n:0,p:0});
+  rows.forEach(r=>{
+    if(bySt[r.status]){bySt[r.status].n++;bySt[r.status].p+=calcP(r);}
+    if(isActive(r)){
+      const p=calcP(r),a=num(r.actual);
+      if(byQ[r.quarter]){byQ[r.quarter].p+=p;byQ[r.quarter].a+=a;byQ[r.quarter].n++;}
+      if(byR[r.region]){byR[r.region].p+=p;byR[r.region].a+=a;byR[r.region].n++;}
+      const o=r.owner||'(unassigned)';
+      if(!byO[o])byO[o]={p:0,a:0,n:0};
+      byO[o].p+=p;byO[o].a+=a;byO[o].n++;
+    }
+  });
+  return {fy,aw,tP,tA,totalTrips:rows.length,activeTrips:active.length,byQ,byR,byO,bySt,
+    util:aw?tA/aw*100:0, avgCost:active.length?tP/active.length:0};
+}
+
+function buildComparison(){
+  const fys=Object.keys(db.years).sort();
+  if(!cmpSelected.length) cmpSelected=fys.slice(-2);
+
+  // Checkboxes
+  document.getElementById('cmp-checks').innerHTML=fys.map(fy=>`
+    <label class="fy-check-label${cmpSelected.includes(fy)?' checked':''}"
+      onclick="toggleCmpFY('${fy}')">
+      <input type="checkbox" ${cmpSelected.includes(fy)?'checked':''}/> ${fy}
+    </label>`).join('');
+
+  const summaries=cmpSelected.map(summarizeFY).filter(Boolean);
+  if(summaries.length<1){
+    document.getElementById('cmp-content').innerHTML=`<p style="padding:20px;color:var(--g4)">Select at least one fiscal year.</p>`;
+    return;
+  }
+
+  const cols=summaries.map((s,i)=>{
+    const prev=summaries[i-1];
+    const chg=(curr,p)=>p&&p>0?((curr-p)/p*100):null;
+    return {...s, color:YR_COLORS[Object.keys(db.years).sort().indexOf(s.fy)%YR_COLORS.length], prev};
+  });
+
+  // Build the big comparison table
+  function td(val,bold=false){
+    return `<td style="${bold?'font-weight:700':''};">${val}</td>`;
+  }
+  function tdChg(curr,prev){
+    if(!prev||prev===0) return '<td class="chg-neu cmp-chg">—</td>';
+    const pct=(curr-prev)/prev*100;
+    const cls=pct>0?'chg-neg':(pct<0?'chg-pos':'chg-neu');
+    return `<td class="${cls} cmp-chg">${fmtPct(pct)}</td>`;
+  }
+  function headerRow(){
+    return `<tr>
+      <th>Metric</th>
+      ${cols.map((c,i)=>`<th style="color:${c.color};background:var(--g1);color:${c.color};font-size:12px">${c.fy}</th>`).join('')}
+      ${cols.length>1?`<th style="background:var(--g1);font-size:11px;color:var(--g4)">YoY Δ</th>`:''}
+    </tr>`;
+  }
+  function dataRow(label, getFn, isAmt=true, bold=false){
+    const vals=cols.map(c=>getFn(c));
+    const last=cols[cols.length-1], prev=cols[cols.length-2];
+    return `<tr>
+      ${td(label)}
+      ${cols.map((c,i)=>td(isAmt?fmt(getFn(c)):getFn(c).toLocaleString(),bold)).join('')}
+      ${cols.length>1?tdChg(getFn(last),prev?getFn(prev):null):''}
+    </tr>`;
+  }
+  function secRow(label){
+    return `<tr class="cmp-section"><td colspan="${cols.length + (cols.length>1?2:1)}">${label}</td></tr>`;
+  }
+
+  // Max values for sparkline charts
+  const allP=cols.map(c=>c.tP);
+  const allA=cols.map(c=>c.tA);
+  const chartMax=Math.max(...allP,...allA,1);
+
+  // Quarter grouped bars
+  function qChart(){
+    return QUARTERS.map(q=>`
+      <tr><td class="lbl">${q}</td>
+      <td colspan="${cols.length+1}">
+        <div class="yr-bar-group">
+          ${cols.map((c,i)=>`
+            <div class="yr-bar">
+              <span class="yr-bar-lbl" style="color:${c.color};width:50px">${c.fy}</span>
+              <div class="yr-bar-fill" style="background:${c.color};width:${c.byQ[q].p/chartMax*100}%;opacity:.8"></div>
+              <span class="yr-bar-amt">${fmt(c.byQ[q].p)}</span>
+            </div>`).join('')}
+        </div>
+      </td></tr>`).join('');
+  }
+  function rChart(){
+    const maxR=Math.max(...cols.flatMap(c=>REGIONS.map(r=>c.byR[r].p)),1);
+    return REGIONS.map(r=>`
+      <tr><td class="lbl"><span class="badge ${REGION_BADGE[r]}" style="font-size:10px">${r}</span></td>
+      <td colspan="${cols.length+1}">
+        <div class="yr-bar-group">
+          ${cols.map((c,i)=>`
+            <div class="yr-bar">
+              <span class="yr-bar-lbl" style="color:${c.color};width:50px">${c.fy}</span>
+              <div class="yr-bar-fill" style="background:${c.color};width:${c.byR[r].p/maxR*100}%;opacity:.8"></div>
+              <span class="yr-bar-amt">${fmt(c.byR[r].p)}</span>
+            </div>`).join('')}
+        </div>
+      </td></tr>`).join('');
+  }
+
+  // All owner keys across all years
+  const allOwners=[...new Set(cols.flatMap(c=>Object.keys(c.byO)))].sort();
+  const maxO=Math.max(...cols.flatMap(c=>Object.values(c.byO).map(v=>v.p)),1);
+  function oChart(){
+    return allOwners.map(o=>`
+      <tr><td class="lbl">${o}</td>
+      <td colspan="${cols.length+1}">
+        <div class="yr-bar-group">
+          ${cols.map((c,i)=>`
+            <div class="yr-bar">
+              <span class="yr-bar-lbl" style="color:${c.color};width:50px">${c.fy}</span>
+              <div class="yr-bar-fill" style="background:${c.color};width:${(c.byO[o]?.p||0)/maxO*100}%;opacity:.8"></div>
+              <span class="yr-bar-amt">${fmt(c.byO[o]?.p||0)}</span>
+            </div>`).join('')}
+        </div>
+      </td></tr>`).join('');
+  }
+
+  document.getElementById('cmp-content').innerHTML=`
+    <div style="padding:16px;">
+      <table class="cmp-table">
+        ${headerRow()}
+        ${secRow('Budget Summary')}
+        ${dataRow('Awarded Budget',       c=>c.aw,  true,true)}
+        ${dataRow('Active Planned',        c=>c.tP,  true,true)}
+        ${dataRow('Actual Spent',          c=>c.tA||0, true)}
+        ${dataRow('Avg Trip Cost',         c=>Math.round(c.avgCost), true)}
+        ${secRow('Trip Counts')}
+        ${dataRow('Total Trips',           c=>c.totalTrips, false)}
+        ${dataRow('Active (Prop+Appr)',    c=>c.activeTrips, false)}
+        ${STATUSES.map(s=>dataRow(s, c=>c.bySt[s].n, false)).join('')}
+        ${secRow('By Quarter (Planned $)')}
+        ${qChart()}
+        ${secRow('By Region (Planned $)')}
+        ${rChart()}
+        ${secRow('By Team Owner (Planned $)')}
+        ${oChart()}
+      </table>
+    </div>`;
+}
+
+function toggleCmpFY(fy){
+  if(cmpSelected.includes(fy)) cmpSelected=cmpSelected.filter(f=>f!==fy);
+  else cmpSelected.push(fy);
+  buildComparison();
+}
+
+// ═══════════════════════════════════════════════════════
+// RATE GUIDE
+// ═══════════════════════════════════════════════════════
+function buildRateGuide(){
+  const rates=getFYRates();
+  const yd=getYD();
+  document.getElementById('rates-fy-label').textContent = db.activeFY;
+  document.getElementById('rates-source-note').textContent =
+    yd.ratesSource ? `Source: ${yd.ratesSource}` : '';
+
+  function rateInput(region,field,val,idx){
+    return `<input type="number" value="${val}"
+      onchange="updateRate('${region}','${field}',this.value)"/>`;
+  }
+  document.getElementById('rate-grid').innerHTML = rates.map(r=>`
+    <div class="rate-card">
+      <div class="flag">${r.flag}</div>
+      <div class="rn">${r.region}</div>
+      <div class="rate-row"><span style="color:var(--g5)">Airfare eco low</span>${rateInput(r.region,'airfare_eco_lo',r.airfare_eco[0])}</div>
+      <div class="rate-row"><span style="color:var(--g5)">Airfare eco high</span>${rateInput(r.region,'airfare_eco_hi',r.airfare_eco[1])}</div>
+      <div class="rate-row"><span style="color:var(--g5)">Airfare biz low</span>${rateInput(r.region,'airfare_biz_lo',r.airfare_biz[0])}</div>
+      <div class="rate-row"><span style="color:var(--g5)">Airfare biz high</span>${rateInput(r.region,'airfare_biz_hi',r.airfare_biz[1])}</div>
+      <div class="rate-row"><span style="color:var(--g5)">Hotel low</span>${rateInput(r.region,'hotel_lo',r.hotel[0])}</div>
+      <div class="rate-row"><span style="color:var(--g5)">Hotel high</span>${rateInput(r.region,'hotel_hi',r.hotel[1])}</div>
+      <div class="rate-row"><span style="color:var(--g5)">Food low</span>${rateInput(r.region,'food_lo',r.food[0])}</div>
+      <div class="rate-row"><span style="color:var(--g5)">Food high</span>${rateInput(r.region,'food_hi',r.food[1])}</div>
+      <div class="rate-row"><span style="color:var(--g5)">Visa ($)</span>${rateInput(r.region,'visa',r.visa)}</div>
+    </div>`).join('');
+
+  document.getElementById('dest-table').innerHTML = rates.map((r,i)=>`
+    <tr style="background:${i%2?'var(--g1)':'#fff'}">
+      <td style="padding:8px 12px;font-weight:600">${r.region}</td>
+      <td style="padding:8px 12px;color:var(--g4)">${DEST_CITIES[r.region]||''}</td>
+      <td style="padding:8px 12px;text-align:right">${fmt(r.airfare_eco[0])}–${fmt(r.airfare_eco[1])}</td>
+      <td style="padding:8px 12px;text-align:right">${fmt(r.airfare_biz[0])}–${fmt(r.airfare_biz[1])}</td>
+      <td style="padding:8px 12px;text-align:right">${fmt(r.hotel[0])}–${fmt(r.hotel[1])}</td>
+      <td style="padding:8px 12px;text-align:right">${fmt(r.food[0])}–${fmt(r.food[1])}</td>
+      <td style="padding:8px 12px;text-align:right">${r.visa===0?'—':fmt(r.visa)}</td>
+    </tr>`).join('');
+}
+
+function updateRate(region, field, value){
+  const yd=getYD();
+  if(!yd.rates) yd.rates = DEFAULT_RATES.map(r=>JSON.parse(JSON.stringify(r)));
+  const r=yd.rates.find(r=>r.region===region); if(!r) return;
+  const v=parseFloat(value)||0;
+  if(field==='airfare_eco_lo') r.airfare_eco[0]=v;
+  else if(field==='airfare_eco_hi') r.airfare_eco[1]=v;
+  else if(field==='airfare_biz_lo') r.airfare_biz[0]=v;
+  else if(field==='airfare_biz_hi') r.airfare_biz[1]=v;
+  else if(field==='hotel_lo') r.hotel[0]=v;
+  else if(field==='hotel_hi') r.hotel[1]=v;
+  else if(field==='food_lo') r.food[0]=v;
+  else if(field==='food_hi') r.food[1]=v;
+  else if(field==='visa') r.visa=v;
+  if(!yd.ratesSource||yd.ratesSource==='Defaults') yd.ratesSource='Manually edited';
+  saveDB(); buildRateGuide();
+}
+
+function resetRatesToDefault(){
+  getYD().rates=null; getYD().ratesSource='Defaults';
+  saveDB(); buildRateGuide();
+}
+
+// BLS fetch (main Rate Guide tab)
+async function fetchBLSRates(){
+  const wrap=document.getElementById('bls-panel-wrap');
+  wrap.innerHTML=`<div class="bls-panel"><h3>Fetching Rate Data</h3>
+    <div class="bls-status"><span class="spinner"></span> Querying BLS CPI data (Airline Fares, Hotels, Food Away from Home)…</div></div>`;
+
+  const result = await queryBLS();
+  applyBLSResult(result, getYD(), ()=>buildRateGuide());
+
+  const pct=v=>v!=null?`<span class="${v>0?'bci-up':'bci-dn'}">${v>0?'+':''}${v.toFixed(1)}%</span>`:'<span>n/a</span>';
+  wrap.innerHTML=`<div class="bls-panel">
+    <h3>Rate Update — ${result.source}</h3>
+    <div class="bls-status">${result.success
+      ?'BLS CPI data applied successfully.'
+      :'Could not reach BLS API — default inflation estimates applied.'}</div>
+    <div class="bls-changes">
+      <div class="bls-change-item"><div class="bci-cat">Airfare YoY</div><div class="bci-val">${pct(result.airfare)}</div></div>
+      <div class="bls-change-item"><div class="bci-cat">Hotels YoY</div><div class="bci-val">${pct(result.hotel)}</div></div>
+      <div class="bls-change-item"><div class="bci-cat">Food YoY</div><div class="bci-val">${pct(result.food)}</div></div>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="document.getElementById('bls-panel-wrap').innerHTML=''">Dismiss</button>
+  </div>`;
+  buildRateGuide();
+}
+
+// ═══════════════════════════════════════════════════════
+// BLS API
+// ═══════════════════════════════════════════════════════
+async function queryBLS(){
+  try {
+    const res = await fetch('https://api.bls.gov/publicAPI/v2/timeseries/data/', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({seriesid:['CUSR0000SETG01','CUSR0000SEHA','CUSR0000SEFV']})
+    });
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const data = await res.json();
+    if(data.status!=='REQUEST_SUCCEEDED') throw new Error('BLS error');
+    function yoy(series){
+      const d=(series.data||[]).filter(x=>x.period!=='M13')
+        .sort((a,b)=>b.year!==a.year?b.year.localeCompare(a.year):b.period.localeCompare(a.period));
+      if(d.length<13) return null;
+      return (parseFloat(d[0].value)-parseFloat(d[12].value))/parseFloat(d[12].value)*100;
+    }
+    const series=data.Results?.series||[];
+    return {
+      airfare: yoy(series.find(s=>s.seriesID==='CUSR0000SETG01')||{}),
+      hotel:   yoy(series.find(s=>s.seriesID==='CUSR0000SEHA')||{}),
+      food:    yoy(series.find(s=>s.seriesID==='CUSR0000SEFV')||{}),
+      source:'BLS CPI (Live)', success:true
+    };
+  } catch(e) {
+    return {airfare:4.2, hotel:3.8, food:3.2, source:'Default estimates (BLS unavailable)', success:false};
+  }
+}
+
+function applyBLSResult(result, yd, cb){
+  const base = yd.rates || DEFAULT_RATES;
+  const adj = r => Math.round(r);
+  const af = 1 + (result.airfare||4.2)/100;
+  const hf = 1 + (result.hotel||3.8)/100;
+  const ff = 1 + (result.food||3.2)/100;
+  yd.rates = base.map(r=>({
+    ...r,
+    airfare_eco: [adj(r.airfare_eco[0]*af), adj(r.airfare_eco[1]*af)],
+    airfare_biz: [adj(r.airfare_biz[0]*af), adj(r.airfare_biz[1]*af)],
+    hotel:       [adj(r.hotel[0]*hf),       adj(r.hotel[1]*hf)],
+    food:        [adj(r.food[0]*ff),         adj(r.food[1]*ff)],
+  }));
+  yd.ratesSource = result.source;
+  saveDB();
+  if(cb) cb();
+}
+
+// ═══════════════════════════════════════════════════════
+// NEW FY MODAL
+// ═══════════════════════════════════════════════════════
+let modalRates=null, seedMode='fresh';
+
+function openNewFYModal(){
+  const fys=Object.keys(db.years).sort();
+  const lastFY=fys[fys.length-1];
+  const lastYear=parseInt(lastFY.replace('FY',''))||2026;
+  const newYear=lastYear+1;
+  const label='FY'+newYear;
+  document.getElementById('mfy-label').value=label;
+  document.getElementById('mfy-start').value=`${newYear-1}-10-01`;
+  document.getElementById('mfy-end').value=`${newYear}-09-30`;
+  document.getElementById('mfy-awarded').value=fmt(getYD(lastFY).awarded||40000);
+  document.getElementById('modal-bls-status').textContent='';
+  document.getElementById('mfy-copy-from').innerHTML=fys.map(f=>`<option value="${f}">${f}</option>`).join('');
+  document.getElementById('mfy-copy-from').value=lastFY;
+  modalRates = JSON.parse(JSON.stringify(getFYRates(lastFY)));
+  seedMode='fresh';
+  selectSeed('fresh');
+  renderModalRates(null);
+  document.getElementById('modal-backdrop').classList.add('open');
+}
+
+function closeNewFYModal(){ document.getElementById('modal-backdrop').classList.remove('open'); }
+
+function selectSeed(mode){
+  seedMode=mode;
+  document.getElementById('seed-fresh').classList.toggle('selected',mode==='fresh');
+  document.getElementById('seed-copy').classList.toggle('selected',mode==='copy');
+  document.getElementById('seed-copy-source').style.display=mode==='copy'?'block':'none';
+}
+
+function renderModalRates(changes){
+  const rows=modalRates.map(r=>{
+    const prev=DEFAULT_RATES.find(d=>d.region===r.region)||r;
+    function cell(curr,old,field){
+      const changed=changes&&Math.abs(curr-old)>0.5;
+      return `<td style="text-align:right">
+        ${changed?`<span class="rate-before">${fmt(old)}</span>`:''}
+        <input type="number" value="${curr}"
+          onchange="modalRateChange('${r.region}','${field}',this.value)" class="${changed?'rate-changed':''}"/>
+      </td>`;
+    }
+    return `<tr>
+      <td style="font-weight:600">${r.region}</td>
+      ${cell(r.airfare_eco[0],prev.airfare_eco[0],'ae0')}
+      ${cell(r.airfare_eco[1],prev.airfare_eco[1],'ae1')}
+      ${cell(r.airfare_biz[0],prev.airfare_biz[0],'ab0')}
+      ${cell(r.airfare_biz[1],prev.airfare_biz[1],'ab1')}
+      ${cell(r.hotel[0],prev.hotel[0],'h0')}
+      ${cell(r.hotel[1],prev.hotel[1],'h1')}
+      ${cell(r.food[0],prev.food[0],'f0')}
+      ${cell(r.food[1],prev.food[1],'f1')}
+      <td style="text-align:right"><input type="number" value="${r.visa}"
+        onchange="modalRateChange('${r.region}','visa',this.value)"/></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('modal-rates-tbody').innerHTML=rows;
+}
+
+function modalRateChange(region,field,val){
+  const r=modalRates.find(r=>r.region===region); if(!r) return;
+  const v=parseFloat(val)||0;
+  const map={ae0:[0,0],ae1:[0,1],ab0:[1,0],ab1:[1,1],h0:[2,0],h1:[2,1],f0:[3,0],f1:[3,1]};
+  if(map[field]){
+    const keys=['airfare_eco','airfare_biz','hotel','food'];
+    r[keys[map[field][0]]][map[field][1]]=v;
+  } else if(field==='visa') r.visa=v;
+}
+
+async function fetchBLSForModal(){
+  document.getElementById('modal-bls-status').innerHTML=`<span class="spinner"></span> Fetching BLS CPI data…`;
+  const result=await queryBLS();
+  const af=1+(result.airfare||4.2)/100, hf=1+(result.hotel||3.8)/100, ff=1+(result.food||3.2)/100;
+  const prevRates=modalRates;
+  const changes={};
+  modalRates=prevRates.map(r=>{
+    changes[r.region]={af:result.airfare,hf:result.hotel,ff:result.food};
+    return {...r,
+      airfare_eco:[Math.round(r.airfare_eco[0]*af),Math.round(r.airfare_eco[1]*af)],
+      airfare_biz:[Math.round(r.airfare_biz[0]*af),Math.round(r.airfare_biz[1]*af)],
+      hotel:[Math.round(r.hotel[0]*hf),Math.round(r.hotel[1]*hf)],
+      food:[Math.round(r.food[0]*ff),Math.round(r.food[1]*ff)],
+    };
+  });
+  document.getElementById('modal-bls-status').innerHTML=
+    result.success
+      ?`<span style="color:var(--green)">✓ BLS CPI data applied — Airfare ${result.airfare?.toFixed(1)}%, Hotels ${result.hotel?.toFixed(1)}%, Food ${result.food?.toFixed(1)}%</span>`
+      :`<span style="color:var(--amber)">⚠ BLS unavailable — default estimates applied (Airfare +${result.airfare}%, Hotels +${result.hotel}%, Food +${result.food}%)</span>`;
+  renderModalRates(changes);
+}
+
+function confirmNewFY(){
+  const label=document.getElementById('mfy-label').value.trim();
+  if(!label){ alert('Please enter a fiscal year label.'); return; }
+  if(db.years[label]){ alert(`${label} already exists.`); return; }
+  const awarded=parseAmt(document.getElementById('mfy-awarded').value);
+  const start=document.getElementById('mfy-start').value;
+  const end=document.getElementById('mfy-end').value;
+
+  let rows=[];
+  if(seedMode==='copy'){
+    const srcFY=document.getElementById('mfy-copy-from').value;
+    const srcRows=(getYD(srcFY).rows||[]).map(r=>({
+      ...JSON.parse(JSON.stringify(r)),
+      status:'Proposed', actual:0,
+      depart: r.depart?shiftDateByYear(r.depart):'',
+      ret:    r.ret?shiftDateByYear(r.ret):'',
+    }));
+    rows=srcRows;
+  }
+
+  db.years[label]={label,start,end,awarded,rows,
+    rates:JSON.parse(JSON.stringify(modalRates)),
+    ratesSource:document.getElementById('modal-bls-status').textContent||'Defaults',
+    archived:false, created:Date.now(), modified:Date.now()};
+  db.activeFY=label;
+  logAudit('fy_create', label, `Created fiscal year ${label}, awarded ${fmt(awarded)}, ${rows.length} seed rows`);
+  saveDB();
+  closeNewFYModal();
+  renderFYSelector();
+  document.getElementById('awarded-input').value=fmt(awarded);
+  renderTable();
+  buildRateGuide();
+}
+
+function shiftDateByYear(dateStr){
+  try{
+    const d=new Date(dateStr+'T00:00:00');
+    d.setFullYear(d.getFullYear()+1);
+    return d.toISOString().split('T')[0];
+  }catch(e){return dateStr;}
+}
+
+// ═══════════════════════════════════════════════════════
+// TAB SWITCHING
+// ═══════════════════════════════════════════════════════
+function showTab(name){
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    t.classList.toggle('active',['budget','dashboard','compare','rates','data'][i]===name);
+  });
+  document.querySelectorAll('.page').forEach(p=>{
+    p.classList.toggle('active',p.id==='page-'+name);
+  });
+  document.getElementById('bov-bar').style.display=name==='budget'?'flex':'none';
+  if(name==='dashboard') buildDashboard();
+  if(name==='compare')   buildComparison();
+  if(name==='rates')     buildRateGuide();
+  if(name==='data')      buildDataManager();
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+initDB();
+document.getElementById('awarded-input').value = fmt(getYD().awarded||40000);
+
+// ═══════════════════════════════════════════════════════
+// SCHEMA MIGRATION
+// ═══════════════════════════════════════════════════════
+function migrateDB(){
+  if(!db.auditLog)   db.auditLog=[];
+  if(!db.travelers)  db.travelers=[];
+  if(!db.owners)     db.owners=[];
+  if(!db.managers)   db.managers=[];
+  Object.values(db.years).forEach(yd=>{
+    if(yd.archived===undefined) yd.archived=false;
+    if(!yd.created)  yd.created=Date.now();
+    if(!yd.modified) yd.modified=Date.now();
+    (yd.rows||[]).forEach(r=>{
+      if(r.archived===undefined) r.archived=false;
+      if(!r.created)  r.created=Date.now();
+      if(!r.modified) r.modified=Date.now();
+      if(r.manager===undefined) r.manager='';
+      if(r.traveler && !db.travelers.includes(r.traveler)) db.travelers.push(r.traveler);
+      if(r.owner    && !db.owners.includes(r.owner))       db.owners.push(r.owner);
+      if(r.manager  && !db.managers.includes(r.manager))   db.managers.push(r.manager);
+    });
+  });
+  db.travelers.sort(); db.owners.sort(); db.managers.sort();
+}
+
+// ═══════════════════════════════════════════════════════
+// AUDIT LOG
+// ═══════════════════════════════════════════════════════
+const AUDIT_ICON={create:'➕',update:'✏️',delete:'🗑️',archive:'📦',restore:'♻️',import:'⬆️',export:'⬇️',fy_create:'📅'};
+
+const MAX_AUDIT = 500;
+
+function logAudit(action, fy, detail){
+  if(!db.auditLog) db.auditLog=[];
+  db.auditLog.unshift({ts:Date.now(), action, fy:fy||db.activeFY, detail});
+  if(db.auditLog.length>MAX_AUDIT) db.auditLog.length=MAX_AUDIT;
+}
+function fmtTS(ts){
+  if(!ts) return '—';
+  const d=new Date(ts);
+  return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+' '
+        +d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+}
+
+// ═══════════════════════════════════════════════════════
+// ARCHIVE / RESTORE / HARD DELETE
+// ═══════════════════════════════════════════════════════
+function archiveRow(fyKey, rowId){
+  const yd=db.years[fyKey]; if(!yd) return;
+  const r=yd.rows.find(r=>r.id===rowId); if(!r) return;
+  History.push();
+  r.archived=true; r.archivedAt=Date.now(); r.modified=Date.now();
+  logAudit('archive', fyKey, `Archived: ${r.traveler||''} → ${r.city||''} (${r.purpose||''})`);
+  saveDB(); if(db.activeFY===fyKey) renderTable(); buildArchivePanel();
+}
+function restoreRow(fyKey, rowId){
+  const yd=db.years[fyKey]; if(!yd) return;
+  const r=yd.rows.find(r=>r.id===rowId); if(!r) return;
+  History.push();
+  r.archived=false; delete r.archivedAt; r.modified=Date.now();
+  logAudit('restore', fyKey, `Restored: ${r.traveler||''} → ${r.city||''}`);
+  saveDB(); if(db.activeFY===fyKey) renderTable(); buildArchivePanel();
+}
+function hardDeleteRow(fyKey, rowId){
+  if(!confirm('Permanently delete this row? This cannot be undone.')) return;
+  const yd=db.years[fyKey]; if(!yd) return;
+  const r=yd.rows.find(r=>r.id===rowId);
+  logAudit('delete', fyKey, `Permanently deleted: ${r?r.traveler+' → '+r.city:'id '+rowId}`);
+  yd.rows=yd.rows.filter(r=>r.id!==rowId);
+  saveDB(); if(db.activeFY===fyKey) renderTable(); buildArchivePanel();
+}
+function archiveFY(fyKey){
+  if(!confirm(`Archive ${fyKey}? It will be hidden from the FY selector.`)) return;
+  const yd=db.years[fyKey]; if(!yd) return;
+  yd.archived=true; yd.archivedAt=Date.now(); yd.modified=Date.now();
+  logAudit('archive', fyKey, `Archived fiscal year: ${fyKey}`);
+  if(db.activeFY===fyKey){
+    const active=Object.keys(db.years).filter(k=>!db.years[k].archived);
+    if(active.length) db.activeFY=active[active.length-1];
+  }
+  saveDB(); renderFYSelector(); buildArchivePanel();
+}
+function restoreFY(fyKey){
+  const yd=db.years[fyKey]; if(!yd) return;
+  yd.archived=false; delete yd.archivedAt; yd.modified=Date.now();
+  logAudit('restore', fyKey, `Restored fiscal year: ${fyKey}`);
+  saveDB(); renderFYSelector(); buildArchivePanel();
+}
+function hardDeleteFY(fyKey){
+  const yd=db.years[fyKey]; if(!yd) return;
+  if(!confirm(`Permanently delete ${fyKey} and all ${(yd.rows||[]).length} rows? Cannot be undone.`)) return;
+  logAudit('delete', fyKey, `Permanently deleted fiscal year: ${fyKey} (${(yd.rows||[]).length} rows)`);
+  delete db.years[fyKey];
+  if(db.activeFY===fyKey){
+    const rem=Object.keys(db.years);
+    db.activeFY=rem.length?rem[rem.length-1]:'';
+  }
+  saveDB(); renderFYSelector(); buildArchivePanel();
+}
+
+// ═══════════════════════════════════════════════════════
+// EXPORT
+// ═══════════════════════════════════════════════════════
+function getExpScope(){ const el=document.querySelector('input[name="exp-scope"]:checked'); return el?el.value:'active-fy'; }
+
+function getExportRows(scope){
+  const all=[];
+  Object.entries(db.years)
+    .filter(([k,yd])=> scope==='active-fy'?k===db.activeFY:true)
+    .forEach(([fyKey,yd])=>{
+      (yd.rows||[]).forEach(r=>{
+        if(scope==='active-rows'&&!isActive(r)) return;
+        all.push({fy:fyKey,...r});
+      });
+    });
+  return all;
+}
+function dlFile(content, filename, mime){
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([content],{type:mime}));
+  a.download=filename; a.click(); URL.revokeObjectURL(a.href);
+}
+function exportCSV(){
+  const scope=getExpScope(), rows=getExportRows(scope);
+  const hdrs=['FY','Status','IS&T Unit','Manager','Traveler','City','Country','Region','Purpose',
+    'Quarter','Depart','Return','Airfare','Nights','Hotel/Night','Hotel Total','Visa',
+    'Car/Taxi','Food/Day','Days','Food Total','Reg Fees','Planned','Actual','Variance'];
+  const esc=v=>{ const s=String(v==null?'':v); return(s.includes(',')||s.includes('"')||s.includes('\n'))?`"${s.replace(/"/g,'""')}"`:`${s}`; };
+  const csv=[hdrs.map(esc).join(','),...rows.map(r=>{
+    const hotel=num(r.nights)*num(r.hrate), food=num(r.fpd)*num(r.days);
+    const planned=calcP(r), actual=num(r.actual);
+    const vari=(actual>0&&isActive(r))?actual-planned:'';
+    return[r.fy,r.status,r.owner,r.manager||'',r.traveler,r.city,r.country,r.region,r.purpose,
+      r.quarter,r.depart,r.ret,r.airfare,r.nights,r.hrate,hotel,r.visa,
+      r.taxi,r.fpd,r.days,food,r.reg,planned,actual||'',vari].map(esc).join(',');
+  })].join('\r\n');
+  const label=scope==='active-fy'?db.activeFY:'AllFYs';
+  dlFile(csv,`TeamTravelBudget_${label}_${new Date().toISOString().slice(0,10)}.csv`,'text/csv;charset=utf-8;');
+  logAudit('export',db.activeFY,`CSV export — scope: ${scope}, ${rows.length} rows`);
+  saveDB();
+  document.getElementById('exp-status').innerHTML=`<div class="io-status io-ok">✓ Exported ${rows.length} rows as CSV</div>`;
+}
+function exportJSON(){
+  const scope=getExpScope();
+  const payload=scope==='active-fy'
+    ?{version:2,exportedAt:Date.now(),type:'single-fy',activeFY:db.activeFY,years:{[db.activeFY]:getYD()}}
+    :{version:2,exportedAt:Date.now(),type:'full',activeFY:db.activeFY,years:db.years};
+  const label=scope==='active-fy'?db.activeFY:'FullBackup';
+  dlFile(JSON.stringify(payload,null,2),`TeamTravelBudget_${label}_${new Date().toISOString().slice(0,10)}.json`,'application/json');
+  logAudit('export',db.activeFY,`JSON export — scope: ${scope}`);
+  saveDB();
+  document.getElementById('exp-status').innerHTML=`<div class="io-status io-ok">✓ JSON downloaded</div>`;
+}
+function exportJSONClipboard(){
+  const scope=getExpScope();
+  const payload=scope==='active-fy'
+    ?{version:2,exportedAt:Date.now(),type:'single-fy',activeFY:db.activeFY,years:{[db.activeFY]:getYD()}}
+    :{version:2,exportedAt:Date.now(),type:'full',activeFY:db.activeFY,years:db.years};
+  navigator.clipboard.writeText(JSON.stringify(payload,null,2))
+    .then(()=>{ document.getElementById('exp-status').innerHTML=`<div class="io-status io-ok">✓ Copied to clipboard</div>`; })
+    .catch(()=>{ document.getElementById('exp-status').innerHTML=`<div class="io-status io-err">Clipboard denied — use Download instead</div>`; });
+}
+
+// ═══════════════════════════════════════════════════════
+// IMPORT
+// ═══════════════════════════════════════════════════════
+function handleImportFile(input){
+  const file=input.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{ document.getElementById('imp-paste').value=e.target.result; previewImport(); };
+  reader.readAsText(file);
+}
+function parseCSVLine(line){
+  const result=[]; let cur='',inQ=false;
+  for(let i=0;i<line.length;i++){
+    const c=line[i];
+    if(c==='"'){ if(inQ&&line[i+1]==='"'){cur+='"';i++;}else inQ=!inQ; }
+    else if(c===','&&!inQ){result.push(cur);cur='';}
+    else cur+=c;
+  }
+  result.push(cur); return result;
+}
+function parseImportData(raw){
+  raw=raw.trim();
+  if(raw.startsWith('{')||raw.startsWith('[')){
+    try{ return{type:'json',data:JSON.parse(raw)}; }
+    catch(e){ return{type:'error',msg:'Invalid JSON: '+e.message}; }
+  }
+  const lines=raw.split(/\r?\n/).filter(l=>l.trim());
+  if(lines.length<2) return{type:'error',msg:'Need at least a header row and one data row'};
+  const hdrs=lines[0].split(',').map(h=>h.trim().replace(/^"|"$/g,'').toLowerCase());
+  const COL={'fy':'fy','fiscal year':'fy','status':'status','team owner':'owner','owner':'owner','is&t unit':'owner','ist unit':'owner',
+    'manager':'manager',
+    'traveler':'traveler','traveller':'traveler','city':'city','country':'country','region':'region',
+    'purpose':'purpose','quarter':'quarter','qtr':'quarter','depart':'depart','departure':'depart',
+    'return':'ret','airfare':'airfare','nights':'nights','hotel/night':'hrate','htl/nt':'hrate',
+    'visa':'visa','car/taxi':'taxi','taxi':'taxi','food/day':'fpd','fpd':'fpd','days':'days',
+    'reg fees':'reg','reg. fees':'reg','registration':'reg','actual':'actual','actual $':'actual'};
+  const cols=hdrs.map(h=>COL[h]||null);
+  const rows=[];
+  for(let i=1;i<lines.length;i++){
+    const cells=parseCSVLine(lines[i]); if(!cells.length) continue;
+    const r={status:'Proposed',region:'North America',quarter:'Q1',airfare:0,nights:1,hrate:150,visa:0,taxi:0,fpd:80,days:1,reg:0,actual:0};
+    cols.forEach((field,idx)=>{
+      if(!field) return;
+      const val=(cells[idx]||'').trim();
+      if(['airfare','nights','hrate','visa','taxi','fpd','days','reg','actual'].includes(field))
+        r[field]=parseFloat(val.replace(/[$,]/g,''))||0;
+      else r[field]=val;
+    });
+    rows.push(r);
+  }
+  return{type:'csv',rows};
+}
+function previewImport(){
+  const raw=document.getElementById('imp-paste').value.trim();
+  if(!raw){document.getElementById('imp-status').innerHTML='';document.getElementById('imp-preview').innerHTML='';return;}
+  const parsed=parseImportData(raw);
+  const stEl=document.getElementById('imp-status'), pvEl=document.getElementById('imp-preview');
+  if(parsed.type==='error'){stEl.innerHTML=`<div class="io-status io-err">✕ ${parsed.msg}</div>`;pvEl.innerHTML='';return;}
+  if(parsed.type==='json'){
+    const fys=Object.keys(parsed.data.years||{});
+    const total=fys.reduce((s,k)=>s+(parsed.data.years[k].rows||[]).length,0);
+    stEl.innerHTML=`<div class="io-status io-ok">✓ Valid JSON — ${fys.length} FY(s), ${total} rows</div>`;
+    pvEl.innerHTML=`<div style="margin-top:6px">${fys.map(f=>`<span class="badge r-na" style="margin:2px">${f}: ${(parsed.data.years[f].rows||[]).length} rows</span>`).join('')}</div>`;
+  } else {
+    const grouped={};
+    parsed.rows.forEach(r=>{const k=r.fy||db.activeFY;if(!grouped[k])grouped[k]=0;grouped[k]++;});
+    stEl.innerHTML=`<div class="io-status io-ok">✓ Valid CSV — ${parsed.rows.length} rows</div>`;
+    pvEl.innerHTML=`<div style="margin-top:6px">${Object.entries(grouped).map(([k,v])=>`<span class="badge r-na" style="margin:2px">${k}: ${v} rows</span>`).join('')}
+      ${!parsed.rows[0]?.fy?`<div style="margin-top:5px;font-size:11px;color:var(--amber)">⚠ No FY column — rows will import into current FY (${db.activeFY})</div>`:''}
+    </div>`;
+  }
+}
+function runImport(){
+  const raw=document.getElementById('imp-paste').value.trim();
+  if(!raw){document.getElementById('imp-status').innerHTML=`<div class="io-status io-err">Nothing to import</div>`;return;}
+  const parsed=parseImportData(raw);
+  if(parsed.type==='error'){document.getElementById('imp-status').innerHTML=`<div class="io-status io-err">✕ ${parsed.msg}</div>`;return;}
+  const mode=document.querySelector('input[name="imp-mode"]:checked')?.value||'merge';
+  if(parsed.type==='json'){
+    const incoming=parsed.data.years||{};
+    if(mode==='replace'&&!confirm('Replace ALL existing data? Cannot be undone.')) return;
+    if(mode==='replace') db.years={};
+    let added=0,merged=0;
+    Object.entries(incoming).forEach(([fyKey,yd])=>{
+      if(db.years[fyKey]&&mode==='merge'){
+        const existIds=new Set(db.years[fyKey].rows.map(r=>r.id));
+        (yd.rows||[]).forEach(r=>{if(!existIds.has(r.id)){r.id=++nextId;db.years[fyKey].rows.push(r);merged++;}});
+      } else { db.years[fyKey]={...yd,archived:yd.archived||false,created:yd.created||Date.now(),modified:Date.now()}; added++; }
+    });
+    logAudit('import',db.activeFY,`JSON import (${mode}) — ${added} FYs added, ${merged} rows merged`);
+    saveDB(); renderFYSelector(); renderTable();
+    document.getElementById('imp-status').innerHTML=`<div class="io-status io-ok">✓ Done — ${added} FY(s) added, ${merged} rows merged</div>`;
+    document.getElementById('imp-paste').value='';
+  } else {
+    const rows=parsed.rows; const fyGroups={};
+    rows.forEach(r=>{const k=r.fy||db.activeFY;if(!fyGroups[k])fyGroups[k]=[];fyGroups[k].push(r);});
+    let total=0;
+    Object.entries(fyGroups).forEach(([fyKey,fyRows])=>{
+      if(!db.years[fyKey]) db.years[fyKey]={label:fyKey,start:'',end:'',awarded:40000,rows:[],rates:null,ratesSource:'Defaults',archived:false,created:Date.now(),modified:Date.now()};
+      fyRows.forEach(r=>{delete r.fy;r.id=++nextId;r.created=Date.now();r.modified=Date.now();r.archived=false;db.years[fyKey].rows.push(r);total++;});
+    });
+    logAudit('import',db.activeFY,`CSV import — ${total} rows into ${Object.keys(fyGroups).join(', ')}`);
+    saveDB(); renderFYSelector(); renderTable();
+    document.getElementById('imp-status').innerHTML=`<div class="io-status io-ok">✓ Imported ${total} rows from CSV</div>`;
+    document.getElementById('imp-paste').value='';
+  }
+}
+function downloadCSVTemplate(){
+  const h='Status,Team Owner,Traveler,City,Country,Region,Purpose,Quarter,Depart,Return,Airfare,Nights,Hotel/Night,Visa,Car/Taxi,Food/Day,Days,Reg Fees,Actual\r\n';
+  const ex='Proposed,Platform Eng,Jane Smith,New York,USA,North America,Conference,Q1,2026-10-14,2026-10-17,450,3,220,0,120,100,4,800,0\r\n';
+  dlFile(h+ex,'TeamTravelBudget_Template.csv','text/csv;charset=utf-8;');
+}
+
+// ═══════════════════════════════════════════════════════
+// RECORDS BROWSER
+// ═══════════════════════════════════════════════════════
+let dmPage=0, dmSort={field:'depart',dir:'asc'};
+const DM_PAGE_SIZE=30;
+
+function clearDMFilters(){
+  ['dm-search','dm-filter-fy','dm-filter-status','dm-filter-region','dm-filter-owner'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+  dmPage=0; buildRecordsBrowser();
+}
+function dmSortBy(field){
+  dmSort=dmSort.field===field?{field,dir:dmSort.dir==='asc'?'desc':'asc'}:{field,dir:'asc'};
+  buildRecordsBrowser();
+}
+function buildRecordsBrowser(){
+  const allRows=[];
+  Object.entries(db.years).filter(([,yd])=>!yd.archived)
+    .forEach(([fyKey,yd])=>{ (yd.rows||[]).filter(r=>!r.archived).forEach(r=>allRows.push({...r,_fy:fyKey})); });
+
+  const fySelect=document.getElementById('dm-filter-fy');
+  const curFY=fySelect?.value||'';
+  const fys=[...new Set(allRows.map(r=>r._fy))].sort();
+  if(fySelect) fySelect.innerHTML='<option value="">All Fiscal Years</option>'+fys.map(f=>`<option value="${f}"${f===curFY?' selected':''}>${f}</option>`).join('');
+
+  const ownerSel=document.getElementById('dm-filter-owner');
+  const curOwn=ownerSel?.value||'';
+  const owners=[...new Set(allRows.map(r=>r.owner).filter(Boolean))].sort();
+  if(ownerSel) ownerSel.innerHTML='<option value="">All Owners</option>'+owners.map(o=>`<option value="${o}"${o===curOwn?' selected':''}>${escH(o)}</option>`).join('');
+
+  const regSel=document.getElementById('dm-filter-region');
+  const curReg=regSel?.value||'';
+  if(regSel) regSel.innerHTML='<option value="">All Regions</option>'+REGIONS.map(r=>`<option value="${r}"${r===curReg?' selected':''}>${r}</option>`).join('');
+
+  const search=(document.getElementById('dm-search')?.value||'').toLowerCase();
+  const fFY=document.getElementById('dm-filter-fy')?.value||'';
+  const fSt=document.getElementById('dm-filter-status')?.value||'';
+  const fReg=regSel?.value||'';
+  const fOwn=ownerSel?.value||'';
+
+  let rows=allRows.filter(r=>{
+    if(fFY&&r._fy!==fFY) return false;
+    if(fSt&&r.status!==fSt) return false;
+    if(fReg&&r.region!==fReg) return false;
+    if(fOwn&&r.owner!==fOwn) return false;
+    if(search){const hay=[r.traveler,r.owner,r.city,r.country,r.purpose].join(' ').toLowerCase();if(!hay.includes(search))return false;}
+    return true;
+  });
+
+  rows.sort((a,b)=>{
+    let av=a[dmSort.field]??'', bv=b[dmSort.field]??'';
+    if(['airfare','nights','hrate','visa','taxi','fpd','days','reg','actual'].includes(dmSort.field)){av=num(av);bv=num(bv);}
+    return(dmSort.dir==='asc'?1:-1)*(av<bv?-1:av>bv?1:0);
+  });
+
+  const countEl=document.getElementById('dm-rec-count');
+  if(countEl) countEl.textContent=`${rows.length} record${rows.length!==1?'s':''}`;
+
+  const total=rows.length, pages=Math.ceil(total/DM_PAGE_SIZE)||1;
+  dmPage=Math.min(dmPage,pages-1);
+  const pageRows=rows.slice(dmPage*DM_PAGE_SIZE,(dmPage+1)*DM_PAGE_SIZE);
+  const tP=pageRows.reduce((s,r)=>s+(isActive(r)?calcP(r):0),0);
+  const tA=pageRows.reduce((s,r)=>s+(isActive(r)?num(r.actual):0),0);
+
+  function th(lbl,field,extra=''){
+    const sorted=dmSort.field===field;
+    return `<th class="${extra}${sorted?' sorted':''}" onclick="dmSortBy('${field}')">${lbl} ${sorted?(dmSort.dir==='asc'?'▲':'▼'):'↕'}</th>`;
+  }
+  const tblEl=document.getElementById('dm-records-table');
+  if(!tblEl) return;
+  tblEl.innerHTML=`<table class="dm-tbl">
+    <thead><tr>${th('FY','_fy')}${th('STATUS','status')}${th('IS&T UNIT','owner')}${th('MANAGER','manager')}${th('TRAVELER','traveler')}${th('CITY','city')}${th('REGION','region')}${th('PURPOSE','purpose')}${th('QTR','quarter')}${th('DEPART','depart')}${th('PLANNED','airfare','r')}${th('ACTUAL','actual','r')}<th>ACTIONS</th></tr></thead>
+    <tbody>${pageRows.map(r=>{
+      const planned=isActive(r)?calcP(r):0, actual=num(r.actual);
+      return `<tr>
+        <td><span class="badge r-na">${r._fy}</span></td>
+        <td><span class="badge st-${r.status}" style="font-size:11px">${r.status}</span></td>
+        <td>${escH(r.owner)}</td><td class="muted">${escH(r.manager||'')}</td><td style="font-weight:600">${escH(r.traveler)}</td>
+        <td>${escH(r.city)}</td>
+        <td class="muted"><span class="badge ${REGION_BADGE[r.region]||''}" style="font-size:10px">${escH(r.region)}</span></td>
+        <td class="muted">${escH(r.purpose)}</td>
+        <td style="text-align:center">${r.quarter}</td>
+        <td class="muted">${r.depart||'—'}</td>
+        <td class="r" style="color:var(--blue)">${planned?fmt(planned):'—'}</td>
+        <td class="r" style="color:var(--green)">${actual?fmt(actual):'—'}</td>
+        <td><div class="dm-row-act">
+          <button class="dm-act-btn" onclick="jumpToRow('${r._fy}',${r.id})">Edit</button>
+          <button class="dm-act-btn warn" onclick="archiveRow('${r._fy}',${r.id})">Archive</button>
+        </div></td>
+      </tr>`;
+    }).join('')}</tbody>
+    <tfoot><tr><td colspan="9" style="text-align:right;color:var(--g4)">Page ${dmPage+1}/${pages} totals:</td>
+      <td style="text-align:right;color:var(--blue);font-weight:700">${fmt(tP)}</td>
+      <td style="text-align:right;color:var(--green);font-weight:700">${tA?fmt(tA):'—'}</td>
+      <td></td></tr></tfoot>
+  </table>`;
+
+  const pagerEl=document.getElementById('dm-records-pager');
+  if(pagerEl) pagerEl.innerHTML=`
+    <button onclick="dmPage=0;buildRecordsBrowser()" ${dmPage===0?'disabled':''}>«</button>
+    <button onclick="dmPage--;buildRecordsBrowser()" ${dmPage===0?'disabled':''}>‹</button>
+    <span class="pag-info">Page ${dmPage+1} of ${pages} · ${total} records</span>
+    <button onclick="dmPage++;buildRecordsBrowser()" ${dmPage>=pages-1?'disabled':''}>›</button>
+    <button onclick="dmPage=${pages-1};buildRecordsBrowser()" ${dmPage>=pages-1?'disabled':''}>»</button>`;
+}
+function jumpToRow(fyKey,rowId){
+  if(db.activeFY!==fyKey) switchFY(fyKey);
+  showTab('budget');
+  setTimeout(()=>{
+    const idx=currentRows().findIndex(r=>r.id===rowId);
+    if(idx>=0){
+      const trs=document.getElementById('budget-tbody').querySelectorAll('tr');
+      if(trs[idx]){trs[idx].scrollIntoView({behavior:'smooth',block:'center'});trs[idx].style.outline='2px solid var(--blue)';setTimeout(()=>{trs[idx].style.outline='';},2000);}
+    }
+  },120);
+}
+
+// ═══════════════════════════════════════════════════════
+// ARCHIVE PANEL
+// ═══════════════════════════════════════════════════════
+function buildArchivePanel(){
+  const arcRows=[];
+  Object.entries(db.years).forEach(([fyKey,yd])=>{
+    (yd.rows||[]).filter(r=>r.archived).forEach(r=>arcRows.push({...r,_fy:fyKey}));
+  });
+  const rowsEl=document.getElementById('dm-arc-rows');
+  if(rowsEl) rowsEl.innerHTML=arcRows.length===0
+    ?`<div class="arc-empty">No archived rows</div>`
+    :`<div style="overflow-x:auto"><table class="dm-tbl">
+      <thead><tr><th>FY</th><th>STATUS</th><th>OWNER</th><th>TRAVELER</th><th>DESTINATION</th><th>PURPOSE</th><th>ARCHIVED</th><th>ACTIONS</th></tr></thead>
+      <tbody>${arcRows.map(r=>`<tr>
+        <td><span class="badge r-na">${r._fy}</span></td>
+        <td><span class="badge st-${r.status}" style="font-size:11px">${r.status}</span></td>
+        <td>${escH(r.owner)}</td><td style="font-weight:600">${escH(r.traveler)}</td>
+        <td>${escH(r.city)}, ${escH(r.country)}</td>
+        <td class="muted">${escH(r.purpose)}</td>
+        <td class="muted">${r.archivedAt?fmtTS(r.archivedAt):'—'}</td>
+        <td><div class="dm-row-act">
+          <button class="dm-act-btn" onclick="restoreRow('${r._fy}',${r.id})">Restore</button>
+          <button class="dm-act-btn danger" onclick="hardDeleteRow('${r._fy}',${r.id})">Delete</button>
+        </div></td>
+      </tr>`).join('')}</tbody></table></div>`;
+
+  const arcFYs=Object.entries(db.years).filter(([,yd])=>yd.archived);
+  const activeFYs=Object.entries(db.years).filter(([,yd])=>!yd.archived);
+  const fyWrap=document.getElementById('dm-arc-fys-wrap');
+  if(fyWrap) fyWrap.innerHTML=(arcFYs.length===0?`<div class="arc-empty">No archived fiscal years</div>`
+    :`<div style="overflow-x:auto"><table class="dm-tbl">
+      <thead><tr><th>FY LABEL</th><th>ROWS</th><th>AWARDED</th><th>ARCHIVED</th><th>ACTIONS</th></tr></thead>
+      <tbody>${arcFYs.map(([k,yd])=>`<tr>
+        <td style="font-weight:700">${k}</td>
+        <td>${(yd.rows||[]).length}</td>
+        <td>${fmt(yd.awarded)}</td>
+        <td class="muted">${yd.archivedAt?fmtTS(yd.archivedAt):'—'}</td>
+        <td><div class="dm-row-act">
+          <button class="dm-act-btn" onclick="restoreFY('${k}')">Restore</button>
+          <button class="dm-act-btn danger" onclick="hardDeleteFY('${k}')">Delete FY</button>
+        </div></td>
+      </tr>`).join('')}</tbody></table></div>`)
+    +(activeFYs.length>1?`<div style="padding:10px 18px;border-top:1px solid var(--g2);display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <span style="font-size:11px;color:var(--g4)">Archive an active FY:</span>
+      ${activeFYs.map(([k])=>`<button class="btn btn-ghost btn-sm" onclick="archiveFY('${k}')">${k}</button>`).join('')}
+    </div>`:'');
+}
+
+// ═══════════════════════════════════════════════════════
+// AUDIT LOG PANEL
+// ═══════════════════════════════════════════════════════
+function buildAuditLogPanel(){
+  const log=db.auditLog||[];
+  const countEl=document.getElementById('audit-count');
+  if(countEl) countEl.textContent=`${log.length} entr${log.length!==1?'ies':'y'}`;
+  const ACT_CLS={create:'aud-create',update:'aud-update',delete:'aud-delete',archive:'aud-archive',restore:'aud-restore',import:'aud-import',export:'aud-export',fy_create:'aud-create'};
+  const tbody=document.getElementById('audit-tbody');
+  if(tbody) tbody.innerHTML=log.length===0
+    ?`<tr><td colspan="4" style="text-align:center;padding:24px;color:var(--g4)">No activity recorded yet</td></tr>`
+    :log.map(e=>`<tr>
+      <td class="muted">${fmtTS(e.ts)}</td>
+      <td><span class="${ACT_CLS[e.action]||''}">${AUDIT_ICON[e.action]||''} ${e.action}</span></td>
+      <td><span class="badge r-na">${e.fy||'—'}</span></td>
+      <td>${escH(e.detail||'')}</td>
+    </tr>`).join('');
+}
+function clearAuditLog(){
+  if(!confirm('Clear the entire audit log?')) return;
+  db.auditLog=[]; saveDB(); buildAuditLogPanel();
+}
+
+// ═══════════════════════════════════════════════════════
+// MASTER DATA MANAGEMENT
+// ═══════════════════════════════════════════════════════
+function buildMasterData(){
+  ['owners','travelers','managers'].forEach(key=>{
+    const listEl  = document.getElementById('md-list-'+key);
+    const countEl = document.getElementById('md-count-'+key);
+    const items   = db[key]||[];
+    if(listEl) listEl.innerHTML = items.length===0
+      ? `<span class="md-empty">No entries yet — add names below or type them directly in the table</span>`
+      : items.map(v=>`<span class="md-tag">${escH(v)}<button class="md-tag-del" onclick="removeMasterEntry('${key}','${escH(v).replace(/'/g,'\\\'')}')" title="Remove">×</button></span>`).join('');
+    if(countEl) countEl.textContent = items.length+' entr'+(items.length!==1?'ies':'y');
+  });
+}
+function addMasterEntry(key, inputEl){
+  const val=(inputEl.value||'').trim(); if(!val) return;
+  if(!db[key]) db[key]=[];
+  if(!db[key].includes(val)){ db[key].push(val); db[key].sort(); saveDB(); renderDataLists(); logAudit('create',db.activeFY,`Added to ${key} master list: ${val}`); }
+  inputEl.value=''; buildMasterData();
+}
+function removeMasterEntry(key, val){
+  if(!db[key]) return;
+  db[key]=db[key].filter(v=>v!==val);
+  saveDB(); renderDataLists(); logAudit('delete',db.activeFY,`Removed from ${key} master list: ${val}`); buildMasterData();
+}
+
+// ═══════════════════════════════════════════════════════
+let _dmActiveTab='records';
+function showDMTab(tab){
+  _dmActiveTab=tab;
+  ['records','archive','io','audit','masterdata','users'].forEach(t=>{
+    const btn=document.getElementById('dmnav-'+t);
+    const panel=document.getElementById('dm-panel-'+t);
+    if(btn) btn.classList.toggle('active',t===tab);
+    if(panel) panel.style.display=t===tab?'block':'none';
+  });
+  if(tab==='records')    buildRecordsBrowser();
+  if(tab==='archive')    buildArchivePanel();
+  if(tab==='audit')      buildAuditLogPanel();
+  if(tab==='masterdata') buildMasterData();
+  if(tab==='users')      buildUsersPanel();
+}
+function buildDataManager(){
+  const total=Object.values(db.years).reduce((s,yd)=>s+(yd.rows||[]).length,0);
+  const fys=Object.keys(db.years).length;
+  const arcR=Object.values(db.years).reduce((s,yd)=>s+(yd.rows||[]).filter(r=>r.archived).length,0);
+  const arcFY=Object.values(db.years).filter(yd=>yd.archived).length;
+  const mdTotal=(db.owners||[]).length+(db.travelers||[]).length+(db.managers||[]).length;
+  const infoEl=document.getElementById('dm-db-info');
+  if(infoEl) infoEl.textContent=`${fys} FY${fys!==1?'s':''} · ${total} rows · ${arcR} archived · ${mdTotal} master entries`;
+  showDMTab(_dmActiveTab);
+}
+
+renderFYSelector();
+renderTable();
+renderDataLists();
+History._update();
+
+// ─── Application bootstrap ─────────────────────────────────────────────────
+(async () => {
+  // 1. Auth check — redirect to /login if not authenticated
+  let currentUser = null;
+  try {
+    const me = await fetch('/api/auth/me').then(r => r.json());
+    if (me.error) { window.location.href = '/login'; return; }
+    currentUser = me;
+  } catch { window.location.href = '/login'; return; }
+
+  // 2. Show user info in topbar
+  const displayEl = document.getElementById('user-display');
+  if (displayEl) displayEl.textContent = currentUser.username
+    + (currentUser.role === 'admin' ? '' : ' (viewer)');
+
+  // 3. Viewer mode — disable all mutating controls
+  if (currentUser.role !== 'admin') {
+    document.querySelectorAll('.btn-new-fy,.btn-undo,.btn-redo,#awarded-input').forEach(el => {
+      el.disabled = true; el.title = 'Read-only — contact an admin';
+    });
+    const addRowBtn = document.querySelector('.add-bar .btn-blue');
+    if (addRowBtn) addRowBtn.style.display = 'none';
+    const lock = document.createElement('div');
+    lock.className = 'viewer-lock'; lock.style.display = 'block';
+    document.querySelector('.tbl-wrap')?.appendChild(lock);
+  }
+
+  // 4. Show Users tab for admins
+  if (currentUser.role === 'admin') {
+    const usersTab = document.getElementById('dmnav-users');
+    if (usersTab) usersTab.style.display = '';
+  }
+
+  // 5. Load data and render
+  await initDB();
+  document.getElementById('awarded-input').value = fmt(getYD().awarded || 40000);
+  if (currentUser.role !== 'admin') document.getElementById('awarded-input').disabled = true;
+  renderFYSelector(); renderTable(); renderDataLists(); History._update();
+  setSaveUI('idle');
+
+  // 6. Wire sign-out
+  window.doSignOut = async function() {
+    await fetch('/api/auth/logout', { method: 'POST' }).catch(() => {});
+    window.location.href = '/login';
+  };
+})();
+
+// ─── User management (admin only) ─────────────────────────────────────────
+async function buildUsersPanel() {
+  const wrap = document.getElementById('users-table-wrap');
+  if (!wrap) return;
+  try {
+    const users = await fetch('/api/users').then(r => r.json());
+    if (!Array.isArray(users)) { wrap.innerHTML = `<p style="padding:16px;color:var(--red)">Could not load users</p>`; return; }
+    wrap.innerHTML = `<table class="user-table">
+      <thead><tr><th>Username</th><th>Role</th><th>Created</th><th>Actions</th></tr></thead>
+      <tbody>${users.map(u => `<tr>
+        <td style="font-weight:600">${escH(u.username)}</td>
+        <td><span class="role-badge role-${u.role}">${u.role}</span></td>
+        <td style="color:var(--g4);font-size:12px">${fmtTS(u.createdAt)}</td>
+        <td><div class="dm-row-act">
+          <button class="dm-act-btn" onclick="resetUserPassword(${u.id},'${escH(u.username)}')">Reset PW</button>
+          <button class="dm-act-btn warn" onclick="toggleUserRole(${u.id},'${u.role}')">${u.role==='admin'?'Make Viewer':'Make Admin'}</button>
+          <button class="dm-act-btn danger" onclick="deleteUser(${u.id},'${escH(u.username)}')">Delete</button>
+        </div></td>
+      </tr>`).join('')}</tbody>
+    </table>`;
+  } catch(e) {
+    wrap.innerHTML = `<p style="padding:16px;color:var(--red)">Error: ${escH(e.message)}</p>`;
+  }
+}
+
+async function addUser() {
+  const username = document.getElementById('new-username').value.trim();
+  const password = document.getElementById('new-password').value;
+  const role     = document.getElementById('new-role').value;
+  const status   = document.getElementById('user-action-status');
+  if (!username || !password) { status.innerHTML = `<span style="color:var(--red)">Username and password required</span>`; return; }
+  const res  = await fetch('/api/users', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({username,password,role}) });
+  const data = await res.json();
+  if (res.ok) {
+    status.innerHTML = `<span style="color:var(--green)">✓ User "${escH(username)}" created as ${role}</span>`;
+    document.getElementById('new-username').value = '';
+    document.getElementById('new-password').value = '';
+    buildUsersPanel();
+  } else {
+    status.innerHTML = `<span style="color:var(--red)">✕ ${escH(data.error)}</span>`;
+  }
+}
+
+async function resetUserPassword(id, username) {
+  const password = prompt(`New password for "${username}":`);
+  if (!password) return;
+  const res  = await fetch(`/api/users/${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({password}) });
+  const data = await res.json();
+  const status = document.getElementById('user-action-status');
+  status.innerHTML = res.ok
+    ? `<span style="color:var(--green)">✓ Password updated for "${escH(username)}"</span>`
+    : `<span style="color:var(--red)">✕ ${escH(data.error)}</span>`;
+}
+
+async function toggleUserRole(id, currentRole) {
+  const newRole = currentRole === 'admin' ? 'viewer' : 'admin';
+  await fetch(`/api/users/${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({role: newRole}) });
+  buildUsersPanel();
+}
+
+async function deleteUser(id, username) {
+  if (!confirm(`Delete user "${username}"? They will lose access immediately.`)) return;
+  const res  = await fetch(`/api/users/${id}`, { method:'DELETE' });
+  const data = await res.json();
+  if (res.ok) { buildUsersPanel(); }
+  else { document.getElementById('user-action-status').innerHTML = `<span style="color:var(--red)">✕ ${escH(data.error)}</span>`; }
+}
+
+document.addEventListener('keydown', e=>{
+  const mod = e.metaKey || e.ctrlKey;
+  if(mod && !e.shiftKey && e.key==='z'){ e.preventDefault(); History.undo(); }
+  if(mod && e.shiftKey  && e.key==='z'){ e.preventDefault(); History.redo(); }
+  if(mod && !e.shiftKey && e.key==='y'){ e.preventDefault(); History.redo(); }
+  if(e.key==='Escape' && pendingDeleteId!==null){ cancelDel(); }
+});
+</script>
+</body>
+</html>
