@@ -1208,7 +1208,6 @@ async function initDB(){
   saveDB();
 }
 
-function saveDB(){ localStorage.setItem(DB_KEY, JSON.stringify(db)); }
 function getYD(fy){ return db.years[fy || db.activeFY]; }
 function currentRows(){ return getYD().rows; }
 let nextId = 100;
@@ -2129,12 +2128,6 @@ function showTab(name){
 }
 
 // ═══════════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════════
-initDB();
-document.getElementById('awarded-input').value = fmt(getYD().awarded||40000);
-
-// ═══════════════════════════════════════════════════════
 // SCHEMA MIGRATION
 // ═══════════════════════════════════════════════════════
 function migrateDB(){
@@ -2651,11 +2644,6 @@ function buildDataManager(){
   showDMTab(_dmActiveTab);
 }
 
-renderFYSelector();
-renderTable();
-renderDataLists();
-History._update();
-
 // ─── Application bootstrap ─────────────────────────────────────────────────
 (async () => {
   // 1. Auth check — redirect to /login if not authenticated
@@ -2691,6 +2679,8 @@ History._update();
 
   // 5. Load data and render
   await initDB();
+  nextId = Object.values(db.years).reduce((max, yd) =>
+    (yd.rows||[]).reduce((m, r) => Math.max(m, r.id||0), max), 100);
   document.getElementById('awarded-input').value = fmt(getYD().awarded || 40000);
   if (currentUser.role !== 'admin') document.getElementById('awarded-input').disabled = true;
   renderFYSelector(); renderTable(); renderDataLists(); History._update();
