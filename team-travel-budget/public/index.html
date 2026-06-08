@@ -1039,43 +1039,9 @@ const DEFAULT_RATES = [
 // ═══════════════════════════════════════════════════════
 // SAMPLE DATA
 // ═══════════════════════════════════════════════════════
-const SAMPLE_FY2025 = [
-  {id:1,owner:'Platform Eng',traveler:'Alice Park',        city:'New York',    country:'USA',         region:'North America',purpose:'Conference',      quarter:'Q1',depart:'2024-10-15',ret:'2024-10-18',airfare:420, nights:3,hrate:215,visa:0, taxi:110,fpd:95, days:4,reg:750, status:'Approved',actual:2510},
-  {id:2,owner:'Sales',       traveler:'Michael Torres',    city:'London',      country:'UK',          region:'Europe',       purpose:'Customer Meeting', quarter:'Q1',depart:'2024-11-04',ret:'2024-11-08',airfare:890, nights:4,hrate:240,visa:0, taxi:190,fpd:115,days:5,reg:0,   status:'Approved',actual:2760},
-  {id:3,owner:'Platform Eng',traveler:'Jana Novak',        city:'Toronto',     country:'Canada',      region:'North America',purpose:'Training',        quarter:'Q1',depart:'2024-12-09',ret:'2024-12-12',airfare:390, nights:3,hrate:200,visa:0, taxi:100,fpd:88, days:4,reg:280, status:'Approved',actual:1680},
-  {id:4,owner:'Product',     traveler:'Wei Zhang',         city:'Tokyo',       country:'Japan',       region:'Asia',         purpose:'Conference',      quarter:'Q2',depart:'2025-01-20',ret:'2025-01-24',airfare:1050,nights:4,hrate:180,visa:0, taxi:150,fpd:85, days:5,reg:1100,status:'Approved',actual:3540},
-  {id:5,owner:'Marketing',   traveler:'Amara Johnson',     city:'Nairobi',     country:'Kenya',       region:'Africa',       purpose:'Field Visit',     quarter:'Q2',depart:'2025-02-10',ret:'2025-02-15',airfare:1380,nights:5,hrate:150,visa:50,taxi:140,fpd:65, days:6,reg:0,   status:'Approved',actual:3100},
-  {id:6,owner:'Platform Eng',traveler:'David Lee',         city:'Amsterdam',   country:'Netherlands', region:'Europe',       purpose:'Training',        quarter:'Q2',depart:'2025-03-03',ret:'2025-03-06',airfare:840, nights:3,hrate:220,visa:0, taxi:150,fpd:105,days:4,reg:480, status:'Approved',actual:2520},
-  {id:7,owner:'Sales',       traveler:'Natasha Ivanova',   city:'São Paulo',   country:'Brazil',      region:'Latin America', purpose:'Sales',           quarter:'Q3',depart:'2025-04-14',ret:'2025-04-17',airfare:800, nights:3,hrate:140,visa:0, taxi:130,fpd:75, days:4,reg:0,   status:'Approved',actual:1870},
-  {id:8,owner:'Product',     traveler:'Kevin Murphy',      city:'Singapore',   country:'Singapore',   region:'Asia',         purpose:'Customer Meeting', quarter:'Q3',depart:'2025-05-06',ret:'2025-05-10',airfare:1150,nights:4,hrate:190,visa:0, taxi:165,fpd:80, days:5,reg:0,   status:'Approved',actual:2310},
-  {id:9,owner:'Marketing',   traveler:'Zara Ahmed',        city:'Chicago',     country:'USA',         region:'North America',purpose:'Conference',      quarter:'Q3',depart:'2025-06-17',ret:'2025-06-20',airfare:360, nights:3,hrate:195,visa:0, taxi:95, fpd:90, days:4,reg:620, status:'Approved',actual:1740},
-  {id:10,owner:'Sales',      traveler:'Omar Hassan',       city:'Lagos',       country:'Nigeria',     region:'Africa',       purpose:'Field Visit',     quarter:'Q4',depart:'2025-07-07',ret:'2025-07-12',airfare:1480,nights:5,hrate:148,visa:50,taxi:135,fpd:62, days:6,reg:0,   status:'Approved',actual:3180},
-  {id:11,owner:'Product',    traveler:'Claire Dubois',     city:'Paris',       country:'France',      region:'Europe',       purpose:'Conference',      quarter:'Q4',depart:'2025-08-11',ret:'2025-08-14',airfare:820, nights:3,hrate:250,visa:0, taxi:165,fpd:125,days:4,reg:700, status:'Approved',actual:2890},
-  {id:12,owner:'Marketing',  traveler:'Ryan Chen',         city:'Seoul',       country:'South Korea', region:'Asia',         purpose:'Recruiting',      quarter:'Q4',depart:'2025-08-25',ret:'2025-08-29',airfare:1100,nights:4,hrate:175,visa:0, taxi:145,fpd:80, days:5,reg:0,   status:'Approved',actual:2620},
-  {id:13,owner:'Platform Eng',traveler:'Maria Santos',     city:'Buenos Aires',country:'Argentina',   region:'Latin America', purpose:'Sales',           quarter:'Q4',depart:'2025-09-08',ret:'2025-09-12',airfare:760, nights:4,hrate:135,visa:0, taxi:115,fpd:68, days:5,reg:0,   status:'Approved',actual:1840},
-  {id:14,owner:'Sales',      traveler:'Priya Patel',       city:'Berlin',      country:'Germany',     region:'Europe',       purpose:'Team Offsite',    quarter:'Q4',depart:'2025-09-22',ret:'2025-09-26',airfare:875, nights:4,hrate:205,visa:0, taxi:155,fpd:110,days:5,reg:0,   status:'Approved',actual:2830},
-];
+const SAMPLE_FY2025 = [];
 
-const SAMPLE_FY2026 = [
-  {id:1,owner:'Platform Eng',traveler:'Sarah Chen',       city:'New York',     country:'USA',         region:'North America',purpose:'Conference',      quarter:'Q1',depart:'2026-01-14',ret:'2026-01-17',airfare:450, nights:3,hrate:220,visa:0, taxi:120,fpd:100,days:4,reg:799, status:'Approved',actual:2501},
-  {id:2,owner:'Platform Eng',traveler:'Marcus Thompson',  city:'London',       country:'UK',          region:'Europe',       purpose:'Team Offsite',    quarter:'Q1',depart:'2026-02-03',ret:'2026-02-07',airfare:950, nights:4,hrate:250,visa:0, taxi:200,fpd:120,days:5,reg:0,   status:'Approved',actual:2890},
-  {id:3,owner:'Sales',       traveler:'Priya Patel',      city:'Singapore',    country:'Singapore',   region:'Asia',         purpose:'Customer Meeting', quarter:'Q1',depart:'2026-03-10',ret:'2026-03-14',airfare:1200,nights:4,hrate:200,visa:25,taxi:180,fpd:85, days:5,reg:0,   status:'Approved',actual:2780},
-  {id:4,owner:'Sales',       traveler:'James Okafor',     city:'Nairobi',      country:'Kenya',       region:'Africa',       purpose:'Field Visit',     quarter:'Q1',depart:'2026-03-22',ret:'2026-03-28',airfare:1450,nights:5,hrate:160,visa:50,taxi:150,fpd:70, days:6,reg:0,   status:'Approved',actual:3110},
-  {id:5,owner:'Product',     traveler:'Elena Vasquez',    city:'São Paulo',    country:'Brazil',      region:'Latin America', purpose:'Customer Meeting', quarter:'Q2',depart:'2026-04-07',ret:'2026-04-10',airfare:850, nights:3,hrate:150,visa:0, taxi:140,fpd:80, days:4,reg:0,   status:'Approved',actual:1940},
-  {id:6,owner:'Product',     traveler:'Daniel Kim',       city:'Tokyo',        country:'Japan',       region:'Asia',         purpose:'Conference',      quarter:'Q2',depart:'2026-04-21',ret:'2026-04-25',airfare:1100,nights:4,hrate:190,visa:0, taxi:160,fpd:90, days:5,reg:1200,status:'Approved',actual:3990},
-  {id:7,owner:'Platform Eng',traveler:'Amy Rodriguez',    city:'Amsterdam',    country:'Netherlands', region:'Europe',       purpose:'Training',        quarter:'Q2',depart:'2026-05-12',ret:'2026-05-15',airfare:880, nights:3,hrate:230,visa:0, taxi:160,fpd:110,days:4,reg:500, status:'Cancelled',actual:0},
-  {id:8,owner:'Marketing',   traveler:'Tom Nguyen',       city:'Chicago',      country:'USA',         region:'North America',purpose:'Conference',      quarter:'Q2',depart:'2026-06-02',ret:'2026-06-05',airfare:380, nights:3,hrate:200,visa:0, taxi:100,fpd:95, days:4,reg:650, status:'Approved',actual:2230},
-  {id:9,owner:'Sales',       traveler:'Fatima Al-Rashid', city:'Dubai',        country:'UAE',         region:'Asia',         purpose:'Sales',           quarter:'Q3',depart:'2026-07-08',ret:'2026-07-12',airfare:1350,nights:4,hrate:210,visa:0, taxi:200,fpd:100,days:5,reg:0,   status:'Proposed',actual:0},
-  {id:10,owner:'Marketing',  traveler:'Chris Obi',        city:'Cape Town',    country:'South Africa',region:'Africa',       purpose:'Conference',      quarter:'Q3',depart:'2026-07-28',ret:'2026-08-01',airfare:1600,nights:4,hrate:175,visa:0, taxi:130,fpd:75, days:5,reg:900, status:'Deferred',actual:0},
-  {id:11,owner:'Product',    traveler:'Lin Wei',          city:'Berlin',       country:'Germany',     region:'Europe',       purpose:'Team Offsite',    quarter:'Q3',depart:'2026-08-17',ret:'2026-08-21',airfare:920, nights:4,hrate:210,visa:0, taxi:150,fpd:115,days:5,reg:0,   status:'Proposed',actual:0},
-  {id:12,owner:'Platform Eng',traveler:'Raj Mehta',       city:'Mumbai',       country:'India',       region:'Asia',         purpose:'Field Visit',     quarter:'Q3',depart:'2026-09-09',ret:'2026-09-14',airfare:1050,nights:5,hrate:140,visa:25,taxi:120,fpd:65, days:6,reg:0,   status:'Proposed',actual:0},
-  {id:13,owner:'Sales',      traveler:'Anna Kowalski',    city:'Warsaw',       country:'Poland',      region:'Europe',       purpose:'Customer Meeting', quarter:'Q4',depart:'2026-10-06',ret:'2026-10-09',airfare:790, nights:3,hrate:190,visa:0, taxi:140,fpd:100,days:4,reg:0,   status:'Proposed',actual:0},
-  {id:14,owner:'Marketing',  traveler:'Carlos Morales',   city:'Bogotá',       country:'Colombia',    region:'Latin America', purpose:'Sales',           quarter:'Q4',depart:'2026-10-20',ret:'2026-10-24',airfare:720, nights:4,hrate:140,visa:0, taxi:120,fpd:70, days:5,reg:0,   status:'Cancelled',actual:0},
-  {id:15,owner:'Product',    traveler:'Yuki Tanaka',      city:'Seoul',        country:'South Korea', region:'Asia',         purpose:'Recruiting',      quarter:'Q4',depart:'2026-11-10',ret:'2026-11-14',airfare:1150,nights:4,hrate:180,visa:0, taxi:150,fpd:85, days:5,reg:0,   status:'Proposed',actual:0},
-  {id:16,owner:'Platform Eng',traveler:'Mia Johansson',   city:'Toronto',      country:'Canada',      region:'North America',purpose:'Training',        quarter:'Q4',depart:'2026-11-30',ret:'2026-12-03',airfare:420, nights:3,hrate:210,visa:0, taxi:110,fpd:95, days:4,reg:300, status:'Proposed',actual:0},
-  {id:17,owner:'Sales',      traveler:'Isaac Dlamini',    city:'Lagos',        country:'Nigeria',     region:'Africa',       purpose:'Field Visit',     quarter:'Q4',depart:'2026-12-08',ret:'2026-12-13',airfare:1550,nights:5,hrate:155,visa:50,taxi:140,fpd:65, days:6,reg:0,   status:'Deferred',actual:0},
-  {id:18,owner:'Marketing',  traveler:'Sophie Lambert',   city:'Paris',        country:'France',      region:'Europe',       purpose:'Conference',      quarter:'Q4',depart:'2026-12-01',ret:'2026-12-04',airfare:870, nights:3,hrate:260,visa:0, taxi:170,fpd:130,days:4,reg:750, status:'Proposed',actual:0},
-];
+const SAMPLE_FY2026 = [];
 
 // ═══════════════════════════════════════════════════════
 // DATABASE (localStorage)
@@ -1264,21 +1230,30 @@ function mkSel(opts, val, field, rid){
   return `<select onchange="upd(${rid},'${field}',this.value)">`
     +opts.map(o=>`<option value="${o}"${o===val?' selected':''}>${o}</option>`).join('')+'</select>';
 }
+function mkSelP(opts, val, field, rid, style=''){
+  return `<select style="${style}" onchange="upd(${rid},'${field}',this.value)"><option value="">—</option>`
+    +opts.map(o=>`<option value="${o}"${o===val?' selected':''}>${o}</option>`).join('')+'</select>';
+}
 function mkIn(val,type,field,rid,w,extra=''){
   return `<input type="${type}" value="${escH(val)}" style="width:${w}" ${extra} onchange="upd(${rid},'${field}',this.value)"/>`;
 }
 function mkTxt(val,field,rid){ return `<input type="text" value="${escH(val)}" onchange="upd(${rid},'${field}',this.value)"/>`; }
 function mkDL(val,field,rid,listId){ return `<input type="text" value="${escH(val)}" list="${listId}" onchange="upd(${rid},'${field}',this.value)" autocomplete="off"/>`; }
+function mkMasterSel(val,field,rid,listKey){
+  const opts=db[listKey]||[];
+  return `<select onchange="upd(${rid},'${field}',this.value)"><option value="">—</option>`
+    +opts.map(o=>`<option value="${escH(o)}"${o===val?' selected':''}>${escH(o)}</option>`).join('')+'</select>';
+}
 function mkCountrySel(val,rid,region){
   const countries=Object.keys(GEO_DATA[region]||{}).sort();
   const extra=val&&!countries.includes(val)?`<option value="${escH(val)}" selected>${escH(val)}</option>`:'';
-  return `<select onchange="upd(${rid},'country',this.value)"><option value="">— Country —</option>${extra}`
+  return `<select onchange="upd(${rid},'country',this.value)"><option value="">—</option>${extra}`
     +countries.map(c=>`<option value="${c}"${c===val?' selected':''}>${c}</option>`).join('')+'</select>';
 }
 function mkCitySel(val,rid,country,region){
   const cities=((GEO_DATA[region]||{})[country])||[];
   const extra=val&&!cities.includes(val)?`<option value="${escH(val)}" selected>${escH(val)}</option>`:'';
-  return `<select onchange="upd(${rid},'city',this.value)"><option value="">— City —</option>${extra}`
+  return `<select onchange="upd(${rid},'city',this.value)"><option value="">—</option>${extra}`
     +cities.map(c=>`<option value="${c}"${c===val?' selected':''}>${c}</option>`).join('')+'</select>';
 }
 function stSel(status,rid){
@@ -1310,14 +1285,14 @@ function renderTable(){
     return `<tr class="${rcls}">
       <td style="text-align:center;color:var(--g4);font-size:11px">${i+1}</td>
       <td class="td-st">${stSel(r.status,r.id)}</td>
-      <td>${mkDL(r.owner,'owner',r.id,'dl-owners')}</td>
-      <td>${mkDL(r.manager,'manager',r.id,'dl-managers')}</td>
-      <td>${mkDL(r.traveler,'traveler',r.id,'dl-travelers')}</td>
+      <td>${mkMasterSel(r.owner,'owner',r.id,'owners')}</td>
+      <td>${mkMasterSel(r.manager,'manager',r.id,'managers')}</td>
+      <td>${mkMasterSel(r.traveler,'traveler',r.id,'travelers')}</td>
       <td>${mkCountrySel(r.country,r.id,r.region)}</td>
-      <td>${mkSel(REGIONS,r.region,'region',r.id)}</td>
+      <td>${mkSelP(REGIONS,r.region,'region',r.id)}</td>
       <td>${mkCitySel(r.city,r.id,r.country,r.region)}</td>
-      <td>${mkSel(PURPOSES,r.purpose,'purpose',r.id)}</td>
-      <td>${mkSel(QUARTERS,r.quarter,'quarter',r.id)}</td>
+      <td>${mkSelP(PURPOSES,r.purpose,'purpose',r.id,'min-width:140px')}</td>
+      <td>${mkSelP(QUARTERS,r.quarter,'quarter',r.id)}</td>
       <td>${mkIn(r.depart,'date','depart',r.id,'118px')}</td>
       <td>${mkIn(r.ret,'date','ret',r.id,'118px')}</td>
       <td>${mkIn(r.airfare,'number','airfare',r.id,'68px')}</td>
@@ -1445,7 +1420,7 @@ function addRow(){
   const rows = currentRows();
   const now = Date.now();
   rows.push({id:++nextId,owner:'',manager:'',traveler:'',city:'',country:'',
-    region:'North America',purpose:'Conference',quarter:'Q1',
+    region:'',purpose:'',quarter:'',
     depart:'',ret:'',airfare:0,nights:0,hrate:0,visa:0,
     taxi:0,fpd:75,days:1,reg:0,status:'Proposed',actual:0,
     archived:false,created:now,modified:now});
