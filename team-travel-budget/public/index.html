@@ -485,9 +485,10 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
 <!-- TABS -->
 <div class="tabs">
   <div class="tab active"  onclick="showTab('budget')">Budget Entry</div>
+  <div class="tab"         onclick="showTab('approved')">Travel Approved</div>
   <div class="tab"         onclick="showTab('dashboard')">Dashboard</div>
   <div class="tab"         onclick="showTab('compare')">Year Comparison</div>
-  <div class="tab"         onclick="showTab('rates')">Rate Guide</div>
+  <a class="tab" href="https://finance.apple.com/policies-compliance/accounting-and-finance-policies/1001-travel-home-office-and-expense-reimbursement/download" target="_blank" rel="noopener noreferrer">Apple Travel Policy ↗</a>
   <div class="tab"         onclick="showTab('data')">Data Manager</div>
 </div>
 
@@ -529,7 +530,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
             <th style="width:90px">STATUS</th>
             <th>IS&amp;T UNIT</th><th>MANAGER</th><th>TRAVELER</th><th>COUNTRY</th>
             <th>REGION</th><th>CITY</th><th>PURPOSE</th><th style="width:50px">QTR</th>
-            <th class="r">DEPART</th><th class="r">RETURN</th>
+            <th class="r">DAYS</th>
             <th class="r">AIRFARE</th><th class="r">NIGHTS</th><th class="r">HTL/NT</th>
             <th class="r">HTL TOT</th><th class="r">VISA</th><th class="r">CAR/TAXI</th>
             <th class="r">FOOD/DAY</th><th class="r">DAYS</th><th class="r">FOOD TOT</th>
@@ -553,6 +554,39 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
           <span class="badge" style="background:#fef3c7;color:#92400e;">Deferred</span>
           — Cancelled &amp; Deferred excluded from totals
         </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: TRAVEL APPROVED -->
+<div class="page" id="page-approved">
+  <div class="card">
+    <div class="card-head">
+      <h2>Travel Approved — <span id="approved-fy-label">FY2026</span></h2>
+      <span class="hint">Rows automatically appear here when status is set to <strong>Approved</strong></span>
+    </div>
+    <div class="card-body">
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th style="width:28px">#</th>
+            <th style="width:90px">STATUS</th>
+            <th>IS&amp;T UNIT</th><th>MANAGER</th><th>TRAVELER</th><th>COUNTRY</th>
+            <th>REGION</th><th>CITY</th><th>PURPOSE</th><th style="width:50px">QTR</th>
+            <th class="r">DAYS</th>
+            <th class="r">AIRFARE</th><th class="r">NIGHTS</th><th class="r">HTL/NT</th>
+            <th class="r">HTL TOT</th><th class="r">VISA</th><th class="r">CAR/TAXI</th>
+            <th class="r">FOOD/DAY</th><th class="r">FOOD TOT</th>
+            <th class="r">REG FEES</th>
+            <th class="r" style="background:#1a3050!important;">PLANNED $</th>
+            <th class="r" style="background:#1a3a2a!important;">ACTUAL $</th>
+            <th class="r" style="background:#2a1a3a!important;">VARIANCE</th>
+            <th style="width:28px"></th>
+          </tr></thead>
+          <tbody id="approved-tbody"></tbody>
+          <tfoot id="approved-tfoot"></tfoot>
+        </table>
       </div>
     </div>
   </div>
@@ -593,37 +627,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
   </div>
 </div>
 
-<!-- PAGE: RATE GUIDE -->
-<div class="page" id="page-rates">
-  <div class="card">
-    <div class="card-head">
-      <h2>Rate Guide — <span id="rates-fy-label">FY2026</span></h2>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <span class="hint" id="rates-source-note"></span>
-        <button class="btn btn-green btn-sm" onclick="fetchBLSRates()">⟳ Fetch Rate Updates from Internet</button>
-        <button class="btn btn-ghost btn-sm" onclick="resetRatesToDefault()">Reset to Defaults</button>
-      </div>
-    </div>
-    <div class="card-body">
-      <div id="bls-panel-wrap"></div>
-      <div class="rate-grid" id="rate-grid"></div>
-      <div style="padding:0 16px 16px;">
-        <table style="width:100%;border-collapse:collapse;font-size:12px;" id="dest-table-wrap">
-          <thead><tr>
-            <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:left;">Region</th>
-            <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:left;">Example Cities</th>
-            <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:right;">Economy ($)</th>
-            <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:right;">Business ($)</th>
-            <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:right;">Hotel/Night ($)</th>
-            <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:right;">Food/Day ($)</th>
-            <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:right;">Visa ($)</th>
-          </tr></thead>
-          <tbody id="dest-table"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- PAGE: RATE GUIDE (removed) -->
 
 <!-- PAGE: DATA MANAGER -->
 <div class="page" id="page-data">
@@ -1293,8 +1297,7 @@ function renderTable(){
       <td>${mkCitySel(r.city,r.id,r.country,r.region)}</td>
       <td>${mkSelP(PURPOSES,r.purpose,'purpose',r.id,'min-width:140px')}</td>
       <td>${mkSelP(QUARTERS,r.quarter,'quarter',r.id)}</td>
-      <td>${mkIn(r.depart,'date','depart',r.id,'118px')}</td>
-      <td>${mkIn(r.ret,'date','ret',r.id,'118px')}</td>
+      <td>${mkIn(r.days,'number','days',r.id,'50px')}</td>
       <td>${mkIn(r.airfare,'number','airfare',r.id,'68px')}</td>
       <td>${mkIn(r.nights,'number','nights',r.id,'44px')}</td>
       <td>${mkIn(r.hrate,'number','hrate',r.id,'56px')}</td>
@@ -1302,7 +1305,6 @@ function renderTable(){
       <td>${mkIn(r.visa,'number','visa',r.id,'48px')}</td>
       <td>${mkIn(r.taxi,'number','taxi',r.id,'56px')}</td>
       <td>${mkIn(r.fpd,'number','fpd',r.id,'50px')}</td>
-      <td>${mkIn(r.days,'number','days',r.id,'40px')}</td>
       <td class="td-calc">${fmt(food)}</td>
       <td>${mkIn(r.reg,'number','reg',r.id,'62px')}</td>
       <td class="col-pl" style="${active?'':'opacity:.38'}">${fmt(planned)}</td>
@@ -1393,10 +1395,17 @@ function upd(id,field,value){
     History.push();
     const prev = r[field];
     r[field]=value; r.modified=Date.now();
-    autoFillRow(id, field);   // runs BEFORE saveDB/renderTable — modifies r in place
+    autoFillRow(id, field);
     if(field==='traveler'||field==='owner'||field==='manager') addToList(field, value);
     logAudit('update', db.activeFY, `${r.traveler||'Row '+id}: ${field} changed${prev!==undefined?' from "'+prev+'"':''} to "${value}"`);
     saveDB(); renderTable();
+    if(field==='status'){
+      if(value==='Approved') showTab('approved');
+      else showTab('budget');
+    } else {
+      const activeTab = document.querySelector('.page.active');
+      if(activeTab && activeTab.id==='page-approved') renderApprovedTable();
+    }
   }
 }
 function requestDelRow(id){
@@ -2086,20 +2095,83 @@ function shiftDateByYear(dateStr){
 }
 
 // ═══════════════════════════════════════════════════════
+// TRAVEL APPROVED TABLE
+// ═══════════════════════════════════════════════════════
+function renderApprovedTable(){
+  document.getElementById('approved-fy-label').textContent = db.activeFY;
+  const rows = currentRows().filter(r => !r.archived && r.status === 'Approved');
+  const tbody = document.getElementById('approved-tbody');
+  const tfoot = document.getElementById('approved-tfoot');
+  let tP=0,tA=0,tAir=0,tHtl=0,tVis=0,tTx=0,tFd=0,tRg=0;
+
+  tbody.innerHTML = rows.map((r,i)=>{
+    const hotel=num(r.nights)*num(r.hrate), food=num(r.fpd)*num(r.days);
+    const planned=calcP(r), actual=num(r.actual);
+    const vari=actual>0?actual-planned:null;
+    tP+=planned; tAir+=num(r.airfare); tHtl+=hotel; tVis+=num(r.visa);
+    tTx+=num(r.taxi); tFd+=food; tRg+=num(r.reg);
+    if(actual>0) tA+=actual;
+    const vc=vari==null?'vr-neu':vari<=0?'vr-pos':'vr-neg';
+    const delCell = r.id===pendingDeleteId
+      ? `<td class="td-del"><div class="del-confirm"><button class="del-yes" onclick="requestDelRow(${r.id})">Delete</button><button class="del-no" onclick="cancelDel()">Cancel</button></div></td>`
+      : `<td class="td-del"><button class="del-btn" onclick="requestDelRow(${r.id})" title="Delete row">✕</button></td>`;
+    return `<tr>
+      <td style="text-align:center;color:var(--g4);font-size:11px">${i+1}</td>
+      <td class="td-st">${stSel(r.status,r.id)}</td>
+      <td>${mkMasterSel(r.owner,'owner',r.id,'owners')}</td>
+      <td>${mkMasterSel(r.manager,'manager',r.id,'managers')}</td>
+      <td>${mkMasterSel(r.traveler,'traveler',r.id,'travelers')}</td>
+      <td>${mkCountrySel(r.country,r.id,r.region)}</td>
+      <td>${mkSelP(REGIONS,r.region,'region',r.id)}</td>
+      <td>${mkCitySel(r.city,r.id,r.country,r.region)}</td>
+      <td>${mkSelP(PURPOSES,r.purpose,'purpose',r.id,'min-width:140px')}</td>
+      <td>${mkSelP(QUARTERS,r.quarter,'quarter',r.id)}</td>
+      <td>${mkIn(r.days,'number','days',r.id,'50px')}</td>
+      <td>${mkIn(r.airfare,'number','airfare',r.id,'68px')}</td>
+      <td>${mkIn(r.nights,'number','nights',r.id,'44px')}</td>
+      <td>${mkIn(r.hrate,'number','hrate',r.id,'56px')}</td>
+      <td class="td-calc">${fmt(hotel)}</td>
+      <td>${mkIn(r.visa,'number','visa',r.id,'48px')}</td>
+      <td>${mkIn(r.taxi,'number','taxi',r.id,'56px')}</td>
+      <td>${mkIn(r.fpd,'number','fpd',r.id,'50px')}</td>
+      <td class="td-calc">${fmt(food)}</td>
+      <td>${mkIn(r.reg,'number','reg',r.id,'62px')}</td>
+      <td class="col-pl">${fmt(planned)}</td>
+      <td class="col-ac">${mkIn(r.actual,'number','actual',r.id,'76px','placeholder="0"')}</td>
+      <td class="col-vr ${vc}">${vari!=null?fmtD(vari):'—'}</td>
+      ${delCell}
+    </tr>`;
+  }).join('');
+
+  const vAP=tA-tP;
+  tfoot.innerHTML=`<tr>
+    <td colspan="11" class="lbl">APPROVED TOTALS (${rows.length} trips)</td>
+    <td style="text-align:right">${fmt(tAir)}</td><td></td><td></td>
+    <td style="text-align:right">${fmt(tHtl)}</td>
+    <td style="text-align:right">${fmt(tVis)}</td>
+    <td style="text-align:right">${fmt(tTx)}</td><td></td>
+    <td style="text-align:right">${fmt(tRg)}</td>
+    <td class="tf-pl">${fmt(tP)}</td>
+    <td class="tf-ac">${tA?fmt(tA):'—'}</td>
+    <td class="${tA?(vAP<=0?'tf-vp':'tf-vn'):''}">${tA?fmtD(vAP):'—'}</td><td></td>
+  </tr>`;
+}
+
+// ═══════════════════════════════════════════════════════
 // TAB SWITCHING
 // ═══════════════════════════════════════════════════════
 function showTab(name){
-  document.querySelectorAll('.tab').forEach((t,i)=>{
-    t.classList.toggle('active',['budget','dashboard','compare','rates','data'][i]===name);
+  document.querySelectorAll('.tab:not(a)').forEach((t,i)=>{
+    t.classList.toggle('active',['budget','approved','dashboard','compare','data'][i]===name);
   });
   document.querySelectorAll('.page').forEach(p=>{
     p.classList.toggle('active',p.id==='page-'+name);
   });
   document.getElementById('bov-bar').style.display=name==='budget'?'flex':'none';
-  if(name==='dashboard') buildDashboard();
-  if(name==='compare')   buildComparison();
-  if(name==='rates')     buildRateGuide();
-  if(name==='data')      buildDataManager();
+  if(name==='approved')   renderApprovedTable();
+  if(name==='dashboard')  buildDashboard();
+  if(name==='compare')    buildComparison();
+  if(name==='data')       buildDataManager();
 }
 
 // ═══════════════════════════════════════════════════════
