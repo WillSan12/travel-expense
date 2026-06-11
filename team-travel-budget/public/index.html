@@ -145,7 +145,9 @@ tbody tr:hover:not(.row-cx):not(.row-df){background:#fafafe;}
 tbody td{padding:4px 5px;vertical-align:middle;}
 tbody td input,tbody td select:not(.status-sel){width:100%;border:1px solid transparent;
   border-radius:5px;padding:4px 6px;font-size:12px;background:transparent;color:var(--navy);
-  outline:none;font-family:inherit;transition:border-color .12s;}
+  outline:none;font-family:inherit;transition:border-color .12s;min-width:0;}
+tbody td select:not(.status-sel){min-width:120px;}
+.col-name-wide{min-width:160px;}
 tbody td input:focus,tbody td select:not(.status-sel):focus{border-color:var(--blue);background:var(--blue-lt);}
 tbody td input[type=number]{text-align:right;}
 .row-cx{opacity:.36;} .row-cx td:not(.td-st):not(.td-del){text-decoration:line-through;}
@@ -556,16 +558,13 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
                 </label>
               </div>
             </th>
-            <th>IS&amp;T UNIT</th><th>MANAGER</th><th>TRAVELER</th><th>COUNTRY</th>
-            <th>REGION</th><th>CITY</th><th>PURPOSE</th><th style="width:50px">QTR</th>
+            <th>IS&amp;T UNIT</th><th style="min-width:160px">MANAGER</th><th style="min-width:180px">TRAVELER</th>
+            <th style="min-width:130px">REGION</th><th style="min-width:150px">PURPOSE</th><th style="width:50px">QTR</th>
             <th class="r">DAYS</th>
-            <th class="r">AIRFARE</th><th class="r">NIGHTS</th><th class="r">HTL/NT</th>
-            <th class="r">HTL TOT</th><th class="r">VISA</th><th class="r">CAR/TAXI</th>
-            <th class="r">FOOD/DAY</th><th class="r">DAYS</th><th class="r">FOOD TOT</th>
+            <th class="r" style="background:#1a2a3a!important;" title="Estimated daily cost: Hotel + Food + Taxi (excl. Airfare &amp; Visa)">EST/DAY</th>
+            <th class="r">AIRFARE</th><th class="r">VISA</th>
             <th class="r">REG FEES</th>
             <th class="r" style="background:#1a3050!important;">PLANNED $</th>
-            <th class="r" style="background:#1a3a2a!important;">ACTUAL $</th>
-            <th class="r" style="background:#2a1a3a!important;">VARIANCE</th>
             <th style="width:28px"></th>
           </tr></thead>
           <tbody id="budget-tbody"></tbody>
@@ -593,8 +592,8 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
           <thead><tr>
             <th style="width:28px">#</th>
             <th style="width:90px">STATUS</th>
-            <th>IS&amp;T UNIT</th><th>MANAGER</th><th>TRAVELER</th><th>COUNTRY</th>
-            <th>REGION</th><th>CITY</th><th>PURPOSE</th><th style="width:50px">QTR</th>
+            <th>IS&amp;T UNIT</th><th style="min-width:160px">MANAGER</th><th style="min-width:180px">TRAVELER</th><th style="min-width:130px">COUNTRY</th>
+            <th style="min-width:130px">REGION</th><th style="min-width:130px">CITY</th><th style="min-width:150px">PURPOSE</th><th style="width:50px">QTR</th>
             <th class="r">DAYS</th>
             <th class="r">AIRFARE</th><th class="r">NIGHTS</th><th class="r">HTL/NT</th>
             <th class="r">HTL TOT</th><th class="r">VISA</th><th class="r">CAR/TAXI</th>
@@ -996,6 +995,19 @@ const DEST_CITIES = {
   'Latin America':'São Paulo, Buenos Aires, Bogotá, Lima, Santiago'
 };
 
+const MANAGER_TRAVELERS = {
+  'Dave Champion':  ['Wayne Lawrence'],
+  'Wayne Lawrence': ['Maggie Leiker','Rajiv Ranjan'],
+  'Rajiv Ranjan':   ['Arupa Banerjee','Deepak Kumar','Sekar Krishnamurthy','Chandru Natarajan',
+    'Gaurav Rawal','Satishkumar Varadarajulu','Diandra Hanna','Idan Bianco','Luisa Guenther',
+    'Gayathri Shenoy','Laura Smart','Umanand Jha','David Jackson','Naveen Potluri',
+    'Subhadeep Nandi','Guilherme Cervezao','Satya Chekuri','William Sanchez','Kumar Kuppusamy',
+    'Monika Dabrowski','Vinit Chalana','Satyanarayana Bandaru','Aditya Dave','Kimiko Kuei',
+    'Valemia Njuh','Edgar Gabriel','Kushboo Pidwa','Satheesh Waran','Teeracha Sinthavanarong'],
+  'Maggie Leiker':  ['Ankita Vijayan','Isha Gummid','Frank Firicano','Vipul Singh',
+    'Martha Hubney','Shravan Koneru','Cebastian Chinolla','Jabbar Ahmad Shaik','Sagata Das'],
+};
+
 // Per-day taxi/ground estimate by region (USD)
 const TAXI_PER_DAY = {
   'North America':35, 'Europe':30, 'Asia':35, 'Africa':25, 'Latin America':25};
@@ -1247,6 +1259,15 @@ function isActive(r){ return r.status==='Proposed'||r.status==='Approved'; }
 function calcP(r){ return num(r.airfare)+num(r.nights)*num(r.hrate)+num(r.visa)+num(r.taxi)+num(r.fpd)*num(r.days)+num(r.reg); }
 function parseAmt(s){ return parseFloat(String(s||'').replace(/[$,\s]/g,''))||0; }
 function getFYRates(fy){ return getYD(fy).rates || DEFAULT_RATES; }
+function getEstDay(region){
+  const rates = getFYRates();
+  const r = rates.find(rt=>rt.region===region);
+  if(!r) return null;
+  const taxi = TAXI_PER_DAY[region]||30;
+  const lo = r.hotel[0] + r.food[0] + taxi;
+  const hi = r.hotel[1] + r.food[1] + taxi;
+  return {lo, hi, mid: Math.round((lo+hi)/2)};
+}
 
 // ═══════════════════════════════════════════════════════
 // FY SELECTOR
@@ -1301,6 +1322,11 @@ function mkMasterSel(val,field,rid,listKey){
   return `<select onchange="upd(${rid},'${field}',this.value)"><option value="">—</option>`
     +opts.map(o=>`<option value="${escH(o)}"${o===val?' selected':''}>${escH(o)}</option>`).join('')+'</select>';
 }
+function mkTravelerSel(val,rid,manager){
+  const opts = manager && MANAGER_TRAVELERS[manager] ? MANAGER_TRAVELERS[manager] : (db.travelers||[]);
+  return `<select onchange="upd(${rid},'traveler',this.value)"><option value="">—</option>`
+    +opts.map(o=>`<option value="${escH(o)}"${o===val?' selected':''}>${escH(o)}</option>`).join('')+'</select>';
+}
 function mkCountrySel(val,rid,region){
   const countries=Object.keys(GEO_DATA[region]||{}).sort();
   const extra=val&&!countries.includes(val)?`<option value="${escH(val)}" selected>${escH(val)}</option>`:'';
@@ -1324,13 +1350,12 @@ function renderTable(){
   const yd   = getYD();
   const tbody= document.getElementById('budget-tbody');
   const tfoot= document.getElementById('budget-tfoot');
-  let tP=0,tA=0,tCx=0,tDf=0,tAir=0,tHtl=0,tVis=0,tTx=0,tFd=0,tRg=0;
+  let tP=0,tA=0,tCx=0,tDf=0,tAir=0,tVis=0,tRg=0;
 
   tbody.innerHTML = rows.map((r,i)=>{
-    const hotel=num(r.nights)*num(r.hrate), food=num(r.fpd)*num(r.days);
     const planned=calcP(r), actual=num(r.actual), active=isActive(r);
     const vari = (actual>0&&active)?actual-planned:null;
-    if(active){ tP+=planned; tAir+=num(r.airfare); tHtl+=hotel; tVis+=num(r.visa); tTx+=num(r.taxi); tFd+=food; tRg+=num(r.reg); }
+    if(active){ tP+=planned; tAir+=num(r.airfare); tVis+=num(r.visa); tRg+=num(r.reg); }
     if(actual>0&&active) tA+=actual;
     if(r.status==='Cancelled') tCx+=planned;
     if(r.status==='Deferred')  tDf+=planned;
@@ -1344,57 +1369,40 @@ function renderTable(){
       <td class="td-st">${stSel(r.status,r.id)}</td>
       <td>${mkMasterSel(r.owner,'owner',r.id,'owners')}</td>
       <td>${mkMasterSel(r.manager,'manager',r.id,'managers')}</td>
-      <td>${mkMasterSel(r.traveler,'traveler',r.id,'travelers')}</td>
-      <td>${mkCountrySel(r.country,r.id,r.region)}</td>
+      <td>${mkTravelerSel(r.traveler,r.id,r.manager)}</td>
       <td>${mkSelP(REGIONS,r.region,'region',r.id)}</td>
-      <td>${mkCitySel(r.city,r.id,r.country,r.region)}</td>
       <td>${mkSelP(PURPOSES,r.purpose,'purpose',r.id,'min-width:140px')}</td>
       <td>${mkSelP(QUARTERS,r.quarter,'quarter',r.id)}</td>
       <td>${mkIn(r.days,'number','days',r.id,'50px')}</td>
+      <td class="td-calc" style="color:var(--purple);font-weight:700;white-space:nowrap;">${(()=>{const e=r.region?getEstDay(r.region):null;return e?'$'+e.lo+'–$'+e.hi:'—';})()}</td>
       <td>${mkIn(r.airfare,'number','airfare',r.id,'68px')}</td>
-      <td>${mkIn(r.nights,'number','nights',r.id,'44px')}</td>
-      <td>${mkIn(r.hrate,'number','hrate',r.id,'56px')}</td>
-      <td class="td-calc">${fmt(hotel)}</td>
       <td>${mkIn(r.visa,'number','visa',r.id,'48px')}</td>
-      <td>${mkIn(r.taxi,'number','taxi',r.id,'56px')}</td>
-      <td>${mkIn(r.fpd,'number','fpd',r.id,'50px')}</td>
-      <td class="td-calc">${fmt(food)}</td>
       <td>${mkIn(r.reg,'number','reg',r.id,'62px')}</td>
       <td class="col-pl" style="${active?'':'opacity:.38'}">${fmt(planned)}</td>
-      <td class="col-ac">${mkIn(r.actual,'number','actual',r.id,'76px','placeholder="0"')}</td>
-      <td class="col-vr ${vc}">${vari!=null?fmtD(vari):'—'}</td>
       ${delCell}
     </tr>`;
   }).join('');
 
   const awarded = yd.awarded||0;
-  const vPA = awarded-tP, vAA = awarded-tA, vAP = tA-tP;
+  const vPA = awarded-tP;
   tfoot.innerHTML = `
   <tr>
-    <td colspan="12" class="lbl">ACTIVE TOTALS (${rows.filter(isActive).length} trips — Proposed + Approved)</td>
-    <td style="text-align:right">${fmt(tAir)}</td><td></td><td></td>
-    <td style="text-align:right">${fmt(tHtl)}</td>
+    <td colspan="10" class="lbl">ACTIVE TOTALS (${rows.filter(isActive).length} trips)</td>
+    <td style="text-align:right">${fmt(tAir)}</td>
     <td style="text-align:right">${fmt(tVis)}</td>
-    <td style="text-align:right">${fmt(tTx)}</td>
-    <td></td><td></td>
-    <td style="text-align:right">${fmt(tFd)}</td>
     <td style="text-align:right">${fmt(tRg)}</td>
     <td class="tf-pl">${fmt(tP)}</td>
-    <td class="tf-ac">${tA?fmt(tA):'—'}</td>
-    <td class="${tA?(vAP<=0?'tf-vp':'tf-vn'):''}">
-      ${tA?fmtD(vAP):'—'}</td><td></td>
+    <td></td>
   </tr>
   <tr>
-    <td colspan="23" class="lbl" style="padding-left:10px">
+    <td colspan="13" class="lbl" style="padding-left:10px">
       Awarded: <strong>${fmt(awarded)}</strong> &nbsp;·&nbsp;
       Cancelled: <strong style="color:var(--red)">${fmt(tCx)}</strong> &nbsp;·&nbsp;
       Deferred: <strong style="color:var(--amber)">${fmt(tDf)}</strong> &nbsp;·&nbsp;
       Active Planned vs. Awarded:
     </td>
-    <td class="${vPA>=0?'tf-vp':'tf-vn'}" colspan="2">${fmtD(vPA)}</td><td></td>
-  </tr>
-  ${tA?`<tr><td colspan="23" class="lbl" style="padding-left:10px">Actual Spent vs. Awarded Budget:</td>
-    <td class="${vAA>=0?'tf-vp':'tf-vn'}" colspan="2">${fmtD(vAA)}</td><td></td></tr>`:''}`;
+    <td class="${vPA>=0?'tf-vp':'tf-vn'}">${fmtD(vPA)}</td><td></td>
+  </tr>`;
 
   document.getElementById('tb-planned').textContent = fmt(tP);
   document.getElementById('tb-actual').textContent  = tA ? fmt(tA) : '—';
@@ -2178,11 +2186,11 @@ function renderActualizeTable(){
   let tP=0,tA=0,tAir=0,tHtl=0,tVis=0,tTx=0,tFd=0,tRg=0;
 
   tbody.innerHTML = rows.map((r,i)=>{
-    const hotel=num(r.nights)*num(r.hrate), food=num(r.fpd)*num(r.days);
     const planned=calcP(r), actual=num(r.actual);
+    const htlTot=num(r.htl_actual), foodTot=num(r.food_actual);
     const vari=actual>0?actual-planned:null;
-    tP+=planned; tAir+=num(r.airfare); tHtl+=hotel; tVis+=num(r.visa);
-    tTx+=num(r.taxi); tFd+=food; tRg+=num(r.reg);
+    tP+=planned; tAir+=num(r.airfare); tHtl+=htlTot; tVis+=num(r.visa);
+    tTx+=num(r.taxi); tFd+=foodTot; tRg+=num(r.reg);
     if(actual>0) tA+=actual;
     const vc=vari==null?'vr-neu':vari<=0?'vr-pos':'vr-neg';
     const delCell = r.id===pendingDeleteId
@@ -2193,7 +2201,7 @@ function renderActualizeTable(){
       <td class="td-st">${stSel(r.status,r.id)}</td>
       <td>${mkMasterSel(r.owner,'owner',r.id,'owners')}</td>
       <td>${mkMasterSel(r.manager,'manager',r.id,'managers')}</td>
-      <td>${mkMasterSel(r.traveler,'traveler',r.id,'travelers')}</td>
+      <td>${mkTravelerSel(r.traveler,r.id,r.manager)}</td>
       <td>${mkCountrySel(r.country,r.id,r.region)}</td>
       <td>${mkSelP(REGIONS,r.region,'region',r.id)}</td>
       <td>${mkCitySel(r.city,r.id,r.country,r.region)}</td>
@@ -2203,11 +2211,11 @@ function renderActualizeTable(){
       <td>${mkIn(r.airfare,'number','airfare',r.id,'68px')}</td>
       <td>${mkIn(r.nights,'number','nights',r.id,'44px')}</td>
       <td>${mkIn(r.hrate,'number','hrate',r.id,'56px')}</td>
-      <td class="td-calc">${fmt(hotel)}</td>
+      <td class="col-ac">${mkIn(r.htl_actual||0,'number','htl_actual',r.id,'76px','placeholder="0"')}</td>
       <td>${mkIn(r.visa,'number','visa',r.id,'48px')}</td>
       <td>${mkIn(r.taxi,'number','taxi',r.id,'56px')}</td>
       <td>${mkIn(r.fpd,'number','fpd',r.id,'50px')}</td>
-      <td class="td-calc">${fmt(food)}</td>
+      <td class="col-ac">${mkIn(r.food_actual||0,'number','food_actual',r.id,'76px','placeholder="0"')}</td>
       <td>${mkIn(r.reg,'number','reg',r.id,'62px')}</td>
       <td class="col-pl">${fmt(planned)}</td>
       <td class="col-ac">${mkIn(r.actual,'number','actual',r.id,'76px','placeholder="0"')}</td>
@@ -2223,6 +2231,7 @@ function renderActualizeTable(){
     <td style="text-align:right">${fmt(tHtl)}</td>
     <td style="text-align:right">${fmt(tVis)}</td>
     <td style="text-align:right">${fmt(tTx)}</td><td></td>
+    <td style="text-align:right">${fmt(tFd)}</td>
     <td style="text-align:right">${fmt(tRg)}</td>
     <td class="tf-pl">${fmt(tP)}</td>
     <td class="tf-ac">${tA?fmt(tA):'—'}</td>
@@ -2264,7 +2273,9 @@ function migrateDB(){
       if(r.archived===undefined) r.archived=false;
       if(!r.created)  r.created=Date.now();
       if(!r.modified) r.modified=Date.now();
-      if(r.manager===undefined) r.manager='';
+      if(r.manager===undefined)      r.manager='';
+      if(r.htl_actual===undefined)   r.htl_actual=0;
+      if(r.food_actual===undefined)  r.food_actual=0;
       if(r.traveler && !db.travelers.includes(r.traveler)) db.travelers.push(r.traveler);
       if(r.owner    && !db.owners.includes(r.owner))       db.owners.push(r.owner);
       if(r.manager  && !db.managers.includes(r.manager))   db.managers.push(r.manager);

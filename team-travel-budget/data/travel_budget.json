@@ -1,0 +1,883 @@
+{
+  "updatedAt": 1781210011857,
+  "updatedBy": "admin",
+  "state": {
+    "activeFY": "FY2026",
+    "auditLog": [
+      {
+        "ts": 1781210011450,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"5\" to \"4\""
+      },
+      {
+        "ts": 1781210010893,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"4\" to \"5\""
+      },
+      {
+        "ts": 1781209820270,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: region changed from \"\" to \"North America\""
+      },
+      {
+        "ts": 1781209815547,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: traveler changed from \"\" to \"Aditya Dave\""
+      },
+      {
+        "ts": 1781209811360,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 108: quarter changed from \"\" to \"Q1\""
+      },
+      {
+        "ts": 1781209705880,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: purpose changed from \"\" to \"Conference\""
+      },
+      {
+        "ts": 1781209057113,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"3\" to \"4\""
+      },
+      {
+        "ts": 1781209055865,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"2\" to \"3\""
+      },
+      {
+        "ts": 1781209050975,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"1\" to \"2\""
+      },
+      {
+        "ts": 1781209047911,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: region changed from \"\" to \"North America\""
+      },
+      {
+        "ts": 1781209044294,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: traveler changed from \"\" to \"Wayne Lawrence\""
+      },
+      {
+        "ts": 1781207570060,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 103: fpd changed from \"74\" to \"75\""
+      },
+      {
+        "ts": 1781207564535,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 103: fpd changed from \"75\" to \"74\""
+      },
+      {
+        "ts": 1781207555356,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 103: days changed from \"2\" to \"1\""
+      },
+      {
+        "ts": 1781207550415,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 103: days changed from \"1\" to \"2\""
+      },
+      {
+        "ts": 1781207230025,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 107: manager changed from \"Maggie Leiker\" to \"Dave Champion\""
+      },
+      {
+        "ts": 1781207080858,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 107: manager changed from \"Rajiv Ranjan\" to \"Maggie Leiker\""
+      },
+      {
+        "ts": 1781207070402,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 107: manager changed from \"Wayne Lawrence\" to \"Rajiv Ranjan\""
+      },
+      {
+        "ts": 1781206981866,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 107: manager changed from \"Dave Champion\" to \"Wayne Lawrence\""
+      },
+      {
+        "ts": 1781206974165,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 107: manager changed from \"Wayne Lawrence\" to \"Dave Champion\""
+      },
+      {
+        "ts": 1781206966914,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 107: manager changed from \"Deepak Kumar\" to \"Wayne Lawrence\""
+      },
+      {
+        "ts": 1781206962337,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 107: manager changed from \"Maggie Leiker\" to \"Deepak Kumar\""
+      },
+      {
+        "ts": 1781206948380,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 107: manager changed from \"Deepak Kumar\" to \"Maggie Leiker\""
+      },
+      {
+        "ts": 1781206851099,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 107: manager changed from \"Dave Champion\" to \"Deepak Kumar\""
+      },
+      {
+        "ts": 1781206831685,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 107: manager changed from \"Rajiv Ranjan\" to \"Dave Champion\""
+      },
+      {
+        "ts": 1781206819086,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 107: manager changed from \"Arupa Banerjee\" to \"Rajiv Ranjan\""
+      },
+      {
+        "ts": 1781206810096,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 107: manager changed from \"\" to \"Arupa Banerjee\""
+      },
+      {
+        "ts": 1781206777651,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted:  → "
+      },
+      {
+        "ts": 1781206776602,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted: Ankita Vijayan → "
+      },
+      {
+        "ts": 1781195645479,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Awarded budget changed: $200,000 → $800,000"
+      },
+      {
+        "ts": 1781192717198,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 108: status changed from \"Approved\" to \"Actualize\""
+      },
+      {
+        "ts": 1781118027719,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Awarded budget changed: $200,000 → $200,000"
+      },
+      {
+        "ts": 1781118018718,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Awarded budget changed: $200,000 → $200,000"
+      },
+      {
+        "ts": 1781118016094,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Awarded budget changed: $200,000 → $200,000"
+      },
+      {
+        "ts": 1781118005461,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Awarded budget changed: $0 → $200,000"
+      },
+      {
+        "ts": 1781117691523,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 112)"
+      },
+      {
+        "ts": 1781117690547,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 111)"
+      },
+      {
+        "ts": 1781117689907,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 110)"
+      },
+      {
+        "ts": 1781117689290,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 109)"
+      },
+      {
+        "ts": 1781117668943,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 108: status changed from \"Proposed\" to \"Approved\""
+      },
+      {
+        "ts": 1781117665540,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 108)"
+      },
+      {
+        "ts": 1781117578102,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 107: days changed from \"2\" to \"1\""
+      },
+      {
+        "ts": 1781117577758,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 107: days changed from \"3\" to \"2\""
+      },
+      {
+        "ts": 1781117575624,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 107: days changed from \"2\" to \"3\""
+      },
+      {
+        "ts": 1781117573242,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 107: days changed from \"1\" to \"2\""
+      },
+      {
+        "ts": 1781117524604,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 107: visa changed from \"1\" to \"2\""
+      },
+      {
+        "ts": 1781117523465,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 107: visa changed from \"0\" to \"1\""
+      },
+      {
+        "ts": 1781117523282,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 107: visa changed from \"-1\" to \"0\""
+      },
+      {
+        "ts": 1781117522565,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 107: visa changed from \"0\" to \"-1\""
+      },
+      {
+        "ts": 1781116768416,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 107)"
+      },
+      {
+        "ts": 1781116725508,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 106: status changed from \"Proposed\" to \"Approved\""
+      },
+      {
+        "ts": 1781116696204,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 106: hrate changed from \"0\" to \"1\""
+      },
+      {
+        "ts": 1781116693920,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 106: reg changed from \"0\" to \"-1\""
+      },
+      {
+        "ts": 1781116692675,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 106: fpd changed from \"75\" to \"76\""
+      },
+      {
+        "ts": 1781116681436,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 106: airfare changed from \"0\" to \"1\""
+      },
+      {
+        "ts": 1781116680123,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 106: days changed from \"1\" to \"2\""
+      },
+      {
+        "ts": 1781116669545,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 106: manager changed from \"Deepak Kumar\" to \"Wayne Lawrence\""
+      },
+      {
+        "ts": 1781116668161,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 106: traveler changed from \"Ankita Vijayan\" to \"\""
+      },
+      {
+        "ts": 1781116621377,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Ankita Vijayan: traveler changed from \"Aditya Dave\" to \"Ankita Vijayan\""
+      },
+      {
+        "ts": 1781116615113,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: manager changed from \"Wayne Lawrence\" to \"Deepak Kumar\""
+      },
+      {
+        "ts": 1781116587196,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: manager changed from \"Arupa Banerjee\" to \"Wayne Lawrence\""
+      },
+      {
+        "ts": 1781116578662,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: manager changed from \"Vipul Singh\" to \"Arupa Banerjee\""
+      },
+      {
+        "ts": 1781116535638,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: traveler changed from \"\" to \"Aditya Dave\""
+      },
+      {
+        "ts": 1781116523194,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 106: manager changed from \"Wayne Lawrence\" to \"Vipul Singh\""
+      },
+      {
+        "ts": 1781116519227,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 106: manager changed from \"Arupa Banerjee\" to \"Wayne Lawrence\""
+      },
+      {
+        "ts": 1781116501697,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 106: manager changed from \"\" to \"Arupa Banerjee\""
+      },
+      {
+        "ts": 1781116500031,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 106: owner changed from \"\" to \"PD2\""
+      },
+      {
+        "ts": 1781116490290,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Ankita Vijayan: status changed from \"Proposed\" to \"Approved\""
+      },
+      {
+        "ts": 1781116481797,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Ankita Vijayan: traveler changed from \"\" to \"Ankita Vijayan\""
+      },
+      {
+        "ts": 1781116480572,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 105: manager changed from \"\" to \"Maggie Leiker\""
+      },
+      {
+        "ts": 1781116479136,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 105: owner changed from \"\" to \"PD2\""
+      },
+      {
+        "ts": 1781116477620,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Awarded budget changed: $100 → $0"
+      },
+      {
+        "ts": 1781116461946,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Awarded budget changed: $400,000 → $100"
+      },
+      {
+        "ts": 1781116427211,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 106)"
+      },
+      {
+        "ts": 1781020453187,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted:  → "
+      },
+      {
+        "ts": 1781020183484,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted:  → "
+      },
+      {
+        "ts": 1781020179552,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted:  → "
+      },
+      {
+        "ts": 1781020170900,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted: 101"
+      },
+      {
+        "ts": 1781020168886,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted: 101"
+      },
+      {
+        "ts": 1781020166083,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted:  → "
+      },
+      {
+        "ts": 1781017370377,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 105: region changed from \"\" to \"North America\""
+      },
+      {
+        "ts": 1781016507833,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 105: purpose changed from \"Conference\" to \"\""
+      },
+      {
+        "ts": 1781016448258,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 105: purpose changed from \"\" to \"Conference\""
+      },
+      {
+        "ts": 1781016360526,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 104: status changed from \"Proposed\" to \"Approved\""
+      },
+      {
+        "ts": 1781016356156,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 104: days changed from \"2\" to \"3\""
+      },
+      {
+        "ts": 1781016325820,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 104: days changed from \"1\" to \"2\""
+      },
+      {
+        "ts": 1781016311745,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 104: purpose changed from \"\" to \"Conference\""
+      },
+      {
+        "ts": 1781016285887,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 104: quarter changed from \"\" to \"Q1\""
+      },
+      {
+        "ts": 1781016254764,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 103: status changed from \"Proposed\" to \"Approved\""
+      },
+      {
+        "ts": 1781016229337,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 106)"
+      },
+      {
+        "ts": 1781014011080,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Awarded budget changed: $40,000 → $400,000"
+      },
+      {
+        "ts": 1781013955075,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 102: status changed from \"Proposed\" to \"Approved\""
+      },
+      {
+        "ts": 1781013948814,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 105)"
+      },
+      {
+        "ts": 1781013184030,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 101: status changed from \"Proposed\" to \"Approved\""
+      },
+      {
+        "ts": 1781013181356,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 104)"
+      },
+      {
+        "ts": 1781012648270,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 103)"
+      },
+      {
+        "ts": 1780957108650,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 102)"
+      },
+      {
+        "ts": 1780957097136,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 101: purpose changed from \"Conference\" to \"\""
+      },
+      {
+        "ts": 1780957094758,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 101: region changed from \"North America\" to \"\""
+      },
+      {
+        "ts": 1780955829777,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 101)"
+      },
+      {
+        "ts": 1780955467457,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 102: owner changed from \"\" to \"Retail - PD2 - Payments\""
+      },
+      {
+        "ts": 1780955465194,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 102)"
+      },
+      {
+        "ts": 1780954332774,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 101)"
+      }
+    ],
+    "years": {
+      "FY2026": {
+        "label": "FY2026",
+        "start": "2025-10-01",
+        "end": "2026-09-30",
+        "awarded": 800000,
+        "rows": [
+          {
+            "id": 103,
+            "owner": "",
+            "manager": "",
+            "traveler": "",
+            "city": "",
+            "country": "",
+            "region": "",
+            "purpose": "",
+            "quarter": "",
+            "depart": "",
+            "ret": "",
+            "airfare": 0,
+            "nights": 0,
+            "hrate": 0,
+            "visa": 0,
+            "taxi": 0,
+            "fpd": "75",
+            "days": "1",
+            "reg": 0,
+            "status": "Approved",
+            "actual": 0,
+            "archived": false,
+            "created": 1781012648270,
+            "modified": 1781207570060,
+            "htl_actual": 0,
+            "food_actual": 0
+          },
+          {
+            "id": 107,
+            "owner": "",
+            "manager": "Dave Champion",
+            "traveler": "Wayne Lawrence",
+            "city": "",
+            "country": "",
+            "region": "North America",
+            "purpose": "Conference",
+            "quarter": "",
+            "depart": "",
+            "ret": "",
+            "airfare": 500,
+            "nights": 0,
+            "hrate": 200,
+            "visa": "2",
+            "taxi": 35,
+            "fpd": 75,
+            "days": "4",
+            "reg": 0,
+            "status": "Proposed",
+            "actual": 0,
+            "archived": false,
+            "created": 1781116768416,
+            "modified": 1781210011450,
+            "htl_actual": 0,
+            "food_actual": 0
+          },
+          {
+            "id": 108,
+            "owner": "",
+            "manager": "",
+            "traveler": "Aditya Dave",
+            "city": "",
+            "country": "",
+            "region": "North America",
+            "purpose": "",
+            "quarter": "Q1",
+            "depart": "",
+            "ret": "",
+            "airfare": 500,
+            "nights": 0,
+            "hrate": 200,
+            "visa": 0,
+            "taxi": 35,
+            "fpd": 75,
+            "days": 1,
+            "reg": 0,
+            "status": "Actualize",
+            "actual": 0,
+            "archived": false,
+            "created": 1781117665540,
+            "modified": 1781209820270,
+            "htl_actual": 0,
+            "food_actual": 0
+          },
+          {
+            "id": 109,
+            "owner": "",
+            "manager": "",
+            "traveler": "",
+            "city": "",
+            "country": "",
+            "region": "",
+            "purpose": "",
+            "quarter": "",
+            "depart": "",
+            "ret": "",
+            "airfare": 0,
+            "nights": 0,
+            "hrate": 0,
+            "visa": 0,
+            "taxi": 0,
+            "fpd": 75,
+            "days": 1,
+            "reg": 0,
+            "status": "Proposed",
+            "actual": 0,
+            "archived": false,
+            "created": 1781117689290,
+            "modified": 1781117689290,
+            "htl_actual": 0,
+            "food_actual": 0
+          },
+          {
+            "id": 110,
+            "owner": "",
+            "manager": "",
+            "traveler": "",
+            "city": "",
+            "country": "",
+            "region": "",
+            "purpose": "",
+            "quarter": "",
+            "depart": "",
+            "ret": "",
+            "airfare": 0,
+            "nights": 0,
+            "hrate": 0,
+            "visa": 0,
+            "taxi": 0,
+            "fpd": 75,
+            "days": 1,
+            "reg": 0,
+            "status": "Proposed",
+            "actual": 0,
+            "archived": false,
+            "created": 1781117689907,
+            "modified": 1781117689907,
+            "htl_actual": 0,
+            "food_actual": 0
+          },
+          {
+            "id": 111,
+            "owner": "",
+            "manager": "",
+            "traveler": "",
+            "city": "",
+            "country": "",
+            "region": "",
+            "purpose": "",
+            "quarter": "",
+            "depart": "",
+            "ret": "",
+            "airfare": 0,
+            "nights": 0,
+            "hrate": 0,
+            "visa": 0,
+            "taxi": 0,
+            "fpd": 75,
+            "days": 1,
+            "reg": 0,
+            "status": "Proposed",
+            "actual": 0,
+            "archived": false,
+            "created": 1781117690547,
+            "modified": 1781117690547,
+            "htl_actual": 0,
+            "food_actual": 0
+          },
+          {
+            "id": 112,
+            "owner": "",
+            "manager": "",
+            "traveler": "",
+            "city": "",
+            "country": "",
+            "region": "",
+            "purpose": "",
+            "quarter": "",
+            "depart": "",
+            "ret": "",
+            "airfare": 0,
+            "nights": 0,
+            "hrate": 0,
+            "visa": 0,
+            "taxi": 0,
+            "fpd": 75,
+            "days": 1,
+            "reg": 0,
+            "status": "Proposed",
+            "actual": 0,
+            "archived": false,
+            "created": 1781117691523,
+            "modified": 1781117691523,
+            "htl_actual": 0,
+            "food_actual": 0
+          }
+        ],
+        "rates": null,
+        "ratesSource": "Defaults",
+        "archived": false,
+        "created": 1780950919832,
+        "modified": 1780950919832
+      }
+    },
+    "travelers": [
+      "Aditya Dave",
+      "Ankita Vijayan",
+      "Cebastian Chinolla",
+      "Chandru Natarajan",
+      "David Jackson",
+      "Diandra Hanna",
+      "Edgar Gabriel",
+      "Frank Firicano",
+      "Gayathri Shenoy",
+      "Guilherme Cervezao",
+      "Idan Bianco",
+      "Isha Gummid",
+      "Jabbar Ahmad Shaik",
+      "Kimiko Kuei",
+      "Kumar Kuppusamy",
+      "Kushboo Pidwa",
+      "Laura Smart",
+      "Luisa Guenther",
+      "Martha Hubney",
+      "Monika Dabrowski",
+      "Naveen Potluri",
+      "Sagata Das",
+      "Satheesh Waran",
+      "Satya Chekuri",
+      "Satyanarayana Bandaru",
+      "Subhadeep Nandi",
+      "Teeracha Sinthavanarong",
+      "Umanand Jha",
+      "Valemia Njuh",
+      "Vinit Chalana",
+      "Wayne Lawrence",
+      "William Sanchez"
+    ],
+    "owners": [
+      "PD2",
+      "Payments",
+      "Retail"
+    ],
+    "managers": [
+      "Dave Champion",
+      "Maggie Leiker",
+      "Rajiv Ranjan",
+      "Wayne Lawrence"
+    ]
+  }
+}
