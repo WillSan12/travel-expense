@@ -127,9 +127,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-se
 .st-Approved{background:var(--green-lt);color:var(--green-dk);}
 .st-Cancelled{background:var(--red-lt);color:var(--red);}
 .st-Deferred{background:var(--amber-lt);color:var(--amber);}
+.st-Actualize{background:#ede9fe;color:#5b21b6;}
+.filter-btn{border:1px solid var(--g3);border-radius:20px;padding:3px 12px;font-size:11px;
+  font-weight:600;cursor:pointer;background:var(--white);color:var(--g5);font-family:inherit;transition:all .12s;}
+.filter-btn:hover{border-color:var(--blue);color:var(--blue);}
+.filter-btn.active{background:var(--navy);border-color:var(--navy);color:#fff;}
 
 /* BUDGET TABLE */
-.tbl-wrap{overflow-x:auto;max-height:calc(100vh - 260px);}
+.tbl-wrap{overflow-x:auto;max-height:calc(100vh - 260px);min-height:220px;}
 table{width:100%;border-collapse:collapse;font-size:12px;}
 thead th{background:var(--navy);color:#f5f5f7;padding:7px 8px;text-align:left;
   font-weight:600;font-size:10px;letter-spacing:.05em;white-space:nowrap;
@@ -485,9 +490,10 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
 <!-- TABS -->
 <div class="tabs">
   <div class="tab active"  onclick="showTab('budget')">Budget Entry</div>
-  <div class="tab"         onclick="showTab('approved')">Travel Approved</div>
+  <div class="tab"         onclick="showTab('actualize')">Actualize</div>
   <div class="tab"         onclick="showTab('dashboard')">Dashboard</div>
   <div class="tab"         onclick="showTab('compare')">Year Comparison</div>
+  <div class="tab"         onclick="showTab('rates')">Rate Guide</div>
   <a class="tab" href="https://finance.apple.com/policies-compliance/accounting-and-finance-policies/1001-travel-home-office-and-expense-reimbursement/download" target="_blank" rel="noopener noreferrer">Apple Travel Policy ↗</a>
   <div class="tab"         onclick="showTab('data')">Data Manager</div>
 </div>
@@ -527,7 +533,29 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
         <table>
           <thead><tr>
             <th style="width:28px">#</th>
-            <th style="width:90px">STATUS</th>
+            <th style="width:110px;position:relative;">
+              <div style="display:inline-flex;align-items:center;gap:5px;cursor:pointer;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);border-radius:6px;padding:3px 8px;transition:background .15s;" onclick="toggleStatusFilterDropdown()" onmouseover="this.style.background='rgba(255,255,255,.25)'" onmouseout="this.style.background='rgba(255,255,255,.15)'">
+                ⊞ STATUS <span id="status-filter-indicator" style="font-size:9px;color:#fbbf24;"></span> ▾
+              </div>
+              <div id="status-filter-dropdown" style="display:none;position:absolute;top:100%;left:0;background:#fff;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.2);min-width:150px;z-index:200;padding:6px 0;">
+                <div style="padding:4px 12px;font-size:10px;color:var(--g4);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--g2);margin-bottom:4px;">Filter by Status</div>
+                <label style="display:flex;align-items:center;gap:8px;padding:5px 12px;cursor:pointer;font-size:12px;font-weight:400;color:var(--navy);">
+                  <input type="radio" name="sf" value="all" checked onchange="setStatusFilter('all')"/> All
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;padding:5px 12px;cursor:pointer;font-size:12px;font-weight:400;color:var(--navy);">
+                  <input type="radio" name="sf" value="Proposed" onchange="setStatusFilter('Proposed')"/> Proposed
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;padding:5px 12px;cursor:pointer;font-size:12px;font-weight:400;color:var(--navy);">
+                  <input type="radio" name="sf" value="Approved" onchange="setStatusFilter('Approved')"/> Approved
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;padding:5px 12px;cursor:pointer;font-size:12px;font-weight:400;color:var(--navy);">
+                  <input type="radio" name="sf" value="Cancelled" onchange="setStatusFilter('Cancelled')"/> Cancelled
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;padding:5px 12px;cursor:pointer;font-size:12px;font-weight:400;color:var(--navy);">
+                  <input type="radio" name="sf" value="Deferred" onchange="setStatusFilter('Deferred')"/> Deferred
+                </label>
+              </div>
+            </th>
             <th>IS&amp;T UNIT</th><th>MANAGER</th><th>TRAVELER</th><th>COUNTRY</th>
             <th>REGION</th><th>CITY</th><th>PURPOSE</th><th style="width:50px">QTR</th>
             <th class="r">DAYS</th>
@@ -547,24 +575,17 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
       <div class="add-bar">
         <button class="btn btn-blue" onclick="addRow()">+ Add Row</button>
         <button class="btn btn-ghost" onclick="showTab('dashboard')">View Dashboard →</button>
-        <span style="font-size:11px;color:var(--g4);">
-          <span class="badge" style="background:#dbeafe;color:#1e40af;">Proposed</span>
-          <span class="badge" style="background:#d1ede0;color:#0f5132;">Approved</span>
-          <span class="badge" style="background:#fde8e6;color:#c0392b;">Cancelled</span>
-          <span class="badge" style="background:#fef3c7;color:#92400e;">Deferred</span>
-          — Cancelled &amp; Deferred excluded from totals
-        </span>
       </div>
     </div>
   </div>
 </div>
 
-<!-- PAGE: TRAVEL APPROVED -->
-<div class="page" id="page-approved">
+<!-- PAGE: ACTUALIZE -->
+<div class="page" id="page-actualize">
   <div class="card">
     <div class="card-head">
-      <h2>Travel Approved — <span id="approved-fy-label">FY2026</span></h2>
-      <span class="hint">Rows automatically appear here when status is set to <strong>Approved</strong></span>
+      <h2>Actualize — <span id="actualize-fy-label">FY2026</span></h2>
+      <span class="hint">Rows automatically appear here when status is set to <strong>Actualize</strong></span>
     </div>
     <div class="card-body">
       <div class="tbl-wrap">
@@ -584,8 +605,8 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
             <th class="r" style="background:#2a1a3a!important;">VARIANCE</th>
             <th style="width:28px"></th>
           </tr></thead>
-          <tbody id="approved-tbody"></tbody>
-          <tfoot id="approved-tfoot"></tfoot>
+          <tbody id="actualize-tbody"></tbody>
+          <tfoot id="actualize-tfoot"></tfoot>
         </table>
       </div>
     </div>
@@ -628,6 +649,38 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
 </div>
 
 <!-- PAGE: RATE GUIDE (removed) -->
+
+<!-- PAGE: RATE GUIDE -->
+<div class="page" id="page-rates">
+  <div class="card">
+    <div class="card-head">
+      <h2>Rate Guide — <span id="rates-fy-label">FY2026</span></h2>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <span class="hint" id="rates-source-note"></span>
+        <button class="btn btn-green btn-sm" onclick="fetchBLSRates()">⟳ Fetch Rate Updates from Internet</button>
+        <button class="btn btn-ghost btn-sm" onclick="resetRatesToDefault()">Reset to Defaults</button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div id="bls-panel-wrap"></div>
+      <div class="rate-grid" id="rate-grid"></div>
+      <div style="padding:0 16px 16px;">
+        <table style="width:100%;border-collapse:collapse;font-size:12px;" id="dest-table-wrap">
+          <thead><tr>
+            <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:left;">Region</th>
+            <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:left;">Example Cities</th>
+            <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:right;">Economy ($)</th>
+            <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:right;">Business ($)</th>
+            <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:right;">Hotel/Night ($)</th>
+            <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:right;">Food/Day ($)</th>
+            <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:right;">Visa ($)</th>
+          </tr></thead>
+          <tbody id="dest-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- PAGE: DATA MANAGER -->
 <div class="page" id="page-data">
@@ -928,7 +981,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
 const REGIONS  = ['North America','Europe','Asia','Africa','Latin America'];
 const QUARTERS = ['Q1','Q2','Q3','Q4'];
 const PURPOSES = ['Conference','Team Offsite','Customer Meeting','Training','Sales','Field Visit','Recruiting','Other'];
-const STATUSES = ['Proposed','Approved','Cancelled','Deferred'];
+const STATUSES = ['Proposed','Approved','Cancelled','Deferred','Actualize'];
 const REGION_BADGE = {
   'North America':'r-na','Europe':'r-eu','Asia':'r-as','Africa':'r-af','Latin America':'r-la'};
 const REGION_BAR = {
@@ -1267,7 +1320,7 @@ function stSel(status,rid){
 }
 
 function renderTable(){
-  const rows = currentRows().filter(r => !r.archived);
+  const rows = currentRows().filter(r => !r.archived && r.status !== 'Actualize' && (budgetStatusFilter==='all' || r.status===budgetStatusFilter));
   const yd   = getYD();
   const tbody= document.getElementById('budget-tbody');
   const tfoot= document.getElementById('budget-tfoot');
@@ -1400,11 +1453,11 @@ function upd(id,field,value){
     logAudit('update', db.activeFY, `${r.traveler||'Row '+id}: ${field} changed${prev!==undefined?' from "'+prev+'"':''} to "${value}"`);
     saveDB(); renderTable();
     if(field==='status'){
-      if(value==='Approved') showTab('approved');
+      if(value==='Actualize') showTab('actualize');
       else showTab('budget');
     } else {
       const activeTab = document.querySelector('.page.active');
-      if(activeTab && activeTab.id==='page-approved') renderApprovedTable();
+      if(activeTab && activeTab.id==='page-actualize') renderActualizeTable();
     }
   }
 }
@@ -1415,15 +1468,15 @@ function requestDelRow(id){
     logAudit('delete', db.activeFY, `Deleted: ${r?r.traveler+' → '+r.city:id}`);
     getYD().rows = currentRows().filter(r=>r.id!==id);
     pendingDeleteId=null;
-    saveDB(); renderTable();
+    saveDB(); renderTable(); renderActualizeTable();
   } else {
     pendingDeleteId=id;
-    renderTable();
+    renderTable(); renderActualizeTable();
     clearTimeout(window._delTimer);
-    window._delTimer=setTimeout(()=>{ if(pendingDeleteId===id){pendingDeleteId=null;renderTable();} },4000);
+    window._delTimer=setTimeout(()=>{ if(pendingDeleteId===id){pendingDeleteId=null;renderTable();renderActualizeTable();} },4000);
   }
 }
-function cancelDel(){ pendingDeleteId=null; renderTable(); }
+function cancelDel(){ pendingDeleteId=null; renderTable(); renderActualizeTable(); }
 function addRow(){
   History.push();
   const rows = currentRows();
@@ -2095,13 +2148,33 @@ function shiftDateByYear(dateStr){
 }
 
 // ═══════════════════════════════════════════════════════
-// TRAVEL APPROVED TABLE
+// ACTUALIZE TABLE
 // ═══════════════════════════════════════════════════════
-function renderApprovedTable(){
-  document.getElementById('approved-fy-label').textContent = db.activeFY;
-  const rows = currentRows().filter(r => !r.archived && r.status === 'Approved');
-  const tbody = document.getElementById('approved-tbody');
-  const tfoot = document.getElementById('approved-tfoot');
+let budgetStatusFilter = 'all';
+function toggleStatusFilterDropdown(){
+  const dd = document.getElementById('status-filter-dropdown');
+  if(dd) dd.style.display = dd.style.display==='none' ? 'block' : 'none';
+}
+document.addEventListener('click', e=>{
+  if(!e.target.closest('#status-filter-dropdown') && !e.target.closest('[onclick="toggleStatusFilterDropdown()"]')){
+    const dd=document.getElementById('status-filter-dropdown');
+    if(dd) dd.style.display='none';
+  }
+});
+function setStatusFilter(status){
+  budgetStatusFilter = status;
+  const ind = document.getElementById('status-filter-indicator');
+  if(ind) ind.textContent = status==='all' ? '' : '● ';
+  const dd = document.getElementById('status-filter-dropdown');
+  if(dd) dd.style.display='none';
+  renderTable();
+}
+
+function renderActualizeTable(){
+  document.getElementById('actualize-fy-label').textContent = db.activeFY;
+  const rows = currentRows().filter(r => !r.archived && r.status === 'Actualize');
+  const tbody = document.getElementById('actualize-tbody');
+  const tfoot = document.getElementById('actualize-tfoot');
   let tP=0,tA=0,tAir=0,tHtl=0,tVis=0,tTx=0,tFd=0,tRg=0;
 
   tbody.innerHTML = rows.map((r,i)=>{
@@ -2145,7 +2218,7 @@ function renderApprovedTable(){
 
   const vAP=tA-tP;
   tfoot.innerHTML=`<tr>
-    <td colspan="11" class="lbl">APPROVED TOTALS (${rows.length} trips)</td>
+    <td colspan="11" class="lbl">ACTUALIZE TOTALS (${rows.length} trips)</td>
     <td style="text-align:right">${fmt(tAir)}</td><td></td><td></td>
     <td style="text-align:right">${fmt(tHtl)}</td>
     <td style="text-align:right">${fmt(tVis)}</td>
@@ -2162,15 +2235,16 @@ function renderApprovedTable(){
 // ═══════════════════════════════════════════════════════
 function showTab(name){
   document.querySelectorAll('.tab:not(a)').forEach((t,i)=>{
-    t.classList.toggle('active',['budget','approved','dashboard','compare','data'][i]===name);
+    t.classList.toggle('active',['budget','actualize','dashboard','compare','rates','data'][i]===name);
   });
   document.querySelectorAll('.page').forEach(p=>{
     p.classList.toggle('active',p.id==='page-'+name);
   });
   document.getElementById('bov-bar').style.display=name==='budget'?'flex':'none';
-  if(name==='approved')   renderApprovedTable();
+  if(name==='actualize')  renderActualizeTable();
   if(name==='dashboard')  buildDashboard();
   if(name==='compare')    buildComparison();
+  if(name==='rates')      buildRateGuide();
   if(name==='data')       buildDataManager();
 }
 
