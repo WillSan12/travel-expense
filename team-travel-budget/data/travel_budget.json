@@ -1,9 +1,75 @@
 {
-  "updatedAt": 1781210011857,
+  "updatedAt": 1781211889773,
   "updatedBy": "admin",
   "state": {
     "activeFY": "FY2026",
     "auditLog": [
+      {
+        "ts": 1781211889368,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Awarded budget changed: $800,000 → $100,000"
+      },
+      {
+        "ts": 1781211750478,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: purpose changed from \"\" to \"Conference\""
+      },
+      {
+        "ts": 1781211748138,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 112: quarter changed from \"\" to \"Q1\""
+      },
+      {
+        "ts": 1781211671055,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: nights changed from \"0\" to \"1\""
+      },
+      {
+        "ts": 1781211667744,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: quarter changed from \"Q1\" to \"\""
+      },
+      {
+        "ts": 1781211407958,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: owner changed from \"\" to \"PD2\""
+      },
+      {
+        "ts": 1781211405665,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: quarter changed from \"\" to \"Q1\""
+      },
+      {
+        "ts": 1781211385111,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: manager changed from \"\" to \"Dave Champion\""
+      },
+      {
+        "ts": 1781210777694,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: region changed from \"\" to \"Europe\""
+      },
+      {
+        "ts": 1781210776493,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: traveler changed from \"\" to \"Wayne Lawrence\""
+      },
+      {
+        "ts": 1781210774478,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 103: manager changed from \"\" to \"Dave Champion\""
+      },
       {
         "ts": 1781210011450,
         "action": "update",
@@ -628,25 +694,25 @@
         "label": "FY2026",
         "start": "2025-10-01",
         "end": "2026-09-30",
-        "awarded": 800000,
+        "awarded": 100000,
         "rows": [
           {
             "id": 103,
-            "owner": "",
-            "manager": "",
-            "traveler": "",
+            "owner": "PD2",
+            "manager": "Dave Champion",
+            "traveler": "Wayne Lawrence",
             "city": "",
             "country": "",
-            "region": "",
-            "purpose": "",
-            "quarter": "",
+            "region": "Europe",
+            "purpose": "Conference",
+            "quarter": "Q1",
             "depart": "",
             "ret": "",
-            "airfare": 0,
+            "airfare": 1000,
             "nights": 0,
-            "hrate": 0,
+            "hrate": 230,
             "visa": 0,
-            "taxi": 0,
+            "taxi": 30,
             "fpd": "75",
             "days": "1",
             "reg": 0,
@@ -654,7 +720,7 @@
             "actual": 0,
             "archived": false,
             "created": 1781012648270,
-            "modified": 1781207570060,
+            "modified": 1781211750478,
             "htl_actual": 0,
             "food_actual": 0
           },
@@ -689,17 +755,17 @@
           {
             "id": 108,
             "owner": "",
-            "manager": "",
+            "manager": "Dave Champion",
             "traveler": "Aditya Dave",
             "city": "",
             "country": "",
             "region": "North America",
             "purpose": "",
-            "quarter": "Q1",
+            "quarter": "",
             "depart": "",
             "ret": "",
             "airfare": 500,
-            "nights": 0,
+            "nights": "1",
             "hrate": 200,
             "visa": 0,
             "taxi": 35,
@@ -710,7 +776,7 @@
             "actual": 0,
             "archived": false,
             "created": 1781117665540,
-            "modified": 1781209820270,
+            "modified": 1781211671055,
             "htl_actual": 0,
             "food_actual": 0
           },
@@ -807,7 +873,7 @@
             "country": "",
             "region": "",
             "purpose": "",
-            "quarter": "",
+            "quarter": "Q1",
             "depart": "",
             "ret": "",
             "airfare": 0,
@@ -822,7 +888,7 @@
             "actual": 0,
             "archived": false,
             "created": 1781117691523,
-            "modified": 1781117691523,
+            "modified": 1781211748138,
             "htl_actual": 0,
             "food_actual": 0
           }
