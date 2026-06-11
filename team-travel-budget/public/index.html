@@ -136,6 +136,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-se
 /* BUDGET TABLE */
 .tbl-wrap{overflow-x:auto;max-height:calc(100vh - 260px);min-height:220px;}
 table{width:100%;border-collapse:collapse;font-size:12px;}
+.budget-table{table-layout:fixed;}
+.budget-table th{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 thead th{background:var(--navy);color:#f5f5f7;padding:7px 8px;text-align:left;
   font-weight:600;font-size:10px;letter-spacing:.05em;white-space:nowrap;
   position:sticky;top:0;z-index:10;}
@@ -144,10 +146,9 @@ tbody tr{border-bottom:1px solid var(--g2);}
 tbody tr:hover:not(.row-cx):not(.row-df){background:#fafafe;}
 tbody td{padding:4px 5px;vertical-align:middle;}
 tbody td input,tbody td select:not(.status-sel){width:100%;border:1px solid transparent;
-  border-radius:5px;padding:4px 6px;font-size:12px;background:transparent;color:var(--navy);
-  outline:none;font-family:inherit;transition:border-color .12s;min-width:0;}
-tbody td select:not(.status-sel){min-width:120px;}
-.col-name-wide{min-width:160px;}
+  border-radius:5px;padding:3px 5px;font-size:12px;background:transparent;color:var(--navy);
+  outline:none;font-family:inherit;transition:border-color .12s;min-width:0;box-sizing:border-box;}
+tbody td select:not(.status-sel){min-width:0;}
 tbody td input:focus,tbody td select:not(.status-sel):focus{border-color:var(--blue);background:var(--blue-lt);}
 tbody td input[type=number]{text-align:right;}
 .row-cx{opacity:.36;} .row-cx td:not(.td-st):not(.td-del){text-decoration:line-through;}
@@ -532,7 +533,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
     </div>
     <div class="card-body">
       <div class="tbl-wrap">
-        <table>
+        <table class="budget-table">
           <thead><tr>
             <th style="width:28px">#</th>
             <th style="width:110px;position:relative;">
@@ -558,13 +559,13 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
                 </label>
               </div>
             </th>
-            <th>IS&amp;T UNIT</th><th style="min-width:160px">MANAGER</th><th style="min-width:180px">TRAVELER</th>
-            <th style="min-width:130px">REGION</th><th style="min-width:150px">PURPOSE</th><th style="width:50px">QTR</th>
-            <th class="r">DAYS</th>
-            <th class="r" style="background:#1a2a3a!important;" title="Estimated daily cost: Hotel + Food + Taxi (excl. Airfare &amp; Visa)">EST/DAY</th>
-            <th class="r">AIRFARE</th><th class="r">VISA</th>
-            <th class="r">REG FEES</th>
-            <th class="r" style="background:#1a3050!important;">PLANNED $</th>
+            <th style="width:72px">IS&amp;T UNIT</th><th style="width:125px">MANAGER</th><th style="width:145px">TRAVELER</th>
+            <th style="width:105px">REGION</th><th style="width:120px">PURPOSE</th><th style="width:46px">QTR</th>
+            <th class="r" style="width:46px">DAYS</th>
+            <th class="r" style="width:95px;background:#1a2a3a!important;" title="Estimated daily cost: Hotel + Food + Taxi (excl. Airfare &amp; Visa)">EST/DAY</th>
+            <th class="r" style="width:65px">AIRFARE</th><th class="r" style="width:52px">VISA</th>
+            <th class="r" style="width:65px">REG FEES</th>
+            <th class="r" style="width:78px;background:#1a3050!important;">PLANNED $</th>
             <th style="width:28px"></th>
           </tr></thead>
           <tbody id="budget-tbody"></tbody>
@@ -588,20 +589,20 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
     </div>
     <div class="card-body">
       <div class="tbl-wrap">
-        <table>
+        <table class="budget-table">
           <thead><tr>
             <th style="width:28px">#</th>
-            <th style="width:90px">STATUS</th>
-            <th>IS&amp;T UNIT</th><th style="min-width:160px">MANAGER</th><th style="min-width:180px">TRAVELER</th><th style="min-width:130px">COUNTRY</th>
-            <th style="min-width:130px">REGION</th><th style="min-width:130px">CITY</th><th style="min-width:150px">PURPOSE</th><th style="width:50px">QTR</th>
-            <th class="r">DAYS</th>
-            <th class="r">AIRFARE</th><th class="r">NIGHTS</th><th class="r">HTL/NT</th>
-            <th class="r">HTL TOT</th><th class="r">VISA</th><th class="r">CAR/TAXI</th>
-            <th class="r">FOOD/DAY</th><th class="r">FOOD TOT</th>
-            <th class="r">REG FEES</th>
-            <th class="r" style="background:#1a3050!important;">PLANNED $</th>
-            <th class="r" style="background:#1a3a2a!important;">ACTUAL $</th>
-            <th class="r" style="background:#2a1a3a!important;">VARIANCE</th>
+            <th style="width:95px">STATUS</th>
+            <th style="width:72px">IS&amp;T UNIT</th><th style="width:145px">MANAGER</th><th style="width:155px">TRAVELER</th><th style="width:105px">COUNTRY</th>
+            <th style="width:105px">REGION</th><th style="width:105px">CITY</th><th style="width:120px">PURPOSE</th><th style="width:65px">QTR</th>
+            <th class="r" style="width:46px">DAYS</th>
+            <th class="r" style="width:65px">AIRFARE</th><th class="r" style="width:52px">NIGHTS</th><th class="r" style="width:52px">HTL/NT</th>
+            <th class="r" style="width:72px">HTL TOT</th><th class="r" style="width:48px">VISA</th><th class="r" style="width:58px">CAR/TAXI</th>
+            <th class="r" style="width:58px">FOOD/DAY</th><th class="r" style="width:72px">FOOD TOT</th>
+            <th class="r" style="width:62px">REG FEES</th>
+            <th class="r" style="width:78px;background:#1a3050!important;">PLANNED $</th>
+            <th class="r" style="width:78px;background:#1a3a2a!important;">ACTUAL $</th>
+            <th class="r" style="width:78px;background:#2a1a3a!important;">VARIANCE</th>
             <th style="width:28px"></th>
           </tr></thead>
           <tbody id="actualize-tbody"></tbody>
@@ -615,21 +616,48 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
 <!-- PAGE: DASHBOARD -->
 <div class="page" id="page-dashboard">
   <div class="kpi-grid" id="kpi-grid"></div>
-  <div class="card"><div class="card-head"><h2>Budget Waterfall</h2></div>
-    <div class="card-body" style="padding:14px 0 6px" id="dash-wf"></div></div>
+  <div class="card">
+    <div class="card-head"><h2>Budget Waterfall</h2></div>
+    <div class="card-body" style="padding:14px 0 6px" id="dash-wf"></div>
+  </div>
+  <div class="card">
+    <div class="card-head">
+      <h2>By Manager</h2>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="hint">Estimated · Approved · Actualized · Variance</span>
+        <select id="dash-mgr-filter" onchange="buildDashboard()" style="border:1px solid var(--g3);border-radius:8px;padding:5px 10px;font-size:12px;outline:none;font-family:inherit;background:var(--white);">
+          <option value="all">All Managers</option>
+          <option value="Dave Champion">Dave Champion</option>
+          <option value="Wayne Lawrence">Wayne Lawrence</option>
+          <option value="Rajiv Ranjan">Rajiv Ranjan</option>
+          <option value="Maggie Leiker">Maggie Leiker</option>
+        </select>
+      </div>
+    </div>
+    <div class="card-body" style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+        <thead><tr>
+          <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:left;font-size:11px;letter-spacing:.05em;">MANAGER</th>
+          <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;text-align:center;font-size:11px;letter-spacing:.05em;">TRIPS</th>
+          <th style="background:var(--navy);color:#f5f5f7;padding:8px 12px;font-size:11px;letter-spacing:.05em;min-width:140px;">BUDGET BAR</th>
+          <th style="background:#1a3050;color:#f5f5f7;padding:8px 12px;text-align:right;font-size:11px;letter-spacing:.05em;">ESTIMATED</th>
+          <th style="background:#1a3a2a;color:#f5f5f7;padding:8px 12px;text-align:right;font-size:11px;letter-spacing:.05em;">APPROVED</th>
+          <th style="background:#1a2a3a;color:#f5f5f7;padding:8px 12px;text-align:right;font-size:11px;letter-spacing:.05em;">ACTUALIZED</th>
+          <th style="background:#2a1a3a;color:#f5f5f7;padding:8px 12px;text-align:right;font-size:11px;letter-spacing:.05em;">VARIANCE</th>
+        </tr></thead>
+        <tbody id="dash-mgr"></tbody>
+      </table>
+    </div>
+  </div>
   <div class="card"><div class="card-head"><h2>Trip Status Breakdown</h2></div>
     <div class="card-body"><div class="st-grid" id="dash-st"></div></div></div>
   <div class="dash-grid">
-    <div class="card"><div class="card-head"><h2>By Quarter <span class="hint">(active only)</span></h2></div>
+    <div class="card"><div class="card-head"><h2>By Quarter</h2><span class="hint">Estimated vs Actualized</span></div>
       <div class="card-body"><table class="bar-table" id="dash-q"></table></div></div>
-    <div class="card"><div class="card-head"><h2>By Region <span class="hint">(active only)</span></h2></div>
+    <div class="card"><div class="card-head"><h2>By Region</h2><span class="hint">Active trips</span></div>
       <div class="card-body"><table class="bar-table" id="dash-r"></table></div></div>
   </div>
-  <div class="card"><div class="card-head"><h2>By Team Owner <span class="hint">(planned vs. actual)</span></h2></div>
-    <div class="card-body"><table class="bar-table" id="dash-o"></table></div></div>
-  <div class="card"><div class="card-head"><h2>Spend Category Breakdown</h2></div>
-    <div class="card-body"><div class="cat-grid" id="dash-cats"></div></div></div>
-  <div class="card"><div class="card-head"><h2>Top Trips by Planned Cost</h2></div>
+  <div class="card"><div class="card-head"><h2>Top Trips by Estimated Cost</h2></div>
     <div class="card-body"><table class="bar-table" id="dash-top"></table></div></div>
 </div>
 
@@ -1007,6 +1035,18 @@ const MANAGER_TRAVELERS = {
   'Maggie Leiker':  ['Ankita Vijayan','Isha Gummid','Frank Firicano','Vipul Singh',
     'Martha Hubney','Shravan Koneru','Cebastian Chinolla','Jabbar Ahmad Shaik','Sagata Das'],
 };
+
+const MANAGER_HIERARCHY = {
+  'Dave Champion':  ['Wayne Lawrence'],
+  'Wayne Lawrence': ['Rajiv Ranjan', 'Maggie Leiker'],
+  'Rajiv Ranjan':   [],
+  'Maggie Leiker':  [],
+};
+
+function getAllSubordinates(manager){
+  const direct = MANAGER_HIERARCHY[manager] || [];
+  return direct.reduce((all, m) => [...all, m, ...getAllSubordinates(m)], []);
+}
 
 // Per-day taxi/ground estimate by region (USD)
 const TAXI_PER_DAY = {
@@ -1594,20 +1634,33 @@ function autoFillRow(rowId, changedField){
 // DASHBOARD
 // ═══════════════════════════════════════════════════════
 function buildDashboard(){
-  const yd=getYD(), rows=(yd.rows||[]).filter(r=>!r.archived), active=rows.filter(isActive);
-  const tP=active.reduce((s,r)=>s+calcP(r),0);
-  const tA=active.filter(r=>num(r.actual)>0).reduce((s,r)=>s+num(r.actual),0);
-  const aw=yd.awarded||0, rem=aw-tP;
-  const kpis=[
-    {cls:'kpi-aw',lbl:'Awarded Budget',   val:fmt(aw),      sub:`FY ${db.activeFY}`},
-    {cls:'kpi-pl',lbl:'Active Planned',   val:fmt(tP),      sub:`${active.length} active trips`},
-    {cls:'kpi-ac',lbl:'Actual Spent',     val:tA?fmt(tA):'—', sub:tA?`${active.filter(r=>num(r.actual)>0).length} actualized`:'No actuals yet'},
-    {cls:'kpi-rm',lbl:'Budget Remaining', val:fmt(Math.max(rem,0)),
-      sub:rem>=0?'Under budget':'OVER BUDGET',
-      tag:rem>=0?{t:'On Track',s:'background:#d1ede0;color:#0f5132'}:{t:'Over Budget',s:'background:#fde8e6;color:#c0392b'}},
-    {cls:'kpi-vr',lbl:'Plan vs. Awarded', val:fmtD(rem), sub:rem>=0?'Headroom':'Over by '+fmt(Math.abs(rem))},
+  const yd = getYD();
+  const allRows  = (yd.rows||[]).filter(r => !r.archived);
+  const active   = allRows.filter(isActive);                          // Proposed + Approved
+  const approved = allRows.filter(r => r.status === 'Approved');
+  const actualize= allRows.filter(r => r.status === 'Actualize');
+  const aw = yd.awarded || 0;
+
+  const tEstimated  = active.reduce((s,r) => s + calcP(r), 0);
+  const tApproved   = approved.reduce((s,r) => s + calcP(r), 0);
+  const tActualized = actualize.reduce((s,r) => s + num(r.actual), 0);
+  const tRemaining  = aw - tEstimated;
+  const tVariance   = tActualized - tApproved;
+
+  // ── KPIs ──────────────────────────────────────────────
+  const kpis = [
+    {cls:'kpi-aw', lbl:'Awarded Budget',    val:fmt(aw),                    sub:`FY ${db.activeFY}`},
+    {cls:'kpi-pl', lbl:'Total Estimated',   val:fmt(tEstimated),            sub:`${active.length} active trip${active.length!==1?'s':''}`},
+    {cls:'kpi-ac', lbl:'Total Approved',    val:fmt(tApproved),             sub:`${approved.length} approved trip${approved.length!==1?'s':''}`},
+    {cls:'kpi-vr', lbl:'Total Actualized',  val:tActualized?fmt(tActualized):'—',
+      sub: actualize.length ? `${actualize.length} actualized trip${actualize.length!==1?'s':''}` : 'No actuals yet'},
+    {cls:'kpi-rm', lbl:'Budget Remaining',  val:fmt(Math.max(tRemaining,0)),
+      sub: tRemaining >= 0 ? 'Under budget' : 'OVER BUDGET',
+      tag: tRemaining >= 0
+        ? {t:'On Track',    s:'background:#d1ede0;color:#0f5132'}
+        : {t:'Over Budget', s:'background:#fde8e6;color:#c0392b'}},
   ];
-  document.getElementById('kpi-grid').innerHTML=kpis.map(k=>`
+  document.getElementById('kpi-grid').innerHTML = kpis.map(k=>`
     <div class="kpi ${k.cls}">
       <div class="kpi-lbl">${k.lbl}</div>
       <div class="kpi-val">${k.val}</div>
@@ -1615,17 +1668,18 @@ function buildDashboard(){
       <div class="kpi-sub">${k.sub}</div>
     </div>`).join('');
 
-  // Waterfall
-  const tCx=rows.filter(r=>r.status==='Cancelled').reduce((s,r)=>s+calcP(r),0);
-  const tDf=rows.filter(r=>r.status==='Deferred').reduce((s,r)=>s+calcP(r),0);
-  const base=Math.max(aw,tP,1);
-  const wfRows=[
-    {lbl:'Awarded',      val:aw,            cls:'wf-aw'},
-    {lbl:'Active Planned',val:tP,           cls:'wf-pl'},
-    ...(tA?[{lbl:'Actual Spent',val:tA,     cls:'wf-ac'}]:[]),
-    ...(tCx?[{lbl:'Cancelled',  val:tCx,   cls:'wf-cx'}]:[]),
-    ...(tDf?[{lbl:'Deferred',   val:tDf,   cls:'wf-df'}]:[]),
-    {lbl:'Remaining',    val:Math.max(rem,0),cls:'wf-aw'},
+  // ── Waterfall ──────────────────────────────────────────
+  const tCx = allRows.filter(r=>r.status==='Cancelled').reduce((s,r)=>s+calcP(r),0);
+  const tDf = allRows.filter(r=>r.status==='Deferred').reduce((s,r)=>s+calcP(r),0);
+  const base = Math.max(aw, tEstimated, 1);
+  const wfRows = [
+    {lbl:'Awarded Budget',    val:aw,                     cls:'wf-aw'},
+    {lbl:'Total Estimated',   val:tEstimated,             cls:'wf-pl'},
+    {lbl:'Total Approved',    val:tApproved,              cls:'wf-ac'},
+    ...(tActualized?[{lbl:'Total Actualized', val:tActualized, cls:'wf-ac'}]:[]),
+    ...(tCx?[{lbl:'Cancelled', val:tCx, cls:'wf-cx'}]:[]),
+    ...(tDf?[{lbl:'Deferred',  val:tDf, cls:'wf-df'}]:[]),
+    {lbl:'Remaining',         val:Math.max(tRemaining,0), cls:'wf-aw'},
   ];
   document.getElementById('dash-wf').innerHTML = wfRows.map(w=>`
     <div class="wf-row">
@@ -1635,83 +1689,120 @@ function buildDashboard(){
       <span class="wf-pct">${Math.round(w.val/base*100)}%</span>
     </div>`).join('');
 
-  // Status breakdown
-  const bySt={Proposed:{n:0,a:0},Approved:{n:0,a:0},Cancelled:{n:0,a:0},Deferred:{n:0,a:0}};
-  rows.forEach(r=>{ if(bySt[r.status]){bySt[r.status].n++;bySt[r.status].a+=calcP(r);} });
-  document.getElementById('dash-st').innerHTML=STATUSES.map(s=>`
+  // ── By Manager ─────────────────────────────────────────
+  const mgrFilter = document.getElementById('dash-mgr-filter')?.value || 'all';
+  const byMgr = {};
+  allRows.forEach(r => {
+    const m = r.manager || '(unassigned)';
+    if(!byMgr[m]) byMgr[m] = {est:0, appr:0, actual:0, trips:0};
+    if(isActive(r))            { byMgr[m].est   += calcP(r); byMgr[m].trips++; }
+    if(r.status==='Approved')    byMgr[m].appr   += calcP(r);
+    if(r.status==='Actualize') { byMgr[m].actual += num(r.actual); byMgr[m].trips++; }
+  });
+
+  let mgrEntries;
+  if(mgrFilter === 'all'){
+    mgrEntries = Object.entries(byMgr).sort((a,b) => b[1].est - a[1].est);
+  } else {
+    const scope = [mgrFilter, ...getAllSubordinates(mgrFilter)];
+    // Aggregate all subordinates into one total row for the selected manager
+    const total = {est:0, appr:0, actual:0, trips:0};
+    scope.forEach(m => {
+      if(byMgr[m]){ total.est+=byMgr[m].est; total.appr+=byMgr[m].appr; total.actual+=byMgr[m].actual; total.trips+=byMgr[m].trips; }
+    });
+    // Also show individual breakdown rows for each manager in scope
+    mgrEntries = [[`${mgrFilter} (Total)`, total],
+      ...scope.filter(m => byMgr[m]).map(m => [m, byMgr[m]])
+    ];
+  }
+
+  const mgrMax = Math.max(...mgrEntries.map(([,v])=>v.est), 1);
+  document.getElementById('dash-mgr').innerHTML = mgrEntries.length === 0
+    ? `<tr><td colspan="7" style="padding:20px;text-align:center;color:var(--g4)">No data yet — add trips in Budget Entry</td></tr>`
+    : mgrEntries.map(([m,v],i) => {
+      const vari = v.actual > 0 ? v.actual - v.appr : null;
+      const variColor = vari===null?'var(--g4)':vari<=0?'var(--green)':'var(--red)';
+      const isTotal = m.includes('(Total)');
+      return `<tr style="background:${isTotal?'var(--blue-lt)':i%2?'var(--g1)':'#fff'};border-bottom:1px solid var(--g2)${isTotal?';border-top:2px solid var(--blue)':''}">
+        <td style="padding:9px 12px;font-weight:${isTotal?'800':'700'};color:${isTotal?'var(--blue)':'inherit'}">${m}</td>
+        <td style="padding:9px 12px;text-align:center;color:var(--g4)">${v.trips}</td>
+        <td style="padding:9px 12px;">
+          <div class="bw">
+            <div class="bf bow" style="width:${v.est/mgrMax*100}%"></div>
+            ${v.appr?`<div class="bf2" style="background:var(--green);width:${v.appr/mgrMax*100}%"></div>`:''}
+            ${v.actual?`<div class="bf2 bac" style="width:${v.actual/mgrMax*100}%"></div>`:''}
+          </div>
+        </td>
+        <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--blue)">${fmt(v.est)}</td>
+        <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--green-dk)">${v.appr?fmt(v.appr):'—'}</td>
+        <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--green)">${v.actual?fmt(v.actual):'—'}</td>
+        <td style="padding:9px 12px;text-align:right;font-weight:700;color:${variColor}">${vari!==null?fmtD(vari):'—'}</td>
+      </tr>`;
+    }).join('');
+
+  // ── Status Breakdown ───────────────────────────────────
+  const bySt = {};
+  STATUSES.forEach(s => bySt[s] = {n:0, amt:0});
+  allRows.forEach(r => { if(bySt[r.status]){ bySt[r.status].n++; bySt[r.status].amt += calcP(r); } });
+  document.getElementById('dash-st').innerHTML = STATUSES.map(s=>`
     <div class="st-item si-${s}">
       <div class="si-count">${bySt[s].n}</div>
       <div class="si-label">${s}</div>
-      <div class="si-amt">${fmt(bySt[s].a)}</div>
+      <div class="si-amt">${fmt(bySt[s].amt)}</div>
     </div>`).join('');
 
-  // Quarter
-  const byQ={};QUARTERS.forEach(q=>byQ[q]={p:0,a:0,n:0});
-  active.forEach(r=>{if(byQ[r.quarter]){byQ[r.quarter].p+=calcP(r);byQ[r.quarter].a+=num(r.actual);byQ[r.quarter].n++;}});
-  const qMax=Math.max(...Object.values(byQ).map(v=>v.p),1);
-  document.getElementById('dash-q').innerHTML=QUARTERS.map(q=>`
+  // ── By Quarter ─────────────────────────────────────────
+  const byQ = {}; QUARTERS.forEach(q => byQ[q] = {est:0, actual:0, n:0});
+  active.forEach(r   => { if(byQ[r.quarter]){ byQ[r.quarter].est += calcP(r); byQ[r.quarter].n++; }});
+  actualize.forEach(r=> { if(byQ[r.quarter])  byQ[r.quarter].actual += num(r.actual); });
+  const qMax = Math.max(...QUARTERS.map(q => byQ[q].est), 1);
+  document.getElementById('dash-q').innerHTML = QUARTERS.map(q=>`
     <tr><td class="lbl">${q}</td>
-    <td><div class="bw"><div class="bf ${QBAR[q]}" style="width:${byQ[q].p/qMax*100}%"></div>
-      ${byQ[q].a?`<div class="bf2 bac" style="width:${byQ[q].a/qMax*100}%"></div>`:''}</div></td>
-    <td class="amt">${fmt(byQ[q].p)}</td>
-    ${byQ[q].a?`<td class="amt2">${fmt(byQ[q].a)}</td>`:`<td class="cnt">—</td>`}
+    <td><div class="bw">
+      <div class="bf ${QBAR[q]}" style="width:${byQ[q].est/qMax*100}%"></div>
+      ${byQ[q].actual?`<div class="bf2 bac" style="width:${byQ[q].actual/qMax*100}%"></div>`:''}
+    </div></td>
+    <td class="amt">${fmt(byQ[q].est)}</td>
+    <td class="${byQ[q].actual?'amt2':'cnt'}">${byQ[q].actual?fmt(byQ[q].actual):'—'}</td>
     <td class="cnt">${byQ[q].n}t</td></tr>`).join('');
 
-  // Region
-  const byR={};REGIONS.forEach(r=>byR[r]={p:0,a:0,n:0});
-  active.forEach(r=>{if(byR[r.region]){byR[r.region].p+=calcP(r);byR[r.region].a+=num(r.actual);byR[r.region].n++;}});
-  const rMax=Math.max(...Object.values(byR).map(v=>v.p),1);
-  document.getElementById('dash-r').innerHTML=REGIONS.map(r=>`
+  // ── By Region ──────────────────────────────────────────
+  const byR = {}; REGIONS.forEach(r => byR[r] = {est:0, actual:0, n:0});
+  active.forEach(r    => { if(byR[r.region]){ byR[r.region].est += calcP(r); byR[r.region].n++; }});
+  actualize.forEach(r => { if(byR[r.region])  byR[r.region].actual += num(r.actual); });
+  const rMax = Math.max(...REGIONS.map(r => byR[r].est), 1);
+  document.getElementById('dash-r').innerHTML = REGIONS.map(r=>`
     <tr><td class="lbl"><span class="badge ${REGION_BADGE[r]}">${r}</span></td>
-    <td><div class="bw"><div class="bf ${REGION_BAR[r]}" style="width:${byR[r].p/rMax*100}%"></div>
-      ${byR[r].a?`<div class="bf2 bac" style="width:${byR[r].a/rMax*100}%"></div>`:''}</div></td>
-    <td class="amt">${fmt(byR[r].p)}</td>
-    ${byR[r].a?`<td class="amt2">${fmt(byR[r].a)}</td>`:`<td class="cnt">—</td>`}
+    <td><div class="bw">
+      <div class="bf ${REGION_BAR[r]}" style="width:${byR[r].est/rMax*100}%"></div>
+      ${byR[r].actual?`<div class="bf2 bac" style="width:${byR[r].actual/rMax*100}%"></div>`:''}
+    </div></td>
+    <td class="amt">${fmt(byR[r].est)}</td>
+    <td class="${byR[r].actual?'amt2':'cnt'}">${byR[r].actual?fmt(byR[r].actual):'—'}</td>
     <td class="cnt">${byR[r].n}t</td></tr>`).join('');
 
-  // Owner
-  const byO={};
-  active.forEach(r=>{const o=r.owner||'(unassigned)';if(!byO[o])byO[o]={p:0,a:0,n:0};byO[o].p+=calcP(r);byO[o].a+=num(r.actual);byO[o].n++;});
-  const oEnt=Object.entries(byO).sort((a,b)=>b[1].p-a[1].p);
-  const oMax=Math.max(...oEnt.map(e=>e[1].p),1);
-  document.getElementById('dash-o').innerHTML=oEnt.map(([o,v])=>`
-    <tr><td class="lbl" style="width:130px">${o}</td>
-    <td><div class="bw"><div class="bf bow" style="width:${v.p/oMax*100}%"></div>
-      ${v.a?`<div class="bf2 bac" style="width:${v.a/oMax*100}%"></div>`:''}</div></td>
-    <td class="amt">${fmt(v.p)}</td>
-    ${v.a?`<td class="amt2">${fmt(v.a)}</td>`:`<td class="cnt">—</td>`}
-    <td class="cnt">${v.n}t</td></tr>`).join('');
-
-  // Categories
-  const cats={Airfare:{v:active.reduce((s,r)=>s+num(r.airfare),0),i:'✈️'},
-    Hotel:{v:active.reduce((s,r)=>s+num(r.nights)*num(r.hrate),0),i:'🏨'},
-    'Car/Taxi':{v:active.reduce((s,r)=>s+num(r.taxi),0),i:'🚕'},
-    Food:{v:active.reduce((s,r)=>s+num(r.fpd)*num(r.days),0),i:'🍽️'},
-    Visa:{v:active.reduce((s,r)=>s+num(r.visa),0),i:'🛂'},
-    'Reg. Fees':{v:active.reduce((s,r)=>s+num(r.reg),0),i:'🎟️'}};
-  document.getElementById('dash-cats').innerHTML=Object.entries(cats).map(([n,c])=>`
-    <div class="cat-item"><div class="cat-lbl">${c.i} ${n}</div>
-    <div class="cat-val">${fmt(c.v)}</div>
-    <div class="cat-pct">${tP?Math.round(c.v/tP*100):0}% of planned</div></div>`).join('');
-
-  // Top trips
-  const top=[...active].sort((a,b)=>calcP(b)-calcP(a)).slice(0,8);
-  document.getElementById('dash-top').innerHTML=`
-    <thead><tr>${['Traveler','Destination','Owner','Region','Qtr','Status','Planned','Actual','Var'].map((h,i)=>`
+  // ── Top Trips ──────────────────────────────────────────
+  const topRows = [...active, ...actualize].sort((a,b) => calcP(b)-calcP(a)).slice(0,10);
+  document.getElementById('dash-top').innerHTML = `
+    <thead><tr>${['Traveler','Manager','Region','Purpose','Qtr','Status','Estimated','Approved','Actualized','Variance'].map((h,i)=>`
       <th style="background:var(--navy);color:#f5f5f7;padding:7px 9px;font-size:10px;letter-spacing:.05em;
         text-align:${i>=6?'right':'left'}">${h}</th>`).join('')}</tr></thead>
-    <tbody>${top.map((r,i)=>{
-      const p=calcP(r),a=num(r.actual),v=a>0?a-p:null;
+    <tbody>${topRows.map((r,i)=>{
+      const est = calcP(r);
+      const appr = r.status==='Approved' || r.status==='Actualize' ? est : 0;
+      const act  = num(r.actual);
+      const vari = act > 0 ? act - appr : null;
       return `<tr style="background:${i%2?'var(--g1)':'#fff'}">
-        <td style="padding:7px 9px">${r.traveler}</td>
-        <td style="padding:7px 9px">${r.city}, ${r.country}</td>
-        <td style="padding:7px 9px">${r.owner}</td>
-        <td style="padding:7px 9px"><span class="badge ${REGION_BADGE[r.region]}">${r.region}</span></td>
-        <td style="padding:7px 9px">${r.quarter}</td>
+        <td style="padding:7px 9px;font-weight:600">${r.traveler||'—'}</td>
+        <td style="padding:7px 9px">${r.manager||'—'}</td>
+        <td style="padding:7px 9px"><span class="badge ${REGION_BADGE[r.region]||''}">${r.region||'—'}</span></td>
+        <td style="padding:7px 9px">${r.purpose||'—'}</td>
+        <td style="padding:7px 9px;text-align:center">${r.quarter||'—'}</td>
         <td style="padding:7px 9px"><span class="badge st-${r.status}">${r.status}</span></td>
-        <td style="padding:7px 9px;text-align:right;font-weight:700;color:var(--blue)">${fmt(p)}</td>
-        <td style="padding:7px 9px;text-align:right;font-weight:700;color:var(--green)">${a?fmt(a):'—'}</td>
-        <td style="padding:7px 9px;text-align:right;font-weight:700;color:${v==null?'var(--g4)':v<=0?'var(--green)':'var(--red)'}">${v!=null?fmtD(v):'—'}</td>
+        <td style="padding:7px 9px;text-align:right;font-weight:700;color:var(--blue)">${fmt(est)}</td>
+        <td style="padding:7px 9px;text-align:right;font-weight:700;color:var(--green-dk)">${appr?fmt(appr):'—'}</td>
+        <td style="padding:7px 9px;text-align:right;font-weight:700;color:var(--green)">${act?fmt(act):'—'}</td>
+        <td style="padding:7px 9px;text-align:right;font-weight:700;color:${vari===null?'var(--g4)':vari<=0?'var(--green)':'var(--red)'}">${vari!==null?fmtD(vari):'—'}</td>
       </tr>`;}).join('')}</tbody>`;
 }
 
