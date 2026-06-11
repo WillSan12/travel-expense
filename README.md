@@ -21,9 +21,9 @@ Before getting started, make sure you have the following installed:
 - [Node.js](https://nodejs.org) — download the **LTS** version
 - [Git](https://git-scm.com/downloads)
 
----
+#### START HERE ###
 
-## Setup Instructions
+## Setup Instructions ##
 
 **Step 1 — Clone the repo**
 ```
