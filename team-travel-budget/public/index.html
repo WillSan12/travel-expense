@@ -161,7 +161,7 @@ tbody td input[type=number]{text-align:right;}
 .vr-neu{color:var(--g4);background:#f9f0ff!important;}
 .td-calc{text-align:right;padding-right:7px;color:var(--g5);font-size:11px;}
 .td-st{text-align:center;padding:3px 5px;}
-.td-del{text-align:center;}
+.td-del{text-align:center;white-space:nowrap;min-width:60px;}
 .del-btn{background:none;border:none;cursor:pointer;color:var(--g4);font-size:13px;padding:3px 5px;border-radius:4px;}
 .del-btn:hover{color:var(--red);background:var(--red-lt);}
 .row-delconfirm{background:#fff5f5!important;outline:2px solid var(--red);outline-offset:-2px;}
@@ -540,7 +540,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
               <div style="display:inline-flex;align-items:center;gap:5px;cursor:pointer;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);border-radius:6px;padding:3px 8px;transition:background .15s;" onclick="toggleStatusFilterDropdown()" onmouseover="this.style.background='rgba(255,255,255,.25)'" onmouseout="this.style.background='rgba(255,255,255,.15)'">
                 ⊞ STATUS <span id="status-filter-indicator" style="font-size:9px;color:#fbbf24;"></span> ▾
               </div>
-              <div id="status-filter-dropdown" style="display:none;position:absolute;top:100%;left:0;background:#fff;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.2);min-width:150px;z-index:200;padding:6px 0;">
+              <div id="status-filter-dropdown" style="display:none;position:absolute;top:100%;left:0;background:#fff;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.2);min-width:150px;z-index:500;padding:6px 0;">
                 <div style="padding:4px 12px;font-size:10px;color:var(--g4);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--g2);margin-bottom:4px;">Filter by Status</div>
                 <label style="display:flex;align-items:center;gap:8px;padding:5px 12px;cursor:pointer;font-size:12px;font-weight:400;color:var(--navy);">
                   <input type="radio" name="sf" value="all" checked onchange="setStatusFilter('all')"/> All
@@ -1296,7 +1296,18 @@ function fmtD(n){ if(!n) return '—'; const s=n>0?'+':'-'; return s+'$'+Math.ab
 function fmtPct(n){ if(!n||isNaN(n)) return '—'; return (n>0?'+':'')+n.toFixed(1)+'%'; }
 function escH(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
 function isActive(r){ return r.status==='Proposed'||r.status==='Approved'; }
-function calcP(r){ return num(r.airfare)+num(r.nights)*num(r.hrate)+num(r.visa)+num(r.taxi)+num(r.fpd)*num(r.days)+num(r.reg); }
+function calcP(r){
+  const hotel = num(r.nights)*num(r.hrate);
+  const food  = num(r.fpd)*num(r.days);
+  const taxi  = num(r.taxi);
+  let daily = hotel + food + taxi;
+  // If no detail costs entered, fall back to rate guide high estimate × days
+  if(daily === 0 && r.region && num(r.days) > 0){
+    const est = getEstDay(r.region);
+    if(est) daily = est.hi * num(r.days);
+  }
+  return num(r.airfare) + daily + num(r.visa) + num(r.reg);
+}
 function parseAmt(s){ return parseFloat(String(s||'').replace(/[$,\s]/g,''))||0; }
 function getFYRates(fy){ return getYD(fy).rates || DEFAULT_RATES; }
 function getEstDay(region){
@@ -1414,7 +1425,7 @@ function renderTable(){
       <td>${mkSelP(PURPOSES,r.purpose,'purpose',r.id,'min-width:140px')}</td>
       <td>${mkSelP(QUARTERS,r.quarter,'quarter',r.id)}</td>
       <td>${mkIn(r.days,'number','days',r.id,'50px')}</td>
-      <td class="td-calc" style="color:var(--purple);font-weight:700;white-space:nowrap;">${(()=>{const e=r.region?getEstDay(r.region):null;return e?'$'+e.lo+'–$'+e.hi:'—';})()}</td>
+      <td class="td-calc" style="color:var(--purple);font-weight:700;white-space:nowrap;">${(()=>{const e=r.region?getEstDay(r.region):null;return e?fmt(e.hi):'—';})()}</td>
       <td>${mkIn(r.airfare,'number','airfare',r.id,'68px')}</td>
       <td>${mkIn(r.visa,'number','visa',r.id,'48px')}</td>
       <td>${mkIn(r.reg,'number','reg',r.id,'62px')}</td>
