@@ -529,36 +529,26 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
   <div class="card">
     <div class="card-head">
       <h2>Travel Requests — <span id="budget-fy-label">FY2026</span></h2>
-      <span class="hint">Click any cell to edit · Cancelled &amp; Deferred excluded from budget totals · <strong>Apple FY:</strong> Q1=Oct–Dec · Q2=Jan–Mar · Q3=Apr–Jun · Q4=Jul–Sep</span>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <span class="hint">Click any cell to edit</span>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-size:11px;color:var(--g4);font-weight:600;">Filter:</span>
+          <select id="status-filter-sel" onchange="setStatusFilter(this.value)" style="border:1px solid var(--g3);border-radius:8px;padding:5px 10px;font-size:12px;outline:none;font-family:inherit;background:var(--white);">
+            <option value="all">All Statuses</option>
+            <option value="Proposed">Proposed</option>
+            <option value="Approved">Approved</option>
+            <option value="Cancelled">Cancelled</option>
+            <option value="Deferred">Deferred</option>
+          </select>
+        </div>
+      </div>
     </div>
     <div class="card-body">
       <div class="tbl-wrap">
         <table class="budget-table">
           <thead><tr>
             <th style="width:28px">#</th>
-            <th style="width:110px;position:relative;">
-              <div style="display:inline-flex;align-items:center;gap:5px;cursor:pointer;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);border-radius:6px;padding:3px 8px;transition:background .15s;" onclick="toggleStatusFilterDropdown()" onmouseover="this.style.background='rgba(255,255,255,.25)'" onmouseout="this.style.background='rgba(255,255,255,.15)'">
-                ⊞ STATUS <span id="status-filter-indicator" style="font-size:9px;color:#fbbf24;"></span> ▾
-              </div>
-              <div id="status-filter-dropdown" style="display:none;position:absolute;top:100%;left:0;background:#fff;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.2);min-width:150px;z-index:500;padding:6px 0;">
-                <div style="padding:4px 12px;font-size:10px;color:var(--g4);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--g2);margin-bottom:4px;">Filter by Status</div>
-                <label style="display:flex;align-items:center;gap:8px;padding:5px 12px;cursor:pointer;font-size:12px;font-weight:400;color:var(--navy);">
-                  <input type="radio" name="sf" value="all" checked onchange="setStatusFilter('all')"/> All
-                </label>
-                <label style="display:flex;align-items:center;gap:8px;padding:5px 12px;cursor:pointer;font-size:12px;font-weight:400;color:var(--navy);">
-                  <input type="radio" name="sf" value="Proposed" onchange="setStatusFilter('Proposed')"/> Proposed
-                </label>
-                <label style="display:flex;align-items:center;gap:8px;padding:5px 12px;cursor:pointer;font-size:12px;font-weight:400;color:var(--navy);">
-                  <input type="radio" name="sf" value="Approved" onchange="setStatusFilter('Approved')"/> Approved
-                </label>
-                <label style="display:flex;align-items:center;gap:8px;padding:5px 12px;cursor:pointer;font-size:12px;font-weight:400;color:var(--navy);">
-                  <input type="radio" name="sf" value="Cancelled" onchange="setStatusFilter('Cancelled')"/> Cancelled
-                </label>
-                <label style="display:flex;align-items:center;gap:8px;padding:5px 12px;cursor:pointer;font-size:12px;font-weight:400;color:var(--navy);">
-                  <input type="radio" name="sf" value="Deferred" onchange="setStatusFilter('Deferred')"/> Deferred
-                </label>
-              </div>
-            </th>
+            <th style="width:95px">STATUS</th>
             <th style="width:72px">IS&amp;T UNIT</th><th style="width:125px">MANAGER</th><th style="width:145px">TRAVELER</th>
             <th style="width:105px">REGION</th><th style="width:120px">PURPOSE</th><th style="width:46px">QTR</th>
             <th class="r" style="width:46px">DAYS</th>
@@ -1297,15 +1287,11 @@ function fmtPct(n){ if(!n||isNaN(n)) return '—'; return (n>0?'+':'')+n.toFixed
 function escH(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
 function isActive(r){ return r.status==='Proposed'||r.status==='Approved'; }
 function calcP(r){
-  const hotel = num(r.nights)*num(r.hrate);
-  const food  = num(r.fpd)*num(r.days);
-  const taxi  = num(r.taxi);
-  let daily = hotel + food + taxi;
-  // If no detail costs entered, fall back to rate guide high estimate × days
-  if(daily === 0 && r.region && num(r.days) > 0){
-    const est = getEstDay(r.region);
-    if(est) daily = est.hi * num(r.days);
+  if(r.status === 'Actualize'){
+    return num(r.airfare) + num(r.nights)*num(r.hrate) + num(r.fpd)*num(r.days) + num(r.taxi) + num(r.visa) + num(r.reg);
   }
+  const est = getEstDay(r.region);
+  const daily = est ? est.hi * Math.max(num(r.days), 1) : 0;
   return num(r.airfare) + daily + num(r.visa) + num(r.reg);
 }
 function parseAmt(s){ return parseFloat(String(s||'').replace(/[$,\s]/g,''))||0; }
@@ -1410,11 +1396,9 @@ function renderTable(){
     if(actual>0&&active) tA+=actual;
     if(r.status==='Cancelled') tCx+=planned;
     if(r.status==='Deferred')  tDf+=planned;
-    const rcls = r.status==='Cancelled'?'row-cx':r.status==='Deferred'?'row-df':r.id===pendingDeleteId?'row-delconfirm':'';
+    const rcls = r.status==='Cancelled'?'row-cx':r.status==='Deferred'?'row-df':'';
     const vc = vari==null?'vr-neu':vari<=0?'vr-pos':'vr-neg';
-    const delCell = r.id===pendingDeleteId
-      ? `<td class="td-del"><div class="del-confirm"><button class="del-yes" onclick="requestDelRow(${r.id})">Delete</button><button class="del-no" onclick="cancelDel()">Cancel</button></div></td>`
-      : `<td class="td-del"><button class="del-btn" onclick="requestDelRow(${r.id})" title="Delete row">✕</button></td>`;
+    const delCell = `<td class="td-del"><button class="del-btn" onclick="requestDelRow(${r.id})" title="Delete row">✕</button></td>`;
     return `<tr class="${rcls}">
       <td style="text-align:center;color:var(--g4);font-size:11px">${i+1}</td>
       <td class="td-st">${stSel(r.status,r.id)}</td>
@@ -1425,7 +1409,7 @@ function renderTable(){
       <td>${mkSelP(PURPOSES,r.purpose,'purpose',r.id,'min-width:140px')}</td>
       <td>${mkSelP(QUARTERS,r.quarter,'quarter',r.id)}</td>
       <td>${mkIn(r.days,'number','days',r.id,'50px')}</td>
-      <td class="td-calc" style="color:var(--purple);font-weight:700;white-space:nowrap;">${(()=>{const e=r.region?getEstDay(r.region):null;return e?fmt(e.hi):'—';})()}</td>
+      <td class="td-calc" style="color:var(--purple);font-weight:700;white-space:nowrap;">${(()=>{const e=r.region?getEstDay(r.region):null;const d=num(r.days)||1;return e?fmt(e.hi*d):'—';})()}</td>
       <td>${mkIn(r.airfare,'number','airfare',r.id,'68px')}</td>
       <td>${mkIn(r.visa,'number','visa',r.id,'48px')}</td>
       <td>${mkIn(r.reg,'number','reg',r.id,'62px')}</td>
@@ -1521,19 +1505,13 @@ function upd(id,field,value){
   }
 }
 function requestDelRow(id){
-  if(pendingDeleteId===id){
-    const r = currentRows().find(r=>r.id===id);
-    History.push();
-    logAudit('delete', db.activeFY, `Deleted: ${r?r.traveler+' → '+r.city:id}`);
-    getYD().rows = currentRows().filter(r=>r.id!==id);
-    pendingDeleteId=null;
-    saveDB(); renderTable(); renderActualizeTable();
-  } else {
-    pendingDeleteId=id;
-    renderTable(); renderActualizeTable();
-    clearTimeout(window._delTimer);
-    window._delTimer=setTimeout(()=>{ if(pendingDeleteId===id){pendingDeleteId=null;renderTable();renderActualizeTable();} },4000);
-  }
+  const r = currentRows().find(r=>r.id===id);
+  if(!confirm(`Delete this row${r&&r.traveler?' for '+r.traveler:''}? This cannot be undone.`)) return;
+  History.push();
+  logAudit('delete', db.activeFY, `Deleted: ${r?r.traveler+' → '+r.city:id}`);
+  getYD().rows = currentRows().filter(r=>r.id!==id);
+  pendingDeleteId = null;
+  saveDB(); renderTable(); renderActualizeTable();
 }
 function cancelDel(){ pendingDeleteId=null; renderTable(); renderActualizeTable(); }
 function addRow(){
@@ -2273,10 +2251,8 @@ document.addEventListener('click', e=>{
 });
 function setStatusFilter(status){
   budgetStatusFilter = status;
-  const ind = document.getElementById('status-filter-indicator');
-  if(ind) ind.textContent = status==='all' ? '' : '● ';
-  const dd = document.getElementById('status-filter-dropdown');
-  if(dd) dd.style.display='none';
+  const sel = document.getElementById('status-filter-sel');
+  if(sel) sel.value = status;
   renderTable();
 }
 
@@ -2295,9 +2271,7 @@ function renderActualizeTable(){
     tTx+=num(r.taxi); tFd+=foodTot; tRg+=num(r.reg);
     if(actual>0) tA+=actual;
     const vc=vari==null?'vr-neu':vari<=0?'vr-pos':'vr-neg';
-    const delCell = r.id===pendingDeleteId
-      ? `<td class="td-del"><div class="del-confirm"><button class="del-yes" onclick="requestDelRow(${r.id})">Delete</button><button class="del-no" onclick="cancelDel()">Cancel</button></div></td>`
-      : `<td class="td-del"><button class="del-btn" onclick="requestDelRow(${r.id})" title="Delete row">✕</button></td>`;
+    const delCell = `<td class="td-del"><button class="del-btn" onclick="requestDelRow(${r.id})" title="Delete row">✕</button></td>`;
     return `<tr>
       <td style="text-align:center;color:var(--g4);font-size:11px">${i+1}</td>
       <td class="td-st">${stSel(r.status,r.id)}</td>
