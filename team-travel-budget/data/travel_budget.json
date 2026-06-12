@@ -1,86 +1,788 @@
 {
-  "updatedAt": 1781214380412,
+  "updatedAt": 1781239342543,
   "updatedBy": "admin",
   "state": {
     "activeFY": "FY2026",
     "auditLog": [
       {
-        "ts": 1781214380002,
+        "ts": 1781239342134,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Chandru Natarajan: days changed from \"2\" to \"5\""
+        "detail": "Awarded budget changed: $10,000 → $100,000"
       },
       {
-        "ts": 1781214370253,
+        "ts": 1781237887341,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: misc changed to \"500\""
+      },
+      {
+        "ts": 1781237878389,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: days changed from \"6\" to \"7\""
+      },
+      {
+        "ts": 1781237877974,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: days changed from \"5\" to \"6\""
+      },
+      {
+        "ts": 1781237876671,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: days changed from \"4\" to \"5\""
+      },
+      {
+        "ts": 1781237870417,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: status changed from \"Proposed\" to \"Actualize\""
+      },
+      {
+        "ts": 1781237864613,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: airfare changed from \"503\" to \"603\""
+      },
+      {
+        "ts": 1781237860656,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: airfare changed from \"502\" to \"503\""
+      },
+      {
+        "ts": 1781237857950,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: airfare changed from \"501\" to \"502\""
+      },
+      {
+        "ts": 1781237857647,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: airfare changed from \"500\" to \"501\""
+      },
+      {
+        "ts": 1781237855930,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: days changed from \"3\" to \"4\""
+      },
+      {
+        "ts": 1781237853934,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: region changed from \"\" to \"North America\""
+      },
+      {
+        "ts": 1781237851702,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: days changed from \"2\" to \"3\""
+      },
+      {
+        "ts": 1781237850612,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: days changed from \"1\" to \"2\""
+      },
+      {
+        "ts": 1781237849818,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: quarter changed from \"\" to \"Q1\""
+      },
+      {
+        "ts": 1781237846406,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: traveler changed from \"\" to \"William Sanchez\""
+      },
+      {
+        "ts": 1781237844503,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 113: manager changed from \"\" to \"Rajiv Ranjan\""
+      },
+      {
+        "ts": 1781237841443,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 113)"
+      },
+      {
+        "ts": 1781237836518,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"8\" to \"9\""
+      },
+      {
+        "ts": 1781237833141,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"7\" to \"8\""
+      },
+      {
+        "ts": 1781237832349,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"6\" to \"7\""
+      },
+      {
+        "ts": 1781237831690,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"5\" to \"6\""
+      },
+      {
+        "ts": 1781237512558,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: days changed from \"2\" to \"1\""
+      },
+      {
+        "ts": 1781237510649,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: days changed from \"1\" to \"2\""
+      },
+      {
+        "ts": 1781237502305,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: status changed from \"Approved\" to \"Actualize\""
+      },
+      {
+        "ts": 1781237492594,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: days changed from \"7\" to \"1\""
+      },
+      {
+        "ts": 1781237486316,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: days changed from \"8\" to \"7\""
+      },
+      {
+        "ts": 1781237485078,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: days changed from \"9\" to \"8\""
+      },
+      {
+        "ts": 1781237482892,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: days changed from \"8\" to \"9\""
+      },
+      {
+        "ts": 1781237482034,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: days changed from \"7\" to \"8\""
+      },
+      {
+        "ts": 1781237481500,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: days changed from \"6\" to \"7\""
+      },
+      {
+        "ts": 1781237480933,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: days changed from \"5\" to \"6\""
+      },
+      {
+        "ts": 1781237477483,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: days changed from \"4\" to \"5\""
+      },
+      {
+        "ts": 1781237476828,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: days changed from \"3\" to \"4\""
+      },
+      {
+        "ts": 1781237473745,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: days changed from \"2\" to \"3\""
+      },
+      {
+        "ts": 1781237472311,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: days changed from \"1\" to \"2\""
+      },
+      {
+        "ts": 1781237002187,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: misc changed from \"0\" to \"1\""
+      },
+      {
+        "ts": 1781236510265,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: purpose changed from \"\" to \"Conference\""
+      },
+      {
+        "ts": 1781235899322,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: days changed from \"2\" to \"1\""
+      },
+      {
+        "ts": 1781235898194,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: days changed from \"3\" to \"2\""
+      },
+      {
+        "ts": 1781235896748,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: days changed from \"2\" to \"3\""
+      },
+      {
+        "ts": 1781235896174,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: days changed from \"1\" to \"2\""
+      },
+      {
+        "ts": 1781235467958,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: actual changed from \"2\" to \"1500\""
+      },
+      {
+        "ts": 1781235461126,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: actual changed from \"1\" to \"2\""
+      },
+      {
+        "ts": 1781235460018,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: actual changed from \"0\" to \"1\""
+      },
+      {
+        "ts": 1781235459616,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: actual changed from \"-1\" to \"0\""
+      },
+      {
+        "ts": 1781235459001,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: actual changed from \"0\" to \"-1\""
+      },
+      {
+        "ts": 1781235458185,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: actual changed from \"1\" to \"0\""
+      },
+      {
+        "ts": 1781235456157,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: actual changed from \"0\" to \"1\""
+      },
+      {
+        "ts": 1781235438048,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: food_actual changed from \"0\" to \"1\""
+      },
+      {
+        "ts": 1781235436122,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: htl_actual changed from \"0\" to \"1\""
+      },
+      {
+        "ts": 1781223749880,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"51\" to \"5\""
+      },
+      {
+        "ts": 1781223745890,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"1\" to \"51\""
+      },
+      {
+        "ts": 1781223735211,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"3\" to \"1\""
+      },
+      {
+        "ts": 1781223732308,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"4\" to \"3\""
+      },
+      {
+        "ts": 1781223406067,
         "action": "update",
         "fy": "FY2026",
         "detail": "Wayne Lawrence: days changed from \"3\" to \"4\""
       },
       {
-        "ts": 1781214363457,
+        "ts": 1781223403480,
         "action": "update",
         "fy": "FY2026",
         "detail": "Wayne Lawrence: days changed from \"2\" to \"3\""
       },
       {
-        "ts": 1781214361001,
+        "ts": 1781223398611,
         "action": "update",
         "fy": "FY2026",
         "detail": "Wayne Lawrence: days changed from \"1\" to \"2\""
       },
       {
-        "ts": 1781214359736,
+        "ts": 1781223395174,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Frank Firicano: days changed from \"1\" to \"2\""
+        "detail": "Wayne Lawrence: days changed from \"2\" to \"1\""
       },
       {
-        "ts": 1781214358015,
+        "ts": 1781223393186,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"3\" to \"2\""
+      },
+      {
+        "ts": 1781223392511,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"4\" to \"3\""
+      },
+      {
+        "ts": 1781223179636,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"3\" to \"4\""
+      },
+      {
+        "ts": 1781223088911,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Chandru Natarajan: days changed from \"2\" to \"5\""
+      },
+      {
+        "ts": 1781223084935,
         "action": "update",
         "fy": "FY2026",
         "detail": "Chandru Natarajan: days changed from \"1\" to \"2\""
       },
       {
-        "ts": 1781214321605,
+        "ts": 1781223083528,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Chandru Natarajan: region changed from \"\" to \"Europe\""
+        "detail": "Chandru Natarajan: region changed from \"\" to \"North America\""
       },
       {
-        "ts": 1781214318785,
+        "ts": 1781223066843,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"4\" to \"3\""
+      },
+      {
+        "ts": 1781223055668,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted: William Sanchez → "
+      },
+      {
+        "ts": 1781223047793,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: days changed from \"3\" to \"4\""
+      },
+      {
+        "ts": 1781223047228,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: days changed from \"2\" to \"3\""
+      },
+      {
+        "ts": 1781223043596,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: days changed from \"1\" to \"2\""
+      },
+      {
+        "ts": 1781223024908,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: days changed from \"6\" to \"1\""
+      },
+      {
+        "ts": 1781223021818,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: days changed from \"7\" to \"6\""
+      },
+      {
+        "ts": 1781222906394,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: visa changed from \"49\" to \"0\""
+      },
+      {
+        "ts": 1781222901800,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: visa changed from \"50\" to \"49\""
+      },
+      {
+        "ts": 1781222806225,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: airfare changed from \"1248\" to \"0\""
+      },
+      {
+        "ts": 1781222803664,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: airfare changed from \"1249\" to \"1248\""
+      },
+      {
+        "ts": 1781222803055,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: airfare changed from \"1250\" to \"1249\""
+      },
+      {
+        "ts": 1781222798280,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: days changed from \"6\" to \"7\""
+      },
+      {
+        "ts": 1781222796961,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: days changed from \"5\" to \"6\""
+      },
+      {
+        "ts": 1781222043369,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: region changed from \"North America\" to \"Europe\""
+      },
+      {
+        "ts": 1781221993759,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Awarded budget changed: $1,000 → $10,000"
+      },
+      {
+        "ts": 1781221989410,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Awarded budget changed: $10 → $1,000"
+      },
+      {
+        "ts": 1781221984446,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Awarded budget changed: $100,000 → $10"
+      },
+      {
+        "ts": 1781221978761,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Awarded budget changed: $120,000 → $100,000"
+      },
+      {
+        "ts": 1781220595549,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: quarter changed from \"\" to \"Q1\""
+      },
+      {
+        "ts": 1781220594202,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Aditya Dave: quarter changed from \"\" to \"Q2\""
+      },
+      {
+        "ts": 1781220590204,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: quarter changed from \"\" to \"Q2\""
+      },
+      {
+        "ts": 1781220588116,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Jabbar Ahmad Shaik: quarter changed from \"\" to \"Q4\""
+      },
+      {
+        "ts": 1781220586263,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Chandru Natarajan: quarter changed from \"\" to \"Q3\""
+      },
+      {
+        "ts": 1781220584617,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: quarter changed from \"\" to \"Q2\""
+      },
+      {
+        "ts": 1781220519852,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted:  → "
+      },
+      {
+        "ts": 1781220381537,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: status changed from \"Approved\" to \"Actualize\""
+      },
+      {
+        "ts": 1781220340100,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Chandru Natarajan: status changed from \"Proposed\" to \"Approved\""
+      },
+      {
+        "ts": 1781220337751,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Jabbar Ahmad Shaik: status changed from \"Proposed\" to \"Deferred\""
+      },
+      {
+        "ts": 1781220335261,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: status changed from \"Proposed\" to \"Approved\""
+      },
+      {
+        "ts": 1781220333383,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: status changed from \"Proposed\" to \"Cancelled\""
+      },
+      {
+        "ts": 1781220331284,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: status changed from \"Proposed\" to \"Approved\""
+      },
+      {
+        "ts": 1781220327615,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 114)"
+      },
+      {
+        "ts": 1781220284948,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: visa changed from \"26\" to \"50\""
+      },
+      {
+        "ts": 1781220282366,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: visa changed from \"25\" to \"26\""
+      },
+      {
+        "ts": 1781220276114,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: days changed from \"1\" to \"5\""
+      },
+      {
+        "ts": 1781220269926,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: region changed from \"\" to \"Asia\""
+      },
+      {
+        "ts": 1781220266629,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: traveler changed from \"\" to \"William Sanchez\""
+      },
+      {
+        "ts": 1781220263433,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 113: manager changed from \"\" to \"Rajiv Ranjan\""
+      },
+      {
+        "ts": 1781220255327,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 113)"
+      },
+      {
+        "ts": 1781220220302,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: airfare changed from \"504\" to \"700\""
+      },
+      {
+        "ts": 1781220217009,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: airfare changed from \"503\" to \"504\""
+      },
+      {
+        "ts": 1781220216597,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: airfare changed from \"502\" to \"503\""
+      },
+      {
+        "ts": 1781220215252,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: airfare changed from \"501\" to \"502\""
+      },
+      {
+        "ts": 1781220213330,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: airfare changed from \"500\" to \"501\""
+      },
+      {
+        "ts": 1781220204071,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: region changed from \"\" to \"North America\""
+      },
+      {
+        "ts": 1781220193848,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: days changed from \"4\" to \"5\""
+      },
+      {
+        "ts": 1781220192961,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: days changed from \"3\" to \"4\""
+      },
+      {
+        "ts": 1781220191988,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: days changed from \"2\" to \"3\""
+      },
+      {
+        "ts": 1781220191513,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: days changed from \"1\" to \"2\""
+      },
+      {
+        "ts": 1781220187863,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: traveler changed from \"\" to \"William Sanchez\""
+      },
+      {
+        "ts": 1781220184991,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 112: manager changed from \"\" to \"Rajiv Ranjan\""
+      },
+      {
+        "ts": 1781220139610,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: airfare changed from \"1251\" to \"1250\""
+      },
+      {
+        "ts": 1781220137083,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: airfare changed from \"1250\" to \"1251\""
+      },
+      {
+        "ts": 1781220125040,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"3\" to \"4\""
+      },
+      {
+        "ts": 1781220123588,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"2\" to \"3\""
+      },
+      {
+        "ts": 1781220122807,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"1\" to \"2\""
+      },
+      {
+        "ts": 1781220107320,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: region changed from \"Europe\" to \"Asia\""
+      },
+      {
+        "ts": 1781219966589,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: traveler changed from \"\" to \"Wayne Lawrence\""
+      },
+      {
+        "ts": 1781219955040,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 111: manager changed from \"\" to \"Dave Champion\""
+      },
+      {
+        "ts": 1781219952315,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Jabbar Ahmad Shaik: traveler changed from \"\" to \"Jabbar Ahmad Shaik\""
+      },
+      {
+        "ts": 1781219949079,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 110: manager changed from \"\" to \"Maggie Leiker\""
+      },
+      {
+        "ts": 1781219946485,
         "action": "update",
         "fy": "FY2026",
         "detail": "Chandru Natarajan: traveler changed from \"\" to \"Chandru Natarajan\""
       },
       {
-        "ts": 1781214316415,
+        "ts": 1781219914047,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Row 111: manager changed from \"\" to \"Rajiv Ranjan\""
+        "detail": "Row 109: manager changed from \"\" to \"Rajiv Ranjan\""
       },
       {
-        "ts": 1781214311078,
+        "ts": 1781219837777,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Frank Firicano: purpose changed from \"\" to \"Customer Meeting\""
-      },
-      {
-        "ts": 1781214308843,
-        "action": "update",
-        "fy": "FY2026",
-        "detail": "Frank Firicano: region changed from \"\" to \"Asia\""
-      },
-      {
-        "ts": 1781214306757,
-        "action": "update",
-        "fy": "FY2026",
-        "detail": "Frank Firicano: traveler changed from \"\" to \"Frank Firicano\""
-      },
-      {
-        "ts": 1781214304851,
-        "action": "update",
-        "fy": "FY2026",
-        "detail": "Row 109: manager changed from \"\" to \"Maggie Leiker\""
+        "detail": "Awarded budget changed: $100,000 → $120,000"
       },
       {
         "ts": 1781211889368,
@@ -781,26 +1483,28 @@
             "traveler": "Wayne Lawrence",
             "city": "",
             "country": "",
-            "region": "Europe",
+            "region": "Asia",
             "purpose": "Conference",
             "quarter": "Q1",
             "depart": "",
             "ret": "",
-            "airfare": 1000,
+            "airfare": "1250",
             "nights": 0,
-            "hrate": 230,
-            "visa": 0,
-            "taxi": 30,
+            "hrate": 170,
+            "visa": 25,
+            "taxi": 35,
             "fpd": "75",
-            "days": "4",
+            "days": "9",
             "reg": 0,
-            "status": "Approved",
+            "status": "Actualize",
             "actual": 0,
             "archived": false,
             "created": 1781012648270,
-            "modified": 1781214370253,
+            "modified": 1781237836518,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "misc": 0,
+            "planned_budget": 3050
           },
           {
             "id": 107,
@@ -809,16 +1513,16 @@
             "traveler": "Wayne Lawrence",
             "city": "",
             "country": "",
-            "region": "North America",
+            "region": "Europe",
             "purpose": "Conference",
-            "quarter": "",
+            "quarter": "Q2",
             "depart": "",
             "ret": "",
-            "airfare": 500,
+            "airfare": 1000,
             "nights": 0,
-            "hrate": 200,
+            "hrate": 230,
             "visa": "2",
-            "taxi": 35,
+            "taxi": 120,
             "fpd": 75,
             "days": "4",
             "reg": 0,
@@ -826,9 +1530,11 @@
             "actual": 0,
             "archived": false,
             "created": 1781116768416,
-            "modified": 1781210011450,
+            "modified": 1781222043369,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "misc": 0,
+            "planned_budget": null
           },
           {
             "id": 108,
@@ -838,8 +1544,8 @@
             "city": "",
             "country": "",
             "region": "North America",
-            "purpose": "",
-            "quarter": "",
+            "purpose": "Conference",
+            "quarter": "Q2",
             "depart": "",
             "ret": "",
             "airfare": 500,
@@ -848,54 +1554,58 @@
             "visa": 0,
             "taxi": 35,
             "fpd": 75,
-            "days": 1,
+            "days": "1",
             "reg": 0,
             "status": "Actualize",
-            "actual": 0,
+            "actual": "1500",
             "archived": false,
             "created": 1781117665540,
-            "modified": 1781211671055,
-            "htl_actual": 0,
-            "food_actual": 0
+            "modified": 1781237512557,
+            "htl_actual": "1",
+            "food_actual": "1",
+            "misc": "1",
+            "planned_budget": null
           },
           {
             "id": 109,
             "owner": "",
-            "manager": "Maggie Leiker",
-            "traveler": "Frank Firicano",
+            "manager": "Rajiv Ranjan",
+            "traveler": "Chandru Natarajan",
             "city": "",
             "country": "",
-            "region": "Asia",
-            "purpose": "Customer Meeting",
-            "quarter": "",
+            "region": "North America",
+            "purpose": "",
+            "quarter": "Q3",
             "depart": "",
             "ret": "",
-            "airfare": 1250,
+            "airfare": 500,
             "nights": 0,
-            "hrate": 170,
-            "visa": 25,
+            "hrate": 200,
+            "visa": 0,
             "taxi": 35,
             "fpd": 75,
-            "days": "2",
+            "days": "5",
             "reg": 0,
-            "status": "Proposed",
+            "status": "Approved",
             "actual": 0,
             "archived": false,
             "created": 1781117689290,
-            "modified": 1781214359736,
+            "modified": 1781223088911,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "misc": 0,
+            "planned_budget": null
           },
           {
             "id": 110,
             "owner": "",
-            "manager": "",
-            "traveler": "",
+            "manager": "Maggie Leiker",
+            "traveler": "Jabbar Ahmad Shaik",
             "city": "",
             "country": "",
             "region": "",
             "purpose": "",
-            "quarter": "",
+            "quarter": "Q4",
             "depart": "",
             "ret": "",
             "airfare": 0,
@@ -906,47 +1616,21 @@
             "fpd": 75,
             "days": 1,
             "reg": 0,
-            "status": "Proposed",
+            "status": "Deferred",
             "actual": 0,
             "archived": false,
             "created": 1781117689907,
-            "modified": 1781117689907,
+            "modified": 1781220588116,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "misc": 0,
+            "planned_budget": null
           },
           {
             "id": 111,
             "owner": "",
-            "manager": "Rajiv Ranjan",
-            "traveler": "Chandru Natarajan",
-            "city": "",
-            "country": "",
-            "region": "Europe",
-            "purpose": "",
-            "quarter": "",
-            "depart": "",
-            "ret": "",
-            "airfare": 1000,
-            "nights": 0,
-            "hrate": 230,
-            "visa": 0,
-            "taxi": 30,
-            "fpd": 75,
-            "days": "5",
-            "reg": 0,
-            "status": "Proposed",
-            "actual": 0,
-            "archived": false,
-            "created": 1781117690547,
-            "modified": 1781214380002,
-            "htl_actual": 0,
-            "food_actual": 0
-          },
-          {
-            "id": 112,
-            "owner": "",
-            "manager": "",
-            "traveler": "",
+            "manager": "Dave Champion",
+            "traveler": "Wayne Lawrence",
             "city": "",
             "country": "",
             "region": "",
@@ -962,11 +1646,73 @@
             "fpd": 75,
             "days": 1,
             "reg": 0,
-            "status": "Proposed",
+            "status": "Actualize",
+            "actual": 0,
+            "archived": false,
+            "created": 1781117690547,
+            "modified": 1781220595549,
+            "htl_actual": 0,
+            "food_actual": 0,
+            "misc": 0,
+            "planned_budget": null
+          },
+          {
+            "id": 112,
+            "owner": "",
+            "manager": "Rajiv Ranjan",
+            "traveler": "William Sanchez",
+            "city": "",
+            "country": "",
+            "region": "North America",
+            "purpose": "",
+            "quarter": "Q1",
+            "depart": "",
+            "ret": "",
+            "airfare": "700",
+            "nights": 0,
+            "hrate": 200,
+            "visa": 0,
+            "taxi": 175,
+            "fpd": 75,
+            "days": "5",
+            "reg": 0,
+            "status": "Cancelled",
             "actual": 0,
             "archived": false,
             "created": 1781117691523,
-            "modified": 1781211748138,
+            "modified": 1781220333383,
+            "htl_actual": 0,
+            "food_actual": 0,
+            "misc": 0,
+            "planned_budget": null
+          },
+          {
+            "id": 113,
+            "owner": "",
+            "manager": "Rajiv Ranjan",
+            "traveler": "William Sanchez",
+            "city": "",
+            "country": "",
+            "region": "North America",
+            "purpose": "",
+            "quarter": "Q1",
+            "depart": "",
+            "ret": "",
+            "airfare": "603",
+            "nights": 0,
+            "hrate": 200,
+            "visa": 0,
+            "taxi": 105,
+            "fpd": 75,
+            "days": "7",
+            "reg": 0,
+            "status": "Actualize",
+            "actual": 0,
+            "archived": false,
+            "created": 1781237841443,
+            "modified": 1781237887340,
+            "planned_budget": 2223,
+            "misc": "500",
             "htl_actual": 0,
             "food_actual": 0
           }

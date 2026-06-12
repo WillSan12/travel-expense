@@ -138,6 +138,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-se
 table{width:100%;border-collapse:collapse;font-size:12px;}
 .budget-table{table-layout:fixed;}
 .budget-table th{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.budget-table td{overflow:hidden;}
 thead th{background:var(--navy);color:#f5f5f7;padding:7px 8px;text-align:left;
   font-weight:600;font-size:10px;letter-spacing:.05em;white-space:nowrap;
   position:sticky;top:0;z-index:10;}
@@ -354,7 +355,15 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
 .yt0{color:#5b21b6;} .yt1{color:#1e40af;} .yt2{color:#166534;}
 .yt3{color:#854d0e;} .yt4{color:#9f1239;}
 
-@media(max-width:900px){.kpi-grid{grid-template-columns:repeat(3,1fr);}
+@media print {
+  body { background: #fff; font-size: 11px; }
+  .topbar, .tabs, .bov, .add-bar, .btn, select, button { display: none !important; }
+  .page { display: none !important; }
+  .page.print-active { display: block !important; padding: 0; }
+  .card { box-shadow: none; border: 1px solid #ddd; margin-bottom: 10px; break-inside: avoid; }
+  .tbl-wrap { max-height: none !important; overflow: visible !important; }
+  .kpi-grid { grid-template-columns: repeat(5,1fr); }
+}
   .dash-grid{grid-template-columns:1fr;}.rate-grid{grid-template-columns:repeat(2,1fr);}}
 
 /* ── SAVE INDICATOR ── */
@@ -584,12 +593,12 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
             <th style="width:28px">#</th>
             <th style="width:95px">STATUS</th>
             <th style="width:72px">IS&amp;T UNIT</th><th style="width:145px">MANAGER</th><th style="width:155px">TRAVELER</th><th style="width:105px">COUNTRY</th>
-            <th style="width:105px">REGION</th><th style="width:105px">CITY</th><th style="width:120px">PURPOSE</th><th style="width:65px">QTR</th>
+            <th style="width:135px">REGION</th><th style="width:100px">PURPOSE</th><th style="width:70px">QTR</th>
             <th class="r" style="width:46px">DAYS</th>
-            <th class="r" style="width:65px">AIRFARE</th><th class="r" style="width:52px">NIGHTS</th><th class="r" style="width:52px">HTL/NT</th>
-            <th class="r" style="width:72px">HTL TOT</th><th class="r" style="width:48px">VISA</th><th class="r" style="width:58px">CAR/TAXI</th>
-            <th class="r" style="width:58px">FOOD/DAY</th><th class="r" style="width:72px">FOOD TOT</th>
-            <th class="r" style="width:62px">REG FEES</th>
+            <th class="r" style="width:65px">AIRFARE</th><th class="r" style="width:52px">HTL</th>
+            <th class="r" style="width:80px">TRANSPOR</th>
+            <th class="r" style="width:58px">FOOD</th>
+            <th class="r" style="width:65px">MISC</th>
             <th class="r" style="width:78px;background:#1a3050!important;">PLANNED $</th>
             <th class="r" style="width:78px;background:#1a3a2a!important;">ACTUAL $</th>
             <th class="r" style="width:78px;background:#2a1a3a!important;">VARIANCE</th>
@@ -605,6 +614,9 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
 
 <!-- PAGE: DASHBOARD -->
 <div class="page" id="page-dashboard">
+  <div style="display:flex;justify-content:flex-end;margin-bottom:10px;">
+    <button class="btn btn-blue" onclick="printDashboard()">⬇ Export PDF</button>
+  </div>
   <div class="kpi-grid" id="kpi-grid"></div>
   <div class="card">
     <div class="card-head"><h2>Budget Waterfall</h2></div>
@@ -1287,8 +1299,9 @@ function fmtPct(n){ if(!n||isNaN(n)) return '—'; return (n>0?'+':'')+n.toFixed
 function escH(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
 function isActive(r){ return r.status==='Proposed'||r.status==='Approved'; }
 function calcP(r){
+  // Actualize rows: always return the locked planned budget — never recalculate
   if(r.status === 'Actualize'){
-    return num(r.airfare) + num(r.nights)*num(r.hrate) + num(r.fpd)*num(r.days) + num(r.taxi) + num(r.visa) + num(r.reg);
+    return num(r.planned_budget) || 0;
   }
   const est = getEstDay(r.region);
   const daily = est ? est.hi * Math.max(num(r.days), 1) : 0;
@@ -1440,7 +1453,9 @@ function renderTable(){
   </tr>`;
 
   document.getElementById('tb-planned').textContent = fmt(tP);
-  document.getElementById('tb-actual').textContent  = tA ? fmt(tA) : '—';
+  const actualSpent = currentRows().filter(r => r.status === 'Actualize')
+    .reduce((s,r) => s + num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc), 0);
+  document.getElementById('tb-actual').textContent = actualSpent ? fmt(actualSpent) : '—';
   const pill = document.getElementById('tb-var-pill');
   const d = awarded - tP;
   pill.textContent = d>=0 ? fmt(d)+' under' : fmt(Math.abs(d))+' OVER';
@@ -1496,8 +1511,13 @@ function upd(id,field,value){
     logAudit('update', db.activeFY, `${r.traveler||'Row '+id}: ${field} changed${prev!==undefined?' from "'+prev+'"':''} to "${value}"`);
     saveDB(); renderTable();
     if(field==='status'){
-      if(value==='Actualize') showTab('actualize');
-      else showTab('budget');
+      if(value==='Actualize'){
+        // Lock the planned budget at the moment of actualization
+        if(r.planned_budget == null) r.planned_budget = calcP({...r, status: 'Approved'});
+        showTab('actualize');
+      } else {
+        showTab('budget');
+      }
     } else {
       const activeTab = document.querySelector('.page.active');
       if(activeTab && activeTab.id==='page-actualize') renderActualizeTable();
@@ -1753,7 +1773,7 @@ function buildDashboard(){
     </div></td>
     <td class="amt">${fmt(byQ[q].est)}</td>
     <td class="${byQ[q].actual?'amt2':'cnt'}">${byQ[q].actual?fmt(byQ[q].actual):'—'}</td>
-    <td class="cnt">${byQ[q].n}t</td></tr>`).join('');
+    </tr>`).join('');
 
   // ── By Region ──────────────────────────────────────────
   const byR = {}; REGIONS.forEach(r => byR[r] = {est:0, actual:0, n:0});
@@ -2261,17 +2281,18 @@ function renderActualizeTable(){
   const rows = currentRows().filter(r => !r.archived && r.status === 'Actualize');
   const tbody = document.getElementById('actualize-tbody');
   const tfoot = document.getElementById('actualize-tfoot');
-  let tP=0,tA=0,tAir=0,tHtl=0,tVis=0,tTx=0,tFd=0,tRg=0;
+  let tP=0,tA=0,tAir=0,tTx=0,tFd=0,tMisc=0;
 
   tbody.innerHTML = rows.map((r,i)=>{
-    const planned=calcP(r), actual=num(r.actual);
-    const htlTot=num(r.htl_actual), foodTot=num(r.food_actual);
-    const vari=actual>0?actual-planned:null;
-    tP+=planned; tAir+=num(r.airfare); tHtl+=htlTot; tVis+=num(r.visa);
-    tTx+=num(r.taxi); tFd+=foodTot; tRg+=num(r.reg);
-    if(actual>0) tA+=actual;
-    const vc=vari==null?'vr-neu':vari<=0?'vr-pos':'vr-neg';
+    const planned = calcP(r);
+    const autoActual = num(r.airfare) + num(r.hrate) + num(r.taxi) + num(r.fpd) + num(r.misc);
+    const vari = autoActual > 0 ? autoActual - planned : null;
+    tP += planned; tAir += num(r.airfare);
+    tTx += num(r.taxi); tFd += num(r.fpd); tMisc += num(r.misc);
+    if(autoActual > 0) tA += autoActual;
+    const vc = vari==null?'vr-neu':vari<=0?'vr-pos':'vr-neg';
     const delCell = `<td class="td-del"><button class="del-btn" onclick="requestDelRow(${r.id})" title="Delete row">✕</button></td>`;
+    const gStyle = 'background:#f0faf5;';
     return `<tr>
       <td style="text-align:center;color:var(--g4);font-size:11px">${i+1}</td>
       <td class="td-st">${stSel(r.status,r.id)}</td>
@@ -2280,39 +2301,283 @@ function renderActualizeTable(){
       <td>${mkTravelerSel(r.traveler,r.id,r.manager)}</td>
       <td>${mkCountrySel(r.country,r.id,r.region)}</td>
       <td>${mkSelP(REGIONS,r.region,'region',r.id)}</td>
-      <td>${mkCitySel(r.city,r.id,r.country,r.region)}</td>
       <td>${mkSelP(PURPOSES,r.purpose,'purpose',r.id,'min-width:140px')}</td>
       <td>${mkSelP(QUARTERS,r.quarter,'quarter',r.id)}</td>
-      <td>${mkIn(r.days,'number','days',r.id,'50px')}</td>
-      <td>${mkIn(r.airfare,'number','airfare',r.id,'68px')}</td>
-      <td>${mkIn(r.nights,'number','nights',r.id,'44px')}</td>
-      <td>${mkIn(r.hrate,'number','hrate',r.id,'56px')}</td>
-      <td class="col-ac">${mkIn(r.htl_actual||0,'number','htl_actual',r.id,'76px','placeholder="0"')}</td>
-      <td>${mkIn(r.visa,'number','visa',r.id,'48px')}</td>
-      <td>${mkIn(r.taxi,'number','taxi',r.id,'56px')}</td>
-      <td>${mkIn(r.fpd,'number','fpd',r.id,'50px')}</td>
-      <td class="col-ac">${mkIn(r.food_actual||0,'number','food_actual',r.id,'76px','placeholder="0"')}</td>
-      <td>${mkIn(r.reg,'number','reg',r.id,'62px')}</td>
+      <td style="text-align:center;color:var(--g5);font-weight:600;">${num(r.days)||'—'}</td>
+      <td style="${gStyle}">${mkIn(r.airfare,'number','airfare',r.id,'68px')}</td>
+      <td style="${gStyle}">${mkIn(r.hrate,'number','hrate',r.id,'56px')}</td>
+      <td style="${gStyle}">${mkIn(r.taxi,'number','taxi',r.id,'70px')}</td>
+      <td style="${gStyle}">${mkIn(r.fpd,'number','fpd',r.id,'50px')}</td>
+      <td style="${gStyle}">${mkIn(r.misc||0,'number','misc',r.id,'58px','placeholder="0"')}</td>
       <td class="col-pl">${fmt(planned)}</td>
-      <td class="col-ac">${mkIn(r.actual,'number','actual',r.id,'76px','placeholder="0"')}</td>
+      <td class="col-ac" style="font-weight:700;text-align:right;padding-right:7px;">${autoActual?fmt(autoActual):'—'}</td>
       <td class="col-vr ${vc}">${vari!=null?fmtD(vari):'—'}</td>
       ${delCell}
     </tr>`;
   }).join('');
 
-  const vAP=tA-tP;
+  const vAP = tA - tP;
   tfoot.innerHTML=`<tr>
-    <td colspan="11" class="lbl">ACTUALIZE TOTALS (${rows.length} trips)</td>
-    <td style="text-align:right">${fmt(tAir)}</td><td></td><td></td>
-    <td style="text-align:right">${fmt(tHtl)}</td>
-    <td style="text-align:right">${fmt(tVis)}</td>
-    <td style="text-align:right">${fmt(tTx)}</td><td></td>
-    <td style="text-align:right">${fmt(tFd)}</td>
-    <td style="text-align:right">${fmt(tRg)}</td>
+    <td colspan="10" class="lbl">ACTUALIZE TOTALS (${rows.length} trips)</td>
+    <td style="text-align:right;background:#f0faf5">${fmt(tAir)}</td>
+    <td style="text-align:right;background:#f0faf5"></td>
+    <td style="text-align:right;background:#f0faf5">${fmt(tTx)}</td>
+    <td style="text-align:right;background:#f0faf5">${fmt(tFd)}</td>
+    <td style="text-align:right;background:#f0faf5">${fmt(tMisc)}</td>
     <td class="tf-pl">${fmt(tP)}</td>
     <td class="tf-ac">${tA?fmt(tA):'—'}</td>
     <td class="${tA?(vAP<=0?'tf-vp':'tf-vn'):''}">${tA?fmtD(vAP):'—'}</td><td></td>
   </tr>`;
+}
+
+function printDashboard(){
+  const yd = getYD();
+  const fy = db.activeFY;
+  const allRows   = (yd.rows||[]).filter(r => !r.archived);
+  const active    = allRows.filter(isActive);
+  const approved  = allRows.filter(r => r.status === 'Approved');
+  const actualize = allRows.filter(r => r.status === 'Actualize');
+  const cancelled = allRows.filter(r => r.status === 'Cancelled');
+  const deferred  = allRows.filter(r => r.status === 'Deferred');
+  const aw = yd.awarded || 0;
+  const tEstimated  = active.reduce((s,r) => s + calcP(r), 0);
+  const tApproved   = approved.reduce((s,r) => s + calcP(r), 0);
+  const tActualized = actualize.reduce((s,r) => s + (num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)), 0);
+  const tRemaining  = aw - tEstimated;
+  const tVariance   = tActualized - tApproved;
+  const utilizePct  = aw > 0 ? Math.round(tEstimated/aw*100) : 0;
+
+  // By Manager
+  const byMgr = {};
+  allRows.forEach(r => {
+    const m = r.manager || '(unassigned)';
+    if(!byMgr[m]) byMgr[m] = {est:0, appr:0, actual:0, trips:0};
+    if(isActive(r))          { byMgr[m].est   += calcP(r); byMgr[m].trips++; }
+    if(r.status==='Approved')  byMgr[m].appr   += calcP(r);
+    if(r.status==='Actualize'){ byMgr[m].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc); byMgr[m].trips++; }
+  });
+
+  // By Quarter
+  const byQ = {}; QUARTERS.forEach(q => byQ[q] = {est:0, actual:0, n:0});
+  active.forEach(r    => { if(byQ[r.quarter]){ byQ[r.quarter].est += calcP(r); byQ[r.quarter].n++; }});
+  actualize.forEach(r => { if(byQ[r.quarter])  byQ[r.quarter].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc); });
+
+  // By Region
+  const byR = {}; REGIONS.forEach(r => byR[r] = {est:0, actual:0, n:0});
+  active.forEach(r    => { if(byR[r.region]){ byR[r.region].est += calcP(r); byR[r.region].n++; }});
+  actualize.forEach(r => { if(byR[r.region])  byR[r.region].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc); });
+
+  // Top trips
+  const topTrips = [...active, ...actualize].sort((a,b) => calcP(b)-calcP(a)).slice(0,8);
+
+  const mgrRows = Object.entries(byMgr).sort((a,b) => b[1].est - a[1].est);
+  const today = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+
+  const bar = (val, max, color) => {
+    const pct = Math.min(val/Math.max(max,1)*100, 100);
+    return `<div style="background:#e8e8ed;border-radius:4px;height:8px;width:100%;"><div style="background:${color};height:8px;border-radius:4px;width:${pct}%"></div></div>`;
+  };
+
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>${fy} Travel Budget</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1d1d1f;background:#fff;padding:24px 28px;}
+  .print-btn{position:fixed;top:16px;right:16px;background:#0071e3;color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;z-index:999;}
+  .print-btn:hover{background:#005bb5;}
+  @media print{.print-btn{display:none;}}
+  h2{font-size:12px;font-weight:800;color:#1d1d1f;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid #1d1d1f;padding-bottom:5px;}
+  .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding:16px 20px;background:#1d1d1f;border-radius:10px;color:#fff;}
+  .header-left h1{font-size:22px;font-weight:800;color:#fff;}
+  .header-left p{font-size:12px;color:#fff;margin-top:3px;}
+  .header-right{text-align:right;font-size:11px;color:#fff;line-height:1.8;}
+  .header-right strong{color:#fff;font-size:13px;}
+  .kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:18px;}
+  .kpi{border-radius:8px;padding:12px 14px;background:#f5f5f7;}
+  .kpi-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:#1d1d1f;margin-bottom:5px;}
+  .kpi-val{font-size:18px;font-weight:800;}
+  .kpi-sub{font-size:9px;color:#1d1d1f;margin-top:3px;}
+  .kpi.blue{background:#e0ecff;} .kpi.blue .kpi-val{color:#0071e3;}
+  .kpi.green{background:#d1ede0;} .kpi.green .kpi-val{color:#1a7f4e;}
+  .kpi.purple{background:#ede9fe;} .kpi.purple .kpi-val{color:#5b21b6;}
+  .kpi.amber{background:#fef3c7;} .kpi.amber .kpi-val{color:#92400e;}
+  .kpi.red{background:#fde8e6;} .kpi.red .kpi-val{color:#c0392b;}
+  .kpi.navy{background:#1d1d1f;} .kpi.navy .kpi-val{color:#fff;} .kpi.navy .kpi-lbl{color:#fff;} .kpi.navy .kpi-sub{color:#fff;}
+  .body-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;margin-bottom:16px;}
+  .bottom-grid{display:grid;grid-template-columns:1fr 2fr;gap:16px;}
+  .section{background:#fff;border:1px solid #e8e8ed;border-radius:8px;padding:14px;}
+  table{width:100%;border-collapse:collapse;font-size:10.5px;}
+  thead th{background:#1d1d1f;color:#fff;padding:6px 9px;text-align:left;font-size:9.5px;letter-spacing:.05em;font-weight:700;}
+  thead th.r{text-align:right;}
+  tbody tr:nth-child(even){background:#f9f9fb;}
+  tbody tr:hover{background:#f0f4ff;}
+  tbody td{padding:6px 9px;border-bottom:1px solid #f0f0f5;vertical-align:middle;}
+  tbody td.r{text-align:right;}
+  tfoot td{padding:6px 9px;background:#1d1d1f;color:#fff;font-weight:700;font-size:10px;}
+  tfoot td.r{text-align:right;}
+  .blue{color:#0071e3;font-weight:700;}
+  .green{color:#1a7f4e;font-weight:700;}
+  .purple{color:#5b21b6;font-weight:700;}
+  .pos{color:#1a7f4e;font-weight:700;}
+  .neg{color:#c0392b;font-weight:700;}
+  .badge{display:inline-block;border-radius:10px;padding:2px 7px;font-size:9px;font-weight:700;}
+  .badge.Proposed{background:#dbeafe;color:#1e40af;}
+  .badge.Approved{background:#d1ede0;color:#0f5132;}
+  .badge.Cancelled{background:#fde8e6;color:#c0392b;}
+  .badge.Deferred{background:#fef3c7;color:#92400e;}
+  .badge.Actualize{background:#ede9fe;color:#5b21b6;}
+  @page{margin:10mm;size:A4 landscape;}
+  @media print{body{padding:0;}}
+</style>
+</head>
+<body>
+<button class="print-btn" onclick="window.print()">⬇ Save as PDF</button>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <h1 style="display:flex;align-items:center;gap:10px;"><svg style="width:22px;height:22px;flex-shrink:0;fill:#fff;" viewBox="0 0 814 1000"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 790.7 0 663 0 541.8c0-207.5 135.4-317.3 270-317.3 70.1 0 128.4 46.4 172.5 46.4 42.8 0 109.6-49 192.5-49 31 0 108.2 2.6 168.6 79.4zm-130.5-254c-31.4 37.4-80.3 67-128.1 67-5.2 0-10.3-.3-15.5-1-1.9-54.7 19.4-109.5 51.9-147 35.2-40.8 90.1-71.2 138.1-73.2 1.3 6.4 2.6 12.2 2.6 22.5 0 53.4-21 108.8-49 131.7z"/></svg>${fy} Travel Budget Report</h1>
+    <p>Retail &nbsp;·&nbsp; PD2 &nbsp;·&nbsp; Payments &nbsp;·&nbsp; Apple IS&amp;T</p>
+  </div>
+  <div class="header-right">
+    <div>Generated: <strong>${today}</strong></div>
+    <div>Fiscal Year: <strong>${fy}</strong></div>
+    <div>Budget Utilization: <strong>${utilizePct}%</strong></div>
+  </div>
+</div>
+
+<!-- KPIs -->
+<div class="kpi-grid">
+  <div class="kpi navy"><div class="kpi-lbl">Awarded Budget</div><div class="kpi-val">${fmt(aw)}</div><div class="kpi-sub">${fy} Total</div></div>
+  <div class="kpi blue"><div class="kpi-lbl">Total Estimated</div><div class="kpi-val">${fmt(tEstimated)}</div><div class="kpi-sub">${active.length} active trips</div></div>
+  <div class="kpi green"><div class="kpi-lbl">Total Approved</div><div class="kpi-val">${fmt(tApproved)}</div><div class="kpi-sub">${approved.length} trips approved</div></div>
+  <div class="kpi purple"><div class="kpi-lbl">Total Actualized</div><div class="kpi-val">${tActualized?fmt(tActualized):'—'}</div><div class="kpi-sub">${actualize.length} trips completed</div></div>
+  <div class="kpi ${tRemaining>=0?'green':'red'}"><div class="kpi-lbl">Remaining Budget</div><div class="kpi-val">${fmt(Math.max(tRemaining,0))}</div><div class="kpi-sub">${tRemaining>=0?'Under budget':'OVER BUDGET'}</div></div>
+  <div class="kpi ${tVariance<=0?'green':'red'}"><div class="kpi-lbl">Act. vs Approved</div><div class="kpi-val">${tActualized?fmtD(tVariance):'—'}</div><div class="kpi-sub">Variance</div></div>
+</div>
+
+<!-- MAIN BODY -->
+<div class="body-grid">
+
+  <!-- BY MANAGER -->
+  <div class="section">
+    <h2>By Manager</h2>
+    <table>
+      <thead><tr>
+        <th>MANAGER</th><th class="r">TRIPS</th><th>BUDGET BAR</th>
+        <th class="r">ESTIMATED</th><th class="r">APPROVED</th><th class="r">ACTUALIZED</th><th class="r">VARIANCE</th>
+      </tr></thead>
+      <tbody>${mgrRows.map(([m,v])=>{
+        const vari = v.actual > 0 ? v.actual - v.appr : null;
+        const maxE = Math.max(...mgrRows.map(([,x])=>x.est),1);
+        return `<tr>
+          <td><strong>${m}</strong></td>
+          <td class="r">${v.trips}</td>
+          <td style="width:80px">${bar(v.est, maxE, '#0071e3')}</td>
+          <td class="r blue">${fmt(v.est)}</td>
+          <td class="r green">${v.appr?fmt(v.appr):'—'}</td>
+          <td class="r purple">${v.actual?fmt(v.actual):'—'}</td>
+        </tr>`;}).join('')}
+      </tbody>
+      <tfoot><tr>
+        <td><strong>TOTAL</strong></td><td class="r">${allRows.length}</td><td></td>
+        <td class="r">${fmt(tEstimated)}</td>
+        <td class="r">${fmt(tApproved)}</td>
+        <td class="r">${tActualized?fmt(tActualized):'—'}</td>
+        <td class="r">${tActualized?fmtD(tVariance):'—'}</td>
+      </tr></tfoot>
+    </table>
+  </div>
+
+  <!-- RIGHT COLUMN -->
+  <div style="display:flex;flex-direction:column;gap:14px;">
+
+    <!-- STATUS BREAKDOWN -->
+    <div class="section">
+      <h2>Trip Status</h2>
+      <table>
+        <thead><tr><th>STATUS</th><th class="r">TRIPS</th><th class="r">AMOUNT</th></tr></thead>
+        <tbody>${STATUSES.map(s=>`<tr>
+          <td><span class="badge ${s}">${s}</span></td>
+          <td class="r">${allRows.filter(r=>r.status===s).length}</td>
+          <td class="r">${fmt(allRows.filter(r=>r.status===s).reduce((sum,r)=>sum+calcP(r),0))}</td>
+        </tr>`).join('')}</tbody>
+        <tfoot><tr><td>TOTAL</td><td class="r">${allRows.length}</td><td class="r">${fmt(tEstimated)}</td></tr></tfoot>
+      </table>
+    </div>
+
+    <!-- BY QUARTER -->
+    <div class="section">
+      <h2>By Quarter</h2>
+      <table>
+        <thead><tr><th>QTR</th><th class="r">TRIPS</th><th class="r">ESTIMATED</th><th class="r">ACTUALIZED</th></tr></thead>
+        <tbody>${QUARTERS.map(q=>`<tr>
+          <td><strong>${q}</strong></td>
+          <td class="r">${byQ[q].n}</td>
+          <td class="r blue">${fmt(byQ[q].est)}</td>
+          <td class="r purple">${byQ[q].actual?fmt(byQ[q].actual):'—'}</td>
+        </tr>`).join('')}</tbody>
+        <tfoot><tr><td>TOTAL</td><td class="r">${active.length}</td><td class="r">${fmt(tEstimated)}</td><td class="r">${tActualized?fmt(tActualized):'—'}</td></tr></tfoot>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- BOTTOM ROW -->
+<div class="bottom-grid">
+
+  <!-- BY REGION -->
+  <div class="section">
+    <h2>By Region</h2>
+    <table>
+      <thead><tr><th>REGION</th><th class="r">TRIPS</th><th class="r">ESTIMATED</th><th class="r">ACTUALIZED</th></tr></thead>
+      <tbody>${REGIONS.map(r=>`<tr>
+        <td>${r}</td>
+        <td class="r">${byR[r].n}</td>
+        <td class="r blue">${fmt(byR[r].est)}</td>
+        <td class="r purple">${byR[r].actual?fmt(byR[r].actual):'—'}</td>
+      </tr>`).join('')}</tbody>
+    </table>
+  </div>
+
+  <!-- TOP TRIPS -->
+  <div class="section" style="grid-column:span 2;">
+    <h2>Top Trips by Estimated Cost</h2>
+    <table>
+      <thead><tr>
+        <th>TRAVELER</th><th>MANAGER</th><th>REGION</th><th>PURPOSE</th>
+        <th class="r">QTR</th><th>STATUS</th><th class="r">ESTIMATED</th><th class="r">ACTUALIZED</th>
+      </tr></thead>
+      <tbody>${topTrips.map((r,i)=>{
+        const est = calcP(r);
+        const act = r.status==='Actualize' ? num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc) : 0;
+        const vari = act > 0 ? act - est : null;
+        return `<tr>
+          <td><strong>${r.traveler||'—'}</strong></td>
+          <td>${r.manager||'—'}</td>
+          <td>${r.region||'—'}</td>
+          <td>${r.purpose||'—'}</td>
+          <td class="r">${r.quarter||'—'}</td>
+          <td><span class="badge ${r.status}">${r.status}</span></td>
+          <td class="r blue">${fmt(est)}</td>
+          <td class="r purple">${act?fmt(act):'—'}</td>
+        </tr>`;}).join('')}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>window.onload=()=>{ setTimeout(()=>window.print(), 800); }<\/script>
+</body></html>`;
+
+  const w = window.open('','_blank');
+  w.document.write(html);
+  w.document.close();
 }
 
 // ═══════════════════════════════════════════════════════
@@ -2352,6 +2617,8 @@ function migrateDB(){
       if(r.manager===undefined)      r.manager='';
       if(r.htl_actual===undefined)   r.htl_actual=0;
       if(r.food_actual===undefined)  r.food_actual=0;
+      if(r.misc===undefined)         r.misc=0;
+      if(r.planned_budget===undefined) r.planned_budget=null;
       if(r.traveler && !db.travelers.includes(r.traveler)) db.travelers.push(r.traveler);
       if(r.owner    && !db.owners.includes(r.owner))       db.owners.push(r.owner);
       if(r.manager  && !db.managers.includes(r.manager))   db.managers.push(r.manager);
