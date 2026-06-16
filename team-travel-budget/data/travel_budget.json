@@ -1,9 +1,279 @@
 {
-  "updatedAt": 1781624344697,
+  "updatedAt": 1781646292678,
   "updatedBy": "admin",
   "state": {
     "activeFY": "FY2026",
     "auditLog": [
+      {
+        "ts": 1781646292270,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Ankita Vijayan: status changed from \"Proposed\" to \"Approved\""
+      },
+      {
+        "ts": 1781646285681,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: status changed from \"Proposed\" to \"Approved\""
+      },
+      {
+        "ts": 1781646263489,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Idan Bianco: days changed from \"1\" to \"4\""
+      },
+      {
+        "ts": 1781646259984,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Idan Bianco: purpose changed from \"\" to \"Training\""
+      },
+      {
+        "ts": 1781646258114,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Idan Bianco: region changed from \"\" to \"North America\""
+      },
+      {
+        "ts": 1781646256084,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Idan Bianco: traveler changed from \"\" to \"Idan Bianco\""
+      },
+      {
+        "ts": 1781646254620,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 309: manager changed from \"\" to \"Rajiv Ranjan\""
+      },
+      {
+        "ts": 1781646252996,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 309: owner changed from \"\" to \"Payments\""
+      },
+      {
+        "ts": 1781646249838,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 309)"
+      },
+      {
+        "ts": 1781646246946,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Ankita Vijayan: days changed from \"1\" to \"2\""
+      },
+      {
+        "ts": 1781646246450,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Ankita Vijayan: quarter changed from \"\" to \"Q2\""
+      },
+      {
+        "ts": 1781646244665,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Ankita Vijayan: purpose changed from \"\" to \"Training\""
+      },
+      {
+        "ts": 1781646242615,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Ankita Vijayan: region changed from \"\" to \"North America\""
+      },
+      {
+        "ts": 1781646241331,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Ankita Vijayan: traveler changed from \"\" to \"Ankita Vijayan\""
+      },
+      {
+        "ts": 1781646240146,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 308: manager changed from \"\" to \"Maggie Leiker\""
+      },
+      {
+        "ts": 1781646238781,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 308: owner changed from \"\" to \"PD2\""
+      },
+      {
+        "ts": 1781646234422,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 308)"
+      },
+      {
+        "ts": 1781646232154,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"1\" to \"5\""
+      },
+      {
+        "ts": 1781646227897,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: quarter changed from \"\" to \"Q1\""
+      },
+      {
+        "ts": 1781646226067,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: purpose changed from \"\" to \"Conference\""
+      },
+      {
+        "ts": 1781646224646,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: region changed from \"\" to \"North America\""
+      },
+      {
+        "ts": 1781646223167,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: traveler changed from \"\" to \"Wayne Lawrence\""
+      },
+      {
+        "ts": 1781646221950,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 307: manager changed from \"\" to \"David Champion\""
+      },
+      {
+        "ts": 1781646219547,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 307: owner changed from \"\" to \"PD2\""
+      },
+      {
+        "ts": 1781646216735,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 307)"
+      },
+      {
+        "ts": 1781646212000,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted: Wayne Lawrence → "
+      },
+      {
+        "ts": 1781646209123,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted: William Sanchez → "
+      },
+      {
+        "ts": 1781646206492,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted: Rajiv Ranjan → New York"
+      },
+      {
+        "ts": 1781646203957,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted: Wayne Lawrence → "
+      },
+      {
+        "ts": 1781646201491,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted: Jabbar Ahmad Shaik → "
+      },
+      {
+        "ts": 1781646198943,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted: Chandru Natarajan → "
+      },
+      {
+        "ts": 1781646194973,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted: Ankita Vijayan → London"
+      },
+      {
+        "ts": 1781646186811,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: status changed from \"Actualize\" to \"Approved\""
+      },
+      {
+        "ts": 1781645700808,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"4\" to \"5\""
+      },
+      {
+        "ts": 1781645700176,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"3\" to \"4\""
+      },
+      {
+        "ts": 1781645515044,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"2\" to \"3\""
+      },
+      {
+        "ts": 1781644205191,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Chandru Natarajan: visa changed from \"0\" to \"1\""
+      },
+      {
+        "ts": 1781644063399,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Chandru Natarajan: days changed from \"5\" to \"6\""
+      },
+      {
+        "ts": 1781644061859,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Chandru Natarajan: visa changed from \"1\" to \"0\""
+      },
+      {
+        "ts": 1781644058783,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Chandru Natarajan: visa changed from \"0\" to \"1\""
+      },
+      {
+        "ts": 1781644046191,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: airfare changed from \"1579\" to \"1580\""
+      },
+      {
+        "ts": 1781644044163,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: airfare changed from \"1578\" to \"1579\""
+      },
+      {
+        "ts": 1781644043891,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: airfare changed from \"1577\" to \"1578\""
+      },
+      {
+        "ts": 1781644042885,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: airfare changed from \"1576\" to \"1577\""
+      },
+      {
+        "ts": 1781644042606,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: airfare changed from \"1575\" to \"1576\""
+      },
       {
         "ts": 1781624344285,
         "action": "update",
@@ -1507,66 +1777,6 @@
         "awarded": 100000,
         "rows": [
           {
-            "id": 103,
-            "owner": "PD2",
-            "manager": "David Champion",
-            "traveler": "Wayne Lawrence",
-            "city": "",
-            "country": "",
-            "region": "Africa",
-            "purpose": "Conference",
-            "quarter": "Q1",
-            "depart": "",
-            "ret": "",
-            "airfare": 1575,
-            "nights": 0,
-            "hrate": 156,
-            "visa": 25,
-            "taxi": 225,
-            "fpd": "75",
-            "days": "9",
-            "reg": 0,
-            "status": "Actualize",
-            "actual": 0,
-            "archived": false,
-            "created": 1781012648270,
-            "modified": 1781624344285,
-            "htl_actual": 0,
-            "food_actual": 0,
-            "misc": 0,
-            "planned_budget": 3050
-          },
-          {
-            "id": 107,
-            "owner": "",
-            "manager": "David Champion",
-            "traveler": "Wayne Lawrence",
-            "city": "",
-            "country": "",
-            "region": "Europe",
-            "purpose": "Conference",
-            "quarter": "Q2",
-            "depart": "",
-            "ret": "",
-            "airfare": 1000,
-            "nights": 0,
-            "hrate": 230,
-            "visa": "2",
-            "taxi": 120,
-            "fpd": 75,
-            "days": "2",
-            "reg": 0,
-            "status": "Proposed",
-            "actual": 0,
-            "archived": false,
-            "created": 1781116768416,
-            "modified": 1781624318076,
-            "htl_actual": 0,
-            "food_actual": 0,
-            "misc": 0,
-            "planned_budget": null
-          },
-          {
             "id": 108,
             "owner": "",
             "manager": "David Champion",
@@ -1597,66 +1807,6 @@
             "planned_budget": null
           },
           {
-            "id": 109,
-            "owner": "",
-            "manager": "Rajiv Ranjan",
-            "traveler": "Chandru Natarajan",
-            "city": "",
-            "country": "",
-            "region": "North America",
-            "purpose": "",
-            "quarter": "Q3",
-            "depart": "",
-            "ret": "",
-            "airfare": 500,
-            "nights": 0,
-            "hrate": 200,
-            "visa": 0,
-            "taxi": 35,
-            "fpd": 75,
-            "days": "5",
-            "reg": 0,
-            "status": "Approved",
-            "actual": 0,
-            "archived": false,
-            "created": 1781117689290,
-            "modified": 1781223088911,
-            "htl_actual": 0,
-            "food_actual": 0,
-            "misc": 0,
-            "planned_budget": null
-          },
-          {
-            "id": 110,
-            "owner": "",
-            "manager": "Maggie Leiker",
-            "traveler": "Jabbar Ahmad Shaik",
-            "city": "",
-            "country": "",
-            "region": "",
-            "purpose": "",
-            "quarter": "Q4",
-            "depart": "",
-            "ret": "",
-            "airfare": 0,
-            "nights": 0,
-            "hrate": 0,
-            "visa": 0,
-            "taxi": 0,
-            "fpd": 75,
-            "days": 1,
-            "reg": 0,
-            "status": "Deferred",
-            "actual": 0,
-            "archived": false,
-            "created": 1781117689907,
-            "modified": 1781220588116,
-            "htl_actual": 0,
-            "food_actual": 0,
-            "misc": 0,
-            "planned_budget": null
-          },
-          {
             "id": 111,
             "owner": "",
             "manager": "David Champion",
@@ -1681,36 +1831,6 @@
             "archived": false,
             "created": 1781117690547,
             "modified": 1781220595549,
-            "htl_actual": 0,
-            "food_actual": 0,
-            "misc": 0,
-            "planned_budget": null
-          },
-          {
-            "id": 112,
-            "owner": "",
-            "manager": "Rajiv Ranjan",
-            "traveler": "William Sanchez",
-            "city": "",
-            "country": "",
-            "region": "North America",
-            "purpose": "",
-            "quarter": "Q1",
-            "depart": "",
-            "ret": "",
-            "airfare": "700",
-            "nights": 0,
-            "hrate": 200,
-            "visa": 0,
-            "taxi": 175,
-            "fpd": 75,
-            "days": "5",
-            "reg": 0,
-            "status": "Cancelled",
-            "actual": 0,
-            "archived": false,
-            "created": 1781117691523,
-            "modified": 1781220333383,
             "htl_actual": 0,
             "food_actual": 0,
             "misc": 0,
@@ -1747,174 +1867,86 @@
             "food_actual": 0
           },
           {
-            "id": 201,
-            "owner": "Retail",
-            "manager": "Wayne Lawrence",
-            "traveler": "Rajiv Ranjan",
-            "city": "New York",
-            "country": "USA",
+            "id": 307,
+            "owner": "PD2",
+            "manager": "David Champion",
+            "traveler": "Wayne Lawrence",
+            "city": "",
+            "country": "",
             "region": "North America",
             "purpose": "Conference",
             "quarter": "Q1",
             "depart": "",
             "ret": "",
-            "airfare": 1000,
+            "airfare": 500,
             "nights": 0,
-            "hrate": 0,
+            "hrate": 200,
             "visa": 0,
-            "taxi": 0,
-            "fpd": 0,
-            "days": 5,
+            "taxi": 35,
+            "fpd": 75,
+            "days": "5",
             "reg": 0,
-            "status": "Proposed",
+            "status": "Approved",
             "actual": 0,
             "archived": false,
-            "created": 1781500000000,
-            "modified": 1781500000000,
-            "htl_actual": 0,
-            "food_actual": 0,
-            "misc": 0,
-            "planned_budget": null
+            "created": 1781646216735,
+            "modified": 1781646285681
           },
           {
-            "id": 202,
+            "id": 308,
             "owner": "PD2",
             "manager": "Maggie Leiker",
             "traveler": "Ankita Vijayan",
-            "city": "London",
-            "country": "UK",
-            "region": "Europe",
+            "city": "",
+            "country": "",
+            "region": "North America",
             "purpose": "Training",
             "quarter": "Q2",
             "depart": "",
             "ret": "",
-            "airfare": 800,
+            "airfare": 500,
             "nights": 0,
-            "hrate": 0,
+            "hrate": 200,
             "visa": 0,
-            "taxi": 0,
-            "fpd": 0,
-            "days": 3,
-            "reg": 200,
+            "taxi": 35,
+            "fpd": 75,
+            "days": "2",
+            "reg": 0,
+            "status": "Approved",
+            "actual": 0,
+            "archived": false,
+            "created": 1781646234422,
+            "modified": 1781646292270
+          },
+          {
+            "id": 309,
+            "owner": "Payments",
+            "manager": "Rajiv Ranjan",
+            "traveler": "Idan Bianco",
+            "city": "",
+            "country": "",
+            "region": "North America",
+            "purpose": "Training",
+            "quarter": "",
+            "depart": "",
+            "ret": "",
+            "airfare": 500,
+            "nights": 0,
+            "hrate": 200,
+            "visa": 0,
+            "taxi": 35,
+            "fpd": 75,
+            "days": "4",
+            "reg": 0,
             "status": "Proposed",
             "actual": 0,
             "archived": false,
-            "created": 1781500000001,
-            "modified": 1781500000001,
-            "htl_actual": 0,
-            "food_actual": 0,
-            "misc": 0,
-            "planned_budget": null
+            "created": 1781646249838,
+            "modified": 1781646263489
           }
         ],
-        "rates": [
-          {
-            "region": "North America",
-            "flag": "🌎",
-            "airfare_eco": [
-              380,
-              705
-            ],
-            "airfare_biz": [
-              977,
-              1955
-            ],
-            "hotel": [
-              162,
-              270
-            ],
-            "food": [
-              86,
-              128
-            ],
-            "visa": 0
-          },
-          {
-            "region": "Europe",
-            "flag": "🌍",
-            "airfare_eco": [
-              760,
-              1412
-            ],
-            "airfare_biz": [
-              2388,
-              4886
-            ],
-            "hotel": [
-              194,
-              302
-            ],
-            "food": [
-              96,
-              149
-            ],
-            "visa": 0
-          },
-          {
-            "region": "Asia",
-            "flag": "🌏",
-            "airfare_eco": [
-              977,
-              1737
-            ],
-            "airfare_biz": [
-              3800,
-              7600
-            ],
-            "hotel": [
-              130,
-              237
-            ],
-            "food": [
-              64,
-              106
-            ],
-            "visa": 25
-          },
-          {
-            "region": "Africa",
-            "flag": "🌍",
-            "airfare_eco": [
-              1194,
-              1955
-            ],
-            "airfare_biz": [
-              4126,
-              8143
-            ],
-            "hotel": [
-              108,
-              204
-            ],
-            "food": [
-              54,
-              96
-            ],
-            "visa": 50
-          },
-          {
-            "region": "Latin America",
-            "flag": "🌎",
-            "airfare_eco": [
-              651,
-              1194
-            ],
-            "airfare_biz": [
-              1955,
-              4343
-            ],
-            "hotel": [
-              108,
-              194
-            ],
-            "food": [
-              59,
-              96
-            ],
-            "visa": 0
-          }
-        ],
-        "ratesSource": "Default estimates (BLS unavailable)",
+        "rates": null,
+        "ratesSource": "Defaults",
         "archived": false,
         "created": 1780950919832,
         "modified": 1780950919832

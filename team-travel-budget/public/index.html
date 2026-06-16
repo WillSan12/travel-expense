@@ -136,9 +136,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-se
 /* BUDGET TABLE */
 .tbl-wrap{overflow-x:auto;max-height:calc(100vh - 260px);min-height:220px;}
 table{width:100%;border-collapse:collapse;font-size:12px;}
-.budget-table{table-layout:fixed;}
+.budget-table{table-layout:auto;width:100%;}
 .budget-table th{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.budget-table td{overflow:hidden;}
 thead th{background:var(--navy);color:#f5f5f7;padding:7px 8px;text-align:left;
   font-weight:600;font-size:10px;letter-spacing:.05em;white-space:nowrap;
   position:sticky;top:0;z-index:10;}
@@ -191,7 +190,7 @@ tfoot td.lbl{color:var(--g4);font-weight:400;}
 .r-la{background:#ffe4e6;color:#9f1239;}
 
 /* DASHBOARD */
-.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin-bottom:16px;}
+.kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:11px;margin-bottom:16px;}
 .kpi{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);padding:14px 16px;
   position:relative;overflow:hidden;}
 .kpi::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;}
@@ -557,13 +556,12 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
           <thead><tr>
             <th style="width:28px">#</th>
             <th style="width:95px">STATUS</th>
-            <th style="width:72px">IS&amp;T UNIT</th><th style="width:125px">MANAGER</th><th style="width:145px">TRAVELER</th>
-            <th style="width:105px">REGION</th><th style="width:120px">PURPOSE</th><th style="width:46px">QTR</th>
-            <th class="r" style="width:46px">DAYS</th>
-            <th class="r" style="width:105px;background:#1a2a3a!important;" title="Airfare (eco high) + Hotel + Food + Taxi × Days">EST TOTAL</th>
-            <th class="r" style="width:52px">VISA</th>
-            <th class="r" style="width:65px">REG FEES</th>
-            <th class="r" style="width:78px;background:#1a3050!important;">PLANNED $</th>
+            <th>IS&amp;T UNIT</th><th>MANAGER</th><th>TRAVELER</th>
+            <th>REGION</th><th>PURPOSE</th><th style="width:70px">QTR</th>
+            <th class="r" style="width:52px">DAYS</th>
+            <th class="r" style="width:60px">VISA</th>
+            <th class="r" style="width:75px">REG FEES</th>
+            <th class="r" style="width:95px;background:#1a3050!important;">EST TOTAL</th>
             <th style="width:28px"></th>
           </tr></thead>
           <tbody id="budget-tbody"></tbody>
@@ -618,8 +616,8 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
   </div>
   <div class="kpi-grid" id="kpi-grid"></div>
   <div class="card">
-    <div class="card-head"><h2>Budget Waterfall</h2></div>
-    <div class="card-body" style="padding:14px 0 6px" id="dash-wf"></div>
+    <div class="card-head"><h2>Budget Overview</h2><span class="hint">Total Budget vs Actuals + Plans to Go</span></div>
+    <div class="card-body" style="padding:20px" id="dash-wf"></div>
   </div>
   <div class="card">
     <div class="card-head">
@@ -1404,6 +1402,14 @@ function stSel(status,rid){
 
 function renderTable(){
   const rows = currentRows().filter(r => !r.archived && r.status !== 'Actualize' && (budgetStatusFilter==='all' || r.status===budgetStatusFilter));
+  if(budgetSort.field){
+    rows.sort((a,b)=>{
+      let av=a[budgetSort.field]??'', bv=b[budgetSort.field]??'';
+      if(!isNaN(num(av))&&!isNaN(num(bv))){av=num(av);bv=num(bv);}
+      else{av=String(av).toLowerCase();bv=String(bv).toLowerCase();}
+      return(budgetSort.dir==='asc'?1:-1)*(av<bv?-1:av>bv?1:0);
+    });
+  }
   const yd   = getYD();
   const tbody= document.getElementById('budget-tbody');
   const tfoot= document.getElementById('budget-tfoot');
@@ -1429,7 +1435,6 @@ function renderTable(){
       <td>${mkSelP(PURPOSES,r.purpose,'purpose',r.id,'min-width:140px')}</td>
       <td>${mkSelP(QUARTERS,r.quarter,'quarter',r.id)}</td>
       <td>${mkIn(r.days,'number','days',r.id,'50px')}</td>
-      <td class="td-calc" style="color:var(--purple);font-weight:700;white-space:nowrap;">${(()=>{const e=r.region?getEstDay(r.region):null;const d=num(r.days)||1;return e?fmt(e.airfareHi + e.dailyHi*d):'—';})()}</td>
       <td>${mkIn(r.visa,'number','visa',r.id,'48px')}</td>
       <td>${mkIn(r.reg,'number','reg',r.id,'62px')}</td>
       <td class="col-pl" style="${active?'':'opacity:.38'}">${fmt(planned)}</td>
@@ -1459,8 +1464,7 @@ function renderTable(){
   </tr>`;
 
   document.getElementById('tb-planned').textContent = fmt(tP);
-  const actualSpent = currentRows().filter(r => r.status === 'Actualize')
-    .reduce((s,r) => s + num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc), 0);
+  const actualSpent = currentRows().filter(r => r.status === 'Actualize').reduce((s,r) => s + (num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)), 0);
   document.getElementById('tb-actual').textContent = actualSpent ? fmt(actualSpent) : '—';
   const pill = document.getElementById('tb-var-pill');
   const d = awarded - tP;
@@ -1656,24 +1660,25 @@ function buildDashboard(){
   const actualize= allRows.filter(r => r.status === 'Actualize');
   const aw = yd.awarded || 0;
 
-  const tEstimated  = active.reduce((s,r) => s + calcP(r), 0);
-  const tApproved   = approved.reduce((s,r) => s + calcP(r), 0);
-  const tActualized = actualize.reduce((s,r) => s + num(r.actual), 0);
-  const tRemaining  = aw - tEstimated;
-  const tVariance   = tActualized - tApproved;
+  const tEstimated       = active.reduce((s,r) => s + calcP(r), 0);
+  const tApproved        = approved.reduce((s,r) => s + calcP(r), 0);
+  const tActualized      = actualize.reduce((s,r) => s + (num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)), 0);
+  const tRemainingActual = aw - tActualized;                          // Awarded - Actualized
+  const tRemainingEst    = aw - (tEstimated + tActualized);           // Awarded - (Estimated + Actualized)
+  const tVariance        = tActualized - tApproved;
 
   // ── KPIs ──────────────────────────────────────────────
   const kpis = [
-    {cls:'kpi-aw', lbl:'Awarded Budget',    val:fmt(aw),                    sub:`FY ${db.activeFY}`},
-    {cls:'kpi-pl', lbl:'Total Estimated',   val:fmt(tEstimated),            sub:`${active.length} active trip${active.length!==1?'s':''}`},
-    {cls:'kpi-ac', lbl:'Total Approved',    val:fmt(tApproved),             sub:`${approved.length} approved trip${approved.length!==1?'s':''}`},
-    {cls:'kpi-vr', lbl:'Total Actualized',  val:tActualized?fmt(tActualized):'—',
-      sub: actualize.length ? `${actualize.length} actualized trip${actualize.length!==1?'s':''}` : 'No actuals yet'},
-    {cls:'kpi-rm', lbl:'Budget Remaining',  val:fmt(Math.max(tRemaining,0)),
-      sub: tRemaining >= 0 ? 'Under budget' : 'OVER BUDGET',
-      tag: tRemaining >= 0
-        ? {t:'On Track',    s:'background:#d1ede0;color:#0f5132'}
-        : {t:'Over Budget', s:'background:#fde8e6;color:#c0392b'}},
+    {cls:'kpi-aw', lbl:'Awarded Budget',         val:fmt(aw),                         sub:`FY ${db.activeFY}`},
+    {cls:'kpi-pl', lbl:'Total Estimated',        val:fmt(tEstimated),                 sub:`${active.length} active trip${active.length!==1?'s':''}`},
+    {cls:'kpi-ac', lbl:'Total Approved',         val:fmt(tApproved),                  sub:`${approved.length} approved trip${approved.length!==1?'s':''}`},
+    {cls:'kpi-vr', lbl:'Total Actualized',       val:tActualized?fmt(tActualized):'—',sub: actualize.length ? `${actualize.length} actualized` : 'No actuals yet'},
+    {cls:'kpi-rm', lbl:'Remaining (Actualized)', val:fmt(Math.max(tRemainingActual,0)),
+      sub:'Awarded − Actualized',
+      tag: tRemainingActual >= 0 ? {t:'On Track',s:'background:#d1ede0;color:#0f5132'} : {t:'Over Budget',s:'background:#fde8e6;color:#c0392b'}},
+    {cls:'kpi-rm', lbl:'Remaining (Estimated)',  val:fmt(Math.max(tRemainingEst,0)),
+      sub:'Awarded − (Estimated + Actualized)',
+      tag: tRemainingEst >= 0 ? {t:'On Track',s:'background:#d1ede0;color:#0f5132'} : {t:'Over Budget',s:'background:#fde8e6;color:#c0392b'}},
   ];
   document.getElementById('kpi-grid').innerHTML = kpis.map(k=>`
     <div class="kpi ${k.cls}">
@@ -1683,26 +1688,50 @@ function buildDashboard(){
       <div class="kpi-sub">${k.sub}</div>
     </div>`).join('');
 
-  // ── Waterfall ──────────────────────────────────────────
-  const tCx = allRows.filter(r=>r.status==='Cancelled').reduce((s,r)=>s+calcP(r),0);
-  const tDf = allRows.filter(r=>r.status==='Deferred').reduce((s,r)=>s+calcP(r),0);
-  const base = Math.max(aw, tEstimated, 1);
-  const wfRows = [
-    {lbl:'Awarded Budget',    val:aw,                     cls:'wf-aw'},
-    {lbl:'Total Estimated',   val:tEstimated,             cls:'wf-pl'},
-    {lbl:'Total Approved',    val:tApproved,              cls:'wf-ac'},
-    ...(tActualized?[{lbl:'Total Actualized', val:tActualized, cls:'wf-ac'}]:[]),
-    ...(tCx?[{lbl:'Cancelled', val:tCx, cls:'wf-cx'}]:[]),
-    ...(tDf?[{lbl:'Deferred',  val:tDf, cls:'wf-df'}]:[]),
-    {lbl:'Remaining',         val:Math.max(tRemaining,0), cls:'wf-rem'},
-  ];
-  document.getElementById('dash-wf').innerHTML = wfRows.map(w=>`
-    <div class="wf-row">
-      <span class="wf-lbl">${w.lbl}</span>
-      <div class="wf-track"><div class="wf-fill ${w.cls}" style="width:${Math.min(w.val/base*100,100)}%"></div></div>
-      <span class="wf-amt">${fmt(w.val)}</span>
-      <span class="wf-pct">${Math.round(w.val/base*100)}%</span>
-    </div>`).join('');
+  // ── Stacked Bar Chart ──────────────────────────────────
+  const tProposed   = allRows.filter(r=>r.status==='Proposed').reduce((s,r)=>s+calcP(r),0);
+  const tBase = Math.max(aw, tEstimated + tActualized, 1);
+  const pct = v => Math.min(v/tBase*100,100).toFixed(1);
+
+  const remActH = pct(Math.max(tRemainingActual,0));
+  const remEstH = pct(Math.max(tRemainingEst,0));
+  const actH    = pct(tActualized);
+  const apprH   = pct(Math.max(tApproved - tActualized, 0));
+  const propH   = pct(Math.max(tProposed, 0));
+
+  function bar(lbl, val, color, segments){
+    const inner = segments
+      ? segments.map(s=>`<div style="width:100%;height:${s.h}%;background:${s.color};transition:height .4s;" title="${s.label}"></div>`).join('')
+      : `<div style="width:100%;height:${pct(val)}%;background:${color};border-radius:8px;" title="${lbl}: ${fmt(val)}"></div>`;
+    return `
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;min-width:70px;">
+        <div style="font-size:10px;font-weight:700;color:var(--g5);text-transform:uppercase;letter-spacing:.04em;text-align:center;">${lbl}</div>
+        <div style="width:60px;height:200px;background:var(--g2);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;">${inner}</div>
+        <div style="font-size:12px;font-weight:800;color:#1d1d1f;">${fmt(val)}</div>
+      </div>`;
+  }
+
+  document.getElementById('dash-wf').innerHTML = `
+    <div style="display:flex;gap:6px;align-items:flex-end;padding:0 10px;">
+      ${bar('Awarded', aw, '#1d1d1f')}
+      ${bar('Actualized', tActualized, '#5b21b6')}
+      ${bar('Approved', tApproved, '#1a7f4e')}
+      ${bar('Proposed', tProposed, '#3b82f6')}
+      ${bar('Remaining (Act)', Math.max(tRemainingActual,0), '#34d399', [
+          {h: remActH, color:'#34d399', label:'Remaining (Actualized): '+fmt(Math.max(tRemainingActual,0))}
+        ])}
+      ${bar('Remaining (Est)', Math.max(tRemainingEst,0), '#93c5fd', [
+          {h: remEstH, color:'#93c5fd', label:'Remaining (Estimated): '+fmt(Math.max(tRemainingEst,0))}
+        ])}
+    </div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;padding:14px 16px 4px;font-size:11px;">
+      <span><span style="display:inline-block;width:10px;height:10px;background:#1d1d1f;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Awarded</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#5b21b6;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Actualized</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#1a7f4e;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Approved</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#3b82f6;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Proposed</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#34d399;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Remaining (Act)</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#93c5fd;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Remaining (Est)</span>
+    </div>`;
 
   // ── By Manager ─────────────────────────────────────────
   const mgrFilter = document.getElementById('dash-mgr-filter')?.value || 'all';
@@ -1759,7 +1788,8 @@ function buildDashboard(){
   const bySt = {};
   STATUSES.forEach(s => bySt[s] = {n:0, amt:0});
   allRows.forEach(r => { if(bySt[r.status]){ bySt[r.status].n++; bySt[r.status].amt += calcP(r); } });
-  document.getElementById('dash-st').innerHTML = STATUSES.map(s=>`
+  const activeStatuses = ['Proposed','Approved','Actualize'];
+  document.getElementById('dash-st').innerHTML = activeStatuses.map(s=>`
     <div class="st-item si-${s}">
       <div class="si-count">${bySt[s].n}</div>
       <div class="si-label">${s}</div>
@@ -2265,6 +2295,16 @@ function shiftDateByYear(dateStr){
 // ACTUALIZE TABLE
 // ═══════════════════════════════════════════════════════
 let budgetStatusFilter = 'all';
+let budgetSort = {field: null, dir: 'asc'};
+function setBudgetSort(field){
+  budgetSort = budgetSort.field===field && budgetSort.dir==='asc'
+    ? {field, dir:'desc'} : {field, dir:'asc'};
+  renderTable();
+}
+function sortIcon(field){
+  if(budgetSort.field!==field) return '<span style="opacity:.4;font-size:9px;">↕</span>';
+  return budgetSort.dir==='asc' ? '▲' : '▼';
+}
 function toggleStatusFilterDropdown(){
   const dd = document.getElementById('status-filter-dropdown');
   if(dd) dd.style.display = dd.style.display==='none' ? 'block' : 'none';
@@ -2348,7 +2388,7 @@ function printDashboard(){
   const tEstimated  = active.reduce((s,r) => s + calcP(r), 0);
   const tApproved   = approved.reduce((s,r) => s + calcP(r), 0);
   const tActualized = actualize.reduce((s,r) => s + (num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)), 0);
-  const tRemaining  = aw - tEstimated;
+  const tRemaining  = aw - tActualized;
   const tVariance   = tActualized - tApproved;
   const utilizePct  = aw > 0 ? Math.round(tEstimated/aw*100) : 0;
 
