@@ -1,9 +1,39 @@
 {
-  "updatedAt": 1781239342543,
+  "updatedAt": 1781624344697,
   "updatedBy": "admin",
   "state": {
     "activeFY": "FY2026",
     "auditLog": [
+      {
+        "ts": 1781624344285,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: region changed from \"Asia\" to \"Africa\""
+      },
+      {
+        "ts": 1781624318076,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"1\" to \"2\""
+      },
+      {
+        "ts": 1781623465165,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"4\" to \"1\""
+      },
+      {
+        "ts": 1781623462029,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"5\" to \"4\""
+      },
+      {
+        "ts": 1781623458688,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"4\" to \"5\""
+      },
       {
         "ts": 1781239342134,
         "action": "update",
@@ -752,7 +782,7 @@
         "ts": 1781219955040,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Row 111: manager changed from \"\" to \"Dave Champion\""
+        "detail": "Row 111: manager changed from \"\" to \"David Champion\""
       },
       {
         "ts": 1781219952315,
@@ -830,7 +860,7 @@
         "ts": 1781211385111,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Aditya Dave: manager changed from \"\" to \"Dave Champion\""
+        "detail": "Aditya Dave: manager changed from \"\" to \"David Champion\""
       },
       {
         "ts": 1781210777694,
@@ -848,7 +878,7 @@
         "ts": 1781210774478,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Row 103: manager changed from \"\" to \"Dave Champion\""
+        "detail": "Row 103: manager changed from \"\" to \"David Champion\""
       },
       {
         "ts": 1781210011450,
@@ -944,7 +974,7 @@
         "ts": 1781207230025,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Row 107: manager changed from \"Maggie Leiker\" to \"Dave Champion\""
+        "detail": "Row 107: manager changed from \"Maggie Leiker\" to \"David Champion\""
       },
       {
         "ts": 1781207080858,
@@ -962,13 +992,13 @@
         "ts": 1781206981866,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Row 107: manager changed from \"Dave Champion\" to \"Wayne Lawrence\""
+        "detail": "Row 107: manager changed from \"David Champion\" to \"Wayne Lawrence\""
       },
       {
         "ts": 1781206974165,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Row 107: manager changed from \"Wayne Lawrence\" to \"Dave Champion\""
+        "detail": "Row 107: manager changed from \"Wayne Lawrence\" to \"David Champion\""
       },
       {
         "ts": 1781206966914,
@@ -992,13 +1022,13 @@
         "ts": 1781206851099,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Row 107: manager changed from \"Dave Champion\" to \"Deepak Kumar\""
+        "detail": "Row 107: manager changed from \"David Champion\" to \"Deepak Kumar\""
       },
       {
         "ts": 1781206831685,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Row 107: manager changed from \"Rajiv Ranjan\" to \"Dave Champion\""
+        "detail": "Row 107: manager changed from \"Rajiv Ranjan\" to \"David Champion\""
       },
       {
         "ts": 1781206819086,
@@ -1479,20 +1509,20 @@
           {
             "id": 103,
             "owner": "PD2",
-            "manager": "Dave Champion",
+            "manager": "David Champion",
             "traveler": "Wayne Lawrence",
             "city": "",
             "country": "",
-            "region": "Asia",
+            "region": "Africa",
             "purpose": "Conference",
             "quarter": "Q1",
             "depart": "",
             "ret": "",
-            "airfare": "1250",
+            "airfare": 1575,
             "nights": 0,
-            "hrate": 170,
+            "hrate": 156,
             "visa": 25,
-            "taxi": 35,
+            "taxi": 225,
             "fpd": "75",
             "days": "9",
             "reg": 0,
@@ -1500,7 +1530,7 @@
             "actual": 0,
             "archived": false,
             "created": 1781012648270,
-            "modified": 1781237836518,
+            "modified": 1781624344285,
             "htl_actual": 0,
             "food_actual": 0,
             "misc": 0,
@@ -1509,7 +1539,7 @@
           {
             "id": 107,
             "owner": "",
-            "manager": "Dave Champion",
+            "manager": "David Champion",
             "traveler": "Wayne Lawrence",
             "city": "",
             "country": "",
@@ -1524,13 +1554,13 @@
             "visa": "2",
             "taxi": 120,
             "fpd": 75,
-            "days": "4",
+            "days": "2",
             "reg": 0,
             "status": "Proposed",
             "actual": 0,
             "archived": false,
             "created": 1781116768416,
-            "modified": 1781222043369,
+            "modified": 1781624318076,
             "htl_actual": 0,
             "food_actual": 0,
             "misc": 0,
@@ -1539,7 +1569,7 @@
           {
             "id": 108,
             "owner": "",
-            "manager": "Dave Champion",
+            "manager": "David Champion",
             "traveler": "Aditya Dave",
             "city": "",
             "country": "",
@@ -1629,7 +1659,7 @@
           {
             "id": 111,
             "owner": "",
-            "manager": "Dave Champion",
+            "manager": "David Champion",
             "traveler": "Wayne Lawrence",
             "city": "",
             "country": "",
@@ -1741,7 +1771,6 @@
             "archived": false,
             "created": 1781500000000,
             "modified": 1781500000000,
-            "manager": "Wayne Lawrence",
             "htl_actual": 0,
             "food_actual": 0,
             "misc": 0,
@@ -1778,8 +1807,114 @@
             "planned_budget": null
           }
         ],
-        "rates": null,
-        "ratesSource": "Defaults",
+        "rates": [
+          {
+            "region": "North America",
+            "flag": "🌎",
+            "airfare_eco": [
+              380,
+              705
+            ],
+            "airfare_biz": [
+              977,
+              1955
+            ],
+            "hotel": [
+              162,
+              270
+            ],
+            "food": [
+              86,
+              128
+            ],
+            "visa": 0
+          },
+          {
+            "region": "Europe",
+            "flag": "🌍",
+            "airfare_eco": [
+              760,
+              1412
+            ],
+            "airfare_biz": [
+              2388,
+              4886
+            ],
+            "hotel": [
+              194,
+              302
+            ],
+            "food": [
+              96,
+              149
+            ],
+            "visa": 0
+          },
+          {
+            "region": "Asia",
+            "flag": "🌏",
+            "airfare_eco": [
+              977,
+              1737
+            ],
+            "airfare_biz": [
+              3800,
+              7600
+            ],
+            "hotel": [
+              130,
+              237
+            ],
+            "food": [
+              64,
+              106
+            ],
+            "visa": 25
+          },
+          {
+            "region": "Africa",
+            "flag": "🌍",
+            "airfare_eco": [
+              1194,
+              1955
+            ],
+            "airfare_biz": [
+              4126,
+              8143
+            ],
+            "hotel": [
+              108,
+              204
+            ],
+            "food": [
+              54,
+              96
+            ],
+            "visa": 50
+          },
+          {
+            "region": "Latin America",
+            "flag": "🌎",
+            "airfare_eco": [
+              651,
+              1194
+            ],
+            "airfare_biz": [
+              1955,
+              4343
+            ],
+            "hotel": [
+              108,
+              194
+            ],
+            "food": [
+              59,
+              96
+            ],
+            "visa": 0
+          }
+        ],
+        "ratesSource": "Default estimates (BLS unavailable)",
         "archived": false,
         "created": 1780950919832,
         "modified": 1780950919832
@@ -1791,52 +1926,184 @@
         "awarded": 80000,
         "rows": [
           {
-            "id": 301, "owner": "Retail", "manager": "Wayne Lawrence", "traveler": "Rajiv Ranjan",
-            "city": "Chicago", "country": "USA", "region": "North America", "purpose": "Conference",
-            "quarter": "Q1", "depart": "", "ret": "", "airfare": 600, "nights": 0, "hrate": 0,
-            "visa": 0, "taxi": 0, "fpd": 0, "days": 4, "reg": 500, "status": "Actualize",
-            "actual": 0, "archived": false, "created": 1750000000000, "modified": 1750000000000,
-            "htl_actual": 800, "food_actual": 320, "misc": 50, "planned_budget": 2720
+            "id": 301,
+            "owner": "Retail",
+            "manager": "Wayne Lawrence",
+            "traveler": "Rajiv Ranjan",
+            "city": "Chicago",
+            "country": "USA",
+            "region": "North America",
+            "purpose": "Conference",
+            "quarter": "Q1",
+            "depart": "",
+            "ret": "",
+            "airfare": 600,
+            "nights": 0,
+            "hrate": 0,
+            "visa": 0,
+            "taxi": 0,
+            "fpd": 0,
+            "days": 4,
+            "reg": 500,
+            "status": "Actualize",
+            "actual": 0,
+            "archived": false,
+            "created": 1750000000000,
+            "modified": 1750000000000,
+            "htl_actual": 800,
+            "food_actual": 320,
+            "misc": 50,
+            "planned_budget": 2720
           },
           {
-            "id": 302, "owner": "PD2", "manager": "Maggie Leiker", "traveler": "Ankita Vijayan",
-            "city": "Paris", "country": "France", "region": "Europe", "purpose": "Training",
-            "quarter": "Q2", "depart": "", "ret": "", "airfare": 1100, "nights": 0, "hrate": 0,
-            "visa": 0, "taxi": 0, "fpd": 0, "days": 5, "reg": 300, "status": "Actualize",
-            "actual": 0, "archived": false, "created": 1750000000001, "modified": 1750000000001,
-            "htl_actual": 1200, "food_actual": 600, "misc": 100, "planned_budget": 3650
+            "id": 302,
+            "owner": "PD2",
+            "manager": "Maggie Leiker",
+            "traveler": "Ankita Vijayan",
+            "city": "Paris",
+            "country": "France",
+            "region": "Europe",
+            "purpose": "Training",
+            "quarter": "Q2",
+            "depart": "",
+            "ret": "",
+            "airfare": 1100,
+            "nights": 0,
+            "hrate": 0,
+            "visa": 0,
+            "taxi": 0,
+            "fpd": 0,
+            "days": 5,
+            "reg": 300,
+            "status": "Actualize",
+            "actual": 0,
+            "archived": false,
+            "created": 1750000000001,
+            "modified": 1750000000001,
+            "htl_actual": 1200,
+            "food_actual": 600,
+            "misc": 100,
+            "planned_budget": 3650
           },
           {
-            "id": 303, "owner": "Payments", "manager": "Rajiv Ranjan", "traveler": "William Sanchez",
-            "city": "Tokyo", "country": "Japan", "region": "Asia", "purpose": "Customer Meeting",
-            "quarter": "Q3", "depart": "", "ret": "", "airfare": 1400, "nights": 0, "hrate": 0,
-            "visa": 25, "taxi": 0, "fpd": 0, "days": 6, "reg": 0, "status": "Actualize",
-            "actual": 0, "archived": false, "created": 1750000000002, "modified": 1750000000002,
-            "htl_actual": 1320, "food_actual": 480, "misc": 200, "planned_budget": 4565
+            "id": 303,
+            "owner": "Payments",
+            "manager": "Rajiv Ranjan",
+            "traveler": "William Sanchez",
+            "city": "Tokyo",
+            "country": "Japan",
+            "region": "Asia",
+            "purpose": "Customer Meeting",
+            "quarter": "Q3",
+            "depart": "",
+            "ret": "",
+            "airfare": 1400,
+            "nights": 0,
+            "hrate": 0,
+            "visa": 25,
+            "taxi": 0,
+            "fpd": 0,
+            "days": 6,
+            "reg": 0,
+            "status": "Actualize",
+            "actual": 0,
+            "archived": false,
+            "created": 1750000000002,
+            "modified": 1750000000002,
+            "htl_actual": 1320,
+            "food_actual": 480,
+            "misc": 200,
+            "planned_budget": 4565
           },
           {
-            "id": 304, "owner": "Retail", "manager": "Maggie Leiker", "traveler": "Vipul Singh",
-            "city": "Nairobi", "country": "Kenya", "region": "Africa", "purpose": "Field Visit",
-            "quarter": "Q4", "depart": "", "ret": "", "airfare": 1600, "nights": 0, "hrate": 0,
-            "visa": 50, "taxi": 0, "fpd": 0, "days": 7, "reg": 0, "status": "Cancelled",
-            "actual": 0, "archived": false, "created": 1750000000003, "modified": 1750000000003,
-            "htl_actual": 0, "food_actual": 0, "misc": 0, "planned_budget": null
+            "id": 304,
+            "owner": "Retail",
+            "manager": "Maggie Leiker",
+            "traveler": "Vipul Singh",
+            "city": "Nairobi",
+            "country": "Kenya",
+            "region": "Africa",
+            "purpose": "Field Visit",
+            "quarter": "Q4",
+            "depart": "",
+            "ret": "",
+            "airfare": 1600,
+            "nights": 0,
+            "hrate": 0,
+            "visa": 50,
+            "taxi": 0,
+            "fpd": 0,
+            "days": 7,
+            "reg": 0,
+            "status": "Cancelled",
+            "actual": 0,
+            "archived": false,
+            "created": 1750000000003,
+            "modified": 1750000000003,
+            "htl_actual": 0,
+            "food_actual": 0,
+            "misc": 0,
+            "planned_budget": null
           },
           {
-            "id": 305, "owner": "PD2", "manager": "Rajiv Ranjan", "traveler": "Aditya Dave",
-            "city": "São Paulo", "country": "Brazil", "region": "Latin America", "purpose": "Sales",
-            "quarter": "Q2", "depart": "", "ret": "", "airfare": 900, "nights": 0, "hrate": 0,
-            "visa": 0, "taxi": 0, "fpd": 0, "days": 4, "reg": 0, "status": "Approved",
-            "actual": 0, "archived": false, "created": 1750000000004, "modified": 1750000000004,
-            "htl_actual": 0, "food_actual": 0, "misc": 0, "planned_budget": null
+            "id": 305,
+            "owner": "PD2",
+            "manager": "Rajiv Ranjan",
+            "traveler": "Aditya Dave",
+            "city": "São Paulo",
+            "country": "Brazil",
+            "region": "Latin America",
+            "purpose": "Sales",
+            "quarter": "Q2",
+            "depart": "",
+            "ret": "",
+            "airfare": 900,
+            "nights": 0,
+            "hrate": 0,
+            "visa": 0,
+            "taxi": 0,
+            "fpd": 0,
+            "days": 4,
+            "reg": 0,
+            "status": "Approved",
+            "actual": 0,
+            "archived": false,
+            "created": 1750000000004,
+            "modified": 1750000000004,
+            "htl_actual": 0,
+            "food_actual": 0,
+            "misc": 0,
+            "planned_budget": null
           },
           {
-            "id": 306, "owner": "Payments", "manager": "Wayne Lawrence", "traveler": "Maggie Leiker",
-            "city": "Singapore", "country": "Singapore", "region": "Asia", "purpose": "Team Offsite",
-            "quarter": "Q1", "depart": "", "ret": "", "airfare": 1300, "nights": 0, "hrate": 0,
-            "visa": 0, "taxi": 0, "fpd": 0, "days": 5, "reg": 800, "status": "Proposed",
-            "actual": 0, "archived": false, "created": 1750000000005, "modified": 1750000000005,
-            "htl_actual": 0, "food_actual": 0, "misc": 0, "planned_budget": null
+            "id": 306,
+            "owner": "Payments",
+            "manager": "Wayne Lawrence",
+            "traveler": "Maggie Leiker",
+            "city": "Singapore",
+            "country": "Singapore",
+            "region": "Asia",
+            "purpose": "Team Offsite",
+            "quarter": "Q1",
+            "depart": "",
+            "ret": "",
+            "airfare": 1300,
+            "nights": 0,
+            "hrate": 0,
+            "visa": 0,
+            "taxi": 0,
+            "fpd": 0,
+            "days": 5,
+            "reg": 800,
+            "status": "Proposed",
+            "actual": 0,
+            "archived": false,
+            "created": 1750000000005,
+            "modified": 1750000000005,
+            "htl_actual": 0,
+            "food_actual": 0,
+            "misc": 0,
+            "planned_budget": null
           }
         ],
         "rates": null,
@@ -1865,9 +2132,11 @@
       "Kushboo Pidwa",
       "Laura Smart",
       "Luisa Guenther",
+      "Maggie Leiker",
       "Martha Hubney",
       "Monika Dabrowski",
       "Naveen Potluri",
+      "Rajiv Ranjan",
       "Sagata Das",
       "Satheesh Waran",
       "Satya Chekuri",
@@ -1877,6 +2146,7 @@
       "Umanand Jha",
       "Valemia Njuh",
       "Vinit Chalana",
+      "Vipul Singh",
       "Wayne Lawrence",
       "William Sanchez"
     ],
@@ -1886,7 +2156,7 @@
       "Retail"
     ],
     "managers": [
-      "Dave Champion",
+      "David Champion",
       "Maggie Leiker",
       "Rajiv Ranjan",
       "Wayne Lawrence"

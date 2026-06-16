@@ -226,8 +226,9 @@ tfoot td.lbl{color:var(--g4);font-weight:400;}
 .wf-lbl{font-size:12px;font-weight:600;width:110px;text-align:right;white-space:nowrap;}
 .wf-track{flex:1;height:18px;background:var(--g2);border-radius:9px;position:relative;overflow:hidden;}
 .wf-fill{position:absolute;left:0;top:0;height:100%;border-radius:9px;transition:width .5s;}
-.wf-aw{background:var(--g3);} .wf-pl{background:#3b82f6;} .wf-ac{background:var(--green);}
-.wf-cx{background:var(--red-lt);} .wf-df{background:var(--amber-lt);}
+.wf-aw{background:#1d1d1f;} .wf-pl{background:#3b82f6;} .wf-ac{background:var(--green);}
+.wf-cx{background:var(--red);} .wf-df{background:var(--amber);}
+.wf-rem{background:#0ea5e9;}
 .wf-amt{font-size:12px;font-weight:700;width:80px;text-align:right;white-space:nowrap;}
 .wf-pct{font-size:11px;color:var(--g4);width:36px;text-align:right;}
 .st-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;padding:14px;}
@@ -472,8 +473,6 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
     <div class="fy-dropdown" id="fy-dropdown"></div>
   </div>
   <button class="btn-new-fy" onclick="openNewFYModal()">+ New FY</button>
-  <button class="btn-undo" id="btn-undo" onclick="History.undo()" disabled title="Nothing to undo">↩ Undo</button>
-  <button class="btn-redo" id="btn-redo" onclick="History.redo()" disabled title="Nothing to redo">↪ Redo</button>
   <div class="tb-sep"></div>
   <div class="spacer"></div>
   <div class="awarded-wrap">
@@ -561,8 +560,8 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
             <th style="width:72px">IS&amp;T UNIT</th><th style="width:125px">MANAGER</th><th style="width:145px">TRAVELER</th>
             <th style="width:105px">REGION</th><th style="width:120px">PURPOSE</th><th style="width:46px">QTR</th>
             <th class="r" style="width:46px">DAYS</th>
-            <th class="r" style="width:95px;background:#1a2a3a!important;" title="Estimated daily cost: Hotel + Food + Taxi (excl. Airfare &amp; Visa)">EST/DAY</th>
-            <th class="r" style="width:65px">AIRFARE</th><th class="r" style="width:52px">VISA</th>
+            <th class="r" style="width:105px;background:#1a2a3a!important;" title="Airfare (eco high) + Hotel + Food + Taxi × Days">EST TOTAL</th>
+            <th class="r" style="width:52px">VISA</th>
             <th class="r" style="width:65px">REG FEES</th>
             <th class="r" style="width:78px;background:#1a3050!important;">PLANNED $</th>
             <th style="width:28px"></th>
@@ -592,7 +591,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
           <thead><tr>
             <th style="width:28px">#</th>
             <th style="width:95px">STATUS</th>
-            <th style="width:72px">IS&amp;T UNIT</th><th style="width:145px">MANAGER</th><th style="width:155px">TRAVELER</th><th style="width:105px">COUNTRY</th>
+            <th style="width:72px">IS&amp;T UNIT</th><th style="width:145px">MANAGER</th><th style="width:155px">TRAVELER</th>
             <th style="width:135px">REGION</th><th style="width:100px">PURPOSE</th><th style="width:70px">QTR</th>
             <th class="r" style="width:46px">DAYS</th>
             <th class="r" style="width:65px">AIRFARE</th><th class="r" style="width:52px">HTL</th>
@@ -629,7 +628,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
         <span class="hint">Estimated · Approved · Actualized · Variance</span>
         <select id="dash-mgr-filter" onchange="buildDashboard()" style="border:1px solid var(--g3);border-radius:8px;padding:5px 10px;font-size:12px;outline:none;font-family:inherit;background:var(--white);">
           <option value="all">All Managers</option>
-          <option value="Dave Champion">Dave Champion</option>
+          <option value="David Champion">David Champion</option>
           <option value="Wayne Lawrence">Wayne Lawrence</option>
           <option value="Rajiv Ranjan">Rajiv Ranjan</option>
           <option value="Maggie Leiker">Maggie Leiker</option>
@@ -1033,7 +1032,7 @@ const DEST_CITIES = {
 };
 
 const MANAGER_TRAVELERS = {
-  'Dave Champion':  ['Wayne Lawrence'],
+  'David Champion':  ['Wayne Lawrence'],
   'Wayne Lawrence': ['Maggie Leiker','Rajiv Ranjan'],
   'Rajiv Ranjan':   ['Arupa Banerjee','Deepak Kumar','Sekar Krishnamurthy','Chandru Natarajan',
     'Gaurav Rawal','Satishkumar Varadarajulu','Diandra Hanna','Idan Bianco','Luisa Guenther',
@@ -1046,7 +1045,7 @@ const MANAGER_TRAVELERS = {
 };
 
 const MANAGER_HIERARCHY = {
-  'Dave Champion':  ['Wayne Lawrence'],
+  'David Champion':  ['Wayne Lawrence'],
   'Wayne Lawrence': ['Rajiv Ranjan', 'Maggie Leiker'],
   'Rajiv Ranjan':   [],
   'Maggie Leiker':  [],
@@ -1306,13 +1305,14 @@ function fmtPct(n){ if(!n||isNaN(n)) return '—'; return (n>0?'+':'')+n.toFixed
 function escH(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
 function isActive(r){ return r.status==='Proposed'||r.status==='Approved'; }
 function calcP(r){
-  // Actualize rows: always return the locked planned budget — never recalculate
   if(r.status === 'Actualize'){
     return num(r.planned_budget) || 0;
   }
   const est = getEstDay(r.region);
-  const daily = est ? est.hi * Math.max(num(r.days), 1) : 0;
-  return num(r.airfare) + daily + num(r.visa) + num(r.reg);
+  const days = Math.max(num(r.days), 1);
+  const daily = est ? est.dailyHi * days : 0;
+  const airfare = est ? est.airfareHi : 0;
+  return airfare + daily + num(r.visa) + num(r.reg);
 }
 function parseAmt(s){ return parseFloat(String(s||'').replace(/[$,\s]/g,''))||0; }
 function getFYRates(fy){ return getYD(fy).rates || DEFAULT_RATES; }
@@ -1321,9 +1321,9 @@ function getEstDay(region){
   const r = rates.find(rt=>rt.region===region);
   if(!r) return null;
   const taxi = TAXI_PER_DAY[region]||30;
-  const lo = r.hotel[0] + r.food[0] + taxi;
-  const hi = r.hotel[1] + r.food[1] + taxi;
-  return {lo, hi, mid: Math.round((lo+hi)/2)};
+  const dailyHi = r.hotel[1] + r.food[1] + taxi;
+  const airfareHi = r.airfare_eco[1];
+  return {dailyHi, airfareHi};
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1429,8 +1429,7 @@ function renderTable(){
       <td>${mkSelP(PURPOSES,r.purpose,'purpose',r.id,'min-width:140px')}</td>
       <td>${mkSelP(QUARTERS,r.quarter,'quarter',r.id)}</td>
       <td>${mkIn(r.days,'number','days',r.id,'50px')}</td>
-      <td class="td-calc" style="color:var(--purple);font-weight:700;white-space:nowrap;">${(()=>{const e=r.region?getEstDay(r.region):null;const d=num(r.days)||1;return e?fmt(e.hi*d):'—';})()}</td>
-      <td>${mkIn(r.airfare,'number','airfare',r.id,'68px')}</td>
+      <td class="td-calc" style="color:var(--purple);font-weight:700;white-space:nowrap;">${(()=>{const e=r.region?getEstDay(r.region):null;const d=num(r.days)||1;return e?fmt(e.airfareHi + e.dailyHi*d):'—';})()}</td>
       <td>${mkIn(r.visa,'number','visa',r.id,'48px')}</td>
       <td>${mkIn(r.reg,'number','reg',r.id,'62px')}</td>
       <td class="col-pl" style="${active?'':'opacity:.38'}">${fmt(planned)}</td>
@@ -1442,15 +1441,15 @@ function renderTable(){
   const vPA = awarded-tP;
   tfoot.innerHTML = `
   <tr>
-    <td colspan="10" class="lbl">ACTIVE TOTALS (${rows.filter(isActive).length} trips)</td>
-    <td style="text-align:right">${fmt(tAir)}</td>
+    <td colspan="9" class="lbl">ACTIVE TOTALS (${rows.filter(isActive).length} trips)</td>
+    <td></td>
     <td style="text-align:right">${fmt(tVis)}</td>
     <td style="text-align:right">${fmt(tRg)}</td>
     <td class="tf-pl">${fmt(tP)}</td>
     <td></td>
   </tr>
   <tr>
-    <td colspan="13" class="lbl" style="padding-left:10px">
+    <td colspan="12" class="lbl" style="padding-left:10px">
       Awarded: <strong>${fmt(awarded)}</strong> &nbsp;·&nbsp;
       Cancelled: <strong style="color:var(--red)">${fmt(tCx)}</strong> &nbsp;·&nbsp;
       Deferred: <strong style="color:var(--amber)">${fmt(tDf)}</strong> &nbsp;·&nbsp;
@@ -1695,7 +1694,7 @@ function buildDashboard(){
     ...(tActualized?[{lbl:'Total Actualized', val:tActualized, cls:'wf-ac'}]:[]),
     ...(tCx?[{lbl:'Cancelled', val:tCx, cls:'wf-cx'}]:[]),
     ...(tDf?[{lbl:'Deferred',  val:tDf, cls:'wf-df'}]:[]),
-    {lbl:'Remaining',         val:Math.max(tRemaining,0), cls:'wf-aw'},
+    {lbl:'Remaining',         val:Math.max(tRemaining,0), cls:'wf-rem'},
   ];
   document.getElementById('dash-wf').innerHTML = wfRows.map(w=>`
     <div class="wf-row">
@@ -2306,8 +2305,7 @@ function renderActualizeTable(){
       <td>${mkMasterSel(r.owner,'owner',r.id,'owners')}</td>
       <td>${mkMasterSel(r.manager,'manager',r.id,'managers')}</td>
       <td>${mkTravelerSel(r.traveler,r.id,r.manager)}</td>
-      <td>${mkCountrySel(r.country,r.id,r.region)}</td>
-      <td>${mkSelP(REGIONS,r.region,'region',r.id)}</td>
+      <td style="padding:4px 8px;font-weight:600;color:var(--g5);">${r.region||'—'}</td>
       <td>${mkSelP(PURPOSES,r.purpose,'purpose',r.id,'min-width:140px')}</td>
       <td>${mkSelP(QUARTERS,r.quarter,'quarter',r.id)}</td>
       <td style="text-align:center;color:var(--g5);font-weight:600;">${num(r.days)||'—'}</td>
@@ -2325,7 +2323,7 @@ function renderActualizeTable(){
 
   const vAP = tA - tP;
   tfoot.innerHTML=`<tr>
-    <td colspan="10" class="lbl">ACTUALIZE TOTALS (${rows.length} trips)</td>
+    <td colspan="9" class="lbl">ACTUALIZE TOTALS (${rows.length} trips)</td>
     <td style="text-align:right;background:#f0faf5">${fmt(tAir)}</td>
     <td style="text-align:right;background:#f0faf5"></td>
     <td style="text-align:right;background:#f0faf5">${fmt(tTx)}</td>
