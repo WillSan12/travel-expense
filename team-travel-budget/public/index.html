@@ -1320,7 +1320,7 @@ function getEstDay(region){
   if(!r) return null;
   const taxi = TAXI_PER_DAY[region]||30;
   const dailyHi = r.hotel[1] + r.food[1] + taxi;
-  const airfareHi = r.airfare_biz[1];  // business class high
+  const airfareHi = r.airfare_eco[1];  // economy class high
   return {dailyHi, airfareHi};
 }
 
