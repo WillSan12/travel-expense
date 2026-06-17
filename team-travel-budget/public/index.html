@@ -1144,11 +1144,11 @@ Object.entries(GEO_DATA).forEach(([region,countries])=>{
 });
 
 const DEFAULT_RATES = [
-  {region:'North America',flag:'🌎',airfare_eco:[350,650],airfare_biz:[900,1800],hotel:[150,250],food:[80,120],visa:0},
-  {region:'Europe',       flag:'🌍',airfare_eco:[700,1300],airfare_biz:[2200,4500],hotel:[180,280],food:[90,140],visa:0},
-  {region:'Asia',         flag:'🌏',airfare_eco:[900,1600],airfare_biz:[3500,7000],hotel:[120,220],food:[60,100],visa:25},
-  {region:'Africa',       flag:'🌍',airfare_eco:[1100,1800],airfare_biz:[3800,7500],hotel:[100,190],food:[50,90],visa:50},
-  {region:'Latin America',flag:'🌎',airfare_eco:[600,1100],airfare_biz:[1800,4000],hotel:[100,180],food:[55,90],visa:0},
+  {region:'North America',flag:'🌎',airfare_eco:[400,800],   airfare_biz:[2000,4000],  hotel:[150,250],food:[80,120], visa:0},
+  {region:'Europe',       flag:'🌍',airfare_eco:[900,1800],  airfare_biz:[4000,8000],  hotel:[180,280],food:[90,140], visa:0},
+  {region:'Asia',         flag:'🌏',airfare_eco:[2000,3500], airfare_biz:[8000,12000], hotel:[120,220],food:[60,100], visa:25},
+  {region:'Africa',       flag:'🌍',airfare_eco:[2000,3200], airfare_biz:[7000,12000], hotel:[100,190],food:[50,90],  visa:50},
+  {region:'Latin America',flag:'🌎',airfare_eco:[800,1500],  airfare_biz:[3500,7000],  hotel:[100,180],food:[55,90],  visa:0},
 ];
 
 // ═══════════════════════════════════════════════════════
@@ -1320,7 +1320,7 @@ function getEstDay(region){
   if(!r) return null;
   const taxi = TAXI_PER_DAY[region]||30;
   const dailyHi = r.hotel[1] + r.food[1] + taxi;
-  const airfareHi = r.airfare_eco[1];
+  const airfareHi = r.airfare_biz[1];  // business class high
   return {dailyHi, airfareHi};
 }
 

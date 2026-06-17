@@ -158,43 +158,43 @@
         "ts": 1781646212000,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted: Wayne Lawrence → "
+        "detail": "Deleted: Wayne Lawrence \u2192 "
       },
       {
         "ts": 1781646209123,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted: William Sanchez → "
+        "detail": "Deleted: William Sanchez \u2192 "
       },
       {
         "ts": 1781646206492,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted: Rajiv Ranjan → New York"
+        "detail": "Deleted: Rajiv Ranjan \u2192 New York"
       },
       {
         "ts": 1781646203957,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted: Wayne Lawrence → "
+        "detail": "Deleted: Wayne Lawrence \u2192 "
       },
       {
         "ts": 1781646201491,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted: Jabbar Ahmad Shaik → "
+        "detail": "Deleted: Jabbar Ahmad Shaik \u2192 "
       },
       {
         "ts": 1781646198943,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted: Chandru Natarajan → "
+        "detail": "Deleted: Chandru Natarajan \u2192 "
       },
       {
         "ts": 1781646194973,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted: Ankita Vijayan → London"
+        "detail": "Deleted: Ankita Vijayan \u2192 London"
       },
       {
         "ts": 1781646186811,
@@ -308,7 +308,7 @@
         "ts": 1781239342134,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $10,000 → $100,000"
+        "detail": "Awarded budget changed: $10,000 \u2192 $100,000"
       },
       {
         "ts": 1781237887341,
@@ -704,7 +704,7 @@
         "ts": 1781223055668,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted: William Sanchez → "
+        "detail": "Deleted: William Sanchez \u2192 "
       },
       {
         "ts": 1781223047793,
@@ -788,25 +788,25 @@
         "ts": 1781221993759,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $1,000 → $10,000"
+        "detail": "Awarded budget changed: $1,000 \u2192 $10,000"
       },
       {
         "ts": 1781221989410,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $10 → $1,000"
+        "detail": "Awarded budget changed: $10 \u2192 $1,000"
       },
       {
         "ts": 1781221984446,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $100,000 → $10"
+        "detail": "Awarded budget changed: $100,000 \u2192 $10"
       },
       {
         "ts": 1781221978761,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $120,000 → $100,000"
+        "detail": "Awarded budget changed: $120,000 \u2192 $100,000"
       },
       {
         "ts": 1781220595549,
@@ -848,7 +848,7 @@
         "ts": 1781220519852,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted:  → "
+        "detail": "Deleted:  \u2192 "
       },
       {
         "ts": 1781220381537,
@@ -1082,13 +1082,13 @@
         "ts": 1781219837777,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $100,000 → $120,000"
+        "detail": "Awarded budget changed: $100,000 \u2192 $120,000"
       },
       {
         "ts": 1781211889368,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $800,000 → $100,000"
+        "detail": "Awarded budget changed: $800,000 \u2192 $100,000"
       },
       {
         "ts": 1781211750478,
@@ -1316,19 +1316,19 @@
         "ts": 1781206777651,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted:  → "
+        "detail": "Deleted:  \u2192 "
       },
       {
         "ts": 1781206776602,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted: Ankita Vijayan → "
+        "detail": "Deleted: Ankita Vijayan \u2192 "
       },
       {
         "ts": 1781195645479,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $200,000 → $800,000"
+        "detail": "Awarded budget changed: $200,000 \u2192 $800,000"
       },
       {
         "ts": 1781192717198,
@@ -1340,25 +1340,25 @@
         "ts": 1781118027719,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $200,000 → $200,000"
+        "detail": "Awarded budget changed: $200,000 \u2192 $200,000"
       },
       {
         "ts": 1781118018718,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $200,000 → $200,000"
+        "detail": "Awarded budget changed: $200,000 \u2192 $200,000"
       },
       {
         "ts": 1781118016094,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $200,000 → $200,000"
+        "detail": "Awarded budget changed: $200,000 \u2192 $200,000"
       },
       {
         "ts": 1781118005461,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $0 → $200,000"
+        "detail": "Awarded budget changed: $0 \u2192 $200,000"
       },
       {
         "ts": 1781117691523,
@@ -1580,13 +1580,13 @@
         "ts": 1781116477620,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $100 → $0"
+        "detail": "Awarded budget changed: $100 \u2192 $0"
       },
       {
         "ts": 1781116461946,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $400,000 → $100"
+        "detail": "Awarded budget changed: $400,000 \u2192 $100"
       },
       {
         "ts": 1781116427211,
@@ -1598,19 +1598,19 @@
         "ts": 1781020453187,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted:  → "
+        "detail": "Deleted:  \u2192 "
       },
       {
         "ts": 1781020183484,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted:  → "
+        "detail": "Deleted:  \u2192 "
       },
       {
         "ts": 1781020179552,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted:  → "
+        "detail": "Deleted:  \u2192 "
       },
       {
         "ts": 1781020170900,
@@ -1628,7 +1628,7 @@
         "ts": 1781020166083,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted:  → "
+        "detail": "Deleted:  \u2192 "
       },
       {
         "ts": 1781017370377,
@@ -1694,7 +1694,7 @@
         "ts": 1781014011080,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $40,000 → $400,000"
+        "detail": "Awarded budget changed: $40,000 \u2192 $400,000"
       },
       {
         "ts": 1781013955075,
@@ -2082,7 +2082,7 @@
             "owner": "PD2",
             "manager": "Rajiv Ranjan",
             "traveler": "Aditya Dave",
-            "city": "São Paulo",
+            "city": "S\u00e3o Paulo",
             "country": "Brazil",
             "region": "Latin America",
             "purpose": "Sales",
