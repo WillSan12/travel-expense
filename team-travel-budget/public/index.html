@@ -652,15 +652,8 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
   </div>
   <div class="card">
     <div class="card-head">
-      <h2>By IMT</h2>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <span class="hint">Estimated · Approved · Actualized · Variance</span>
-        <select id="dash-mgr-filter" onchange="buildDashboard()" style="border:1px solid var(--g3);border-radius:8px;padding:5px 10px;font-size:12px;outline:none;font-family:inherit;background:var(--white);">
-          <option value="all">All Managers</option>
-          <option value="David Champion">David Champion</option>
-          <option value="Wayne Lawrence">Wayne Lawrence</option>
-        </select>
-      </div>
+      <h2>By Manager</h2>
+      <span class="hint">Org hierarchy — Estimated · Approved · Actualized · Variance</span>
     </div>
     <div class="card-body" style="overflow-x:auto">
       <table style="width:100%;border-collapse:collapse;font-size:12px;">
@@ -1810,59 +1803,58 @@ function buildDashboard(){
       <span><span style="display:inline-block;width:10px;height:10px;background:#93c5fd;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Remaining (Est)</span>
     </div>`;
 
-  // ── By Manager ─────────────────────────────────────────
-  const mgrFilter = document.getElementById('dash-mgr-filter')?.value || 'all';
-  const byMgr = {};
-  allRows.forEach(r => {
-    const m = r.manager || '(unassigned)';
-    if(!byMgr[m]) byMgr[m] = {est:0, appr:0, actual:0, trips:0};
-    if(isActive(r))            { byMgr[m].est   += calcP(r); byMgr[m].trips++; }
-    if(r.status==='Approved')    byMgr[m].appr   += calcP(r);
-    if(r.status==='Actualize') { byMgr[m].actual += num(r.actual); byMgr[m].trips++; }
-  });
-
-  let mgrEntries;
-  if(mgrFilter === 'all'){
-    mgrEntries = Object.entries(byMgr).sort((a,b) => b[1].est - a[1].est);
-  } else {
-    const scope = [mgrFilter, ...getAllSubordinates(mgrFilter)];
-    // Aggregate all subordinates into one total row for the selected manager
-    const total = {est:0, appr:0, actual:0, trips:0};
-    scope.forEach(m => {
-      if(byMgr[m]){ total.est+=byMgr[m].est; total.appr+=byMgr[m].appr; total.actual+=byMgr[m].actual; total.trips+=byMgr[m].trips; }
+  // ── By Manager (Org Hierarchy) ─────────────────────────
+  // Aggregate spend per person/group
+  function aggSpend(filterFn){
+    const r = {est:0, appr:0, actual:0, trips:0};
+    allRows.forEach(row => {
+      if(!filterFn(row)) return;
+      if(isActive(row))             { r.est    += calcP(row); r.trips++; }
+      if(row.status==='Approved')     r.appr   += calcP(row);
+      if(row.status==='Actualize')  { r.actual += num(row.actual); r.trips++; }
     });
-    // Also show individual breakdown rows for each manager in scope
-    mgrEntries = [[`${mgrFilter} (Total)`, total],
-      ...scope.filter(m => byMgr[m]).map(m => [m, byMgr[m]])
-    ];
+    return r;
   }
 
-  const mgrMax = Math.max(...mgrEntries.map(([,v])=>v.est), 1);
-  document.getElementById('dash-mgr').innerHTML = mgrEntries.length === 0
-    ? `<tr><td colspan="7" style="padding:20px;text-align:center;color:var(--g4)">No data yet — add trips in Budget Entry</td></tr>`
-    : mgrEntries.map(([m,v],i) => {
-      const vari = v.actual > 0 ? v.actual - v.appr : null;
-      const variColor = vari===null?'var(--g4)':vari<=0?'var(--green)':'var(--red)';
-      const isTotal = m.includes('(Total)');
-      const estPct  = aw > 0 ? Math.round(v.est/aw*100)    : 0;
-      const apprPct = aw > 0 ? Math.round(v.appr/aw*100)   : 0;
-      const actPct  = aw > 0 ? Math.round(v.actual/aw*100) : 0;
-      return `<tr style="background:${isTotal?'var(--blue-lt)':i%2?'var(--g1)':'#fff'};border-bottom:1px solid var(--g2)${isTotal?';border-top:2px solid var(--blue)':''}">
-        <td style="padding:9px 12px;font-weight:${isTotal?'800':'700'};color:${isTotal?'var(--blue)':'inherit'}">${m}</td>
-        <td style="padding:9px 12px;text-align:center;color:var(--g4)">${v.trips}</td>
-        <td style="padding:9px 12px;">
-          <div class="bw">
-            <div class="bf" style="background:#0071e3;height:12px;width:${v.est/mgrMax*100}%"></div>
-            ${v.appr?`<div class="bf2" style="background:#1a7f4e;height:8px;width:${v.appr/mgrMax*100}%"></div>`:''}
-            ${v.actual?`<div class="bf2" style="background:#5b21b6;height:5px;width:${v.actual/mgrMax*100}%"></div>`:''}
-          </div>
-        </td>
-        <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--blue)">${fmt(v.est)} <span style="font-size:10px;font-weight:600;color:#3b82f6;background:#e0ecff;border-radius:8px;padding:1px 5px;">${estPct}%</span></td>
-        <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--green-dk)">${v.appr?`${fmt(v.appr)} <span style="font-size:10px;font-weight:600;color:var(--green-dk);background:var(--green-lt);border-radius:8px;padding:1px 5px;">${apprPct}%</span>`:'—'}</td>
-        <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--green)">${v.actual?`${fmt(v.actual)} <span style="font-size:10px;font-weight:600;color:#5b21b6;background:#ede9fe;border-radius:8px;padding:1px 5px;">${actPct}%</span>`:'—'}</td>
-        <td style="padding:9px 12px;text-align:right;font-weight:700;color:${variColor}">${vari!==null?fmtD(vari):'—'}</td>
-      </tr>`;
-    }).join('');
+  // Build hierarchy rows:
+  // Dave Champion (Total) = everyone under Dave
+  // ↳ Wayne Lawrence (Total) = Wayne as traveler + everyone under Wayne's managers
+  //   ↳ Rajiv Ranjan team = rows where manager = Rajiv
+  //   ↳ Maggie Leiker team = rows where manager = Maggie
+  const hierarchy = [
+    { label:'Dave Champion (Total)',    indent:0, bold:true,  highlight:true,  data: aggSpend(r => r.imt==='David Champion' || r.manager==='Rajiv Ranjan' || r.manager==='Maggie Leiker') },
+    { label:'↳ Wayne Lawrence (Total)',  indent:1, bold:true,  highlight:false, data: aggSpend(r => r.imt==='David Champion') },
+    { label:'   ↳ Wayne as Traveler',    indent:2, bold:false, highlight:false, data: aggSpend(r => r.traveler==='Wayne Lawrence') },
+    { label:'   ↳ Rajiv Ranjan\'s Team', indent:2, bold:false, highlight:false, data: aggSpend(r => r.manager==='Rajiv Ranjan') },
+    { label:'   ↳ Maggie Leiker\'s Team',indent:2, bold:false, highlight:false, data: aggSpend(r => r.manager==='Maggie Leiker') },
+  ];
+
+  const mgrMax = Math.max(...hierarchy.map(h=>h.data.est), 1);
+  document.getElementById('dash-mgr').innerHTML = hierarchy.map((h,i) => {
+    const v = h.data;
+    const vari = v.actual > 0 ? v.actual - v.appr : null;
+    const variColor = vari===null?'var(--g4)':vari<=0?'var(--green)':'var(--red)';
+    const estPct  = aw > 0 ? Math.round(v.est/aw*100)    : 0;
+    const apprPct = aw > 0 ? Math.round(v.appr/aw*100)   : 0;
+    const actPct  = aw > 0 ? Math.round(v.actual/aw*100) : 0;
+    const bg = h.highlight ? 'var(--blue-lt)' : i%2 ? 'var(--g1)' : '#fff';
+    const border = h.highlight ? 'border-top:2px solid var(--blue);border-bottom:1px solid var(--g2)' : 'border-bottom:1px solid var(--g2)';
+    return `<tr style="background:${bg};${border}">
+      <td style="padding:9px 12px;padding-left:${12+h.indent*16}px;font-weight:${h.bold?'800':'500'};color:${h.highlight?'var(--blue)':'inherit'};font-family:monospace;">${h.label}</td>
+      <td style="padding:9px 12px;text-align:center;color:var(--g4)">${v.trips}</td>
+      <td style="padding:9px 12px;">
+        <div class="bw">
+          <div class="bf" style="background:#0071e3;height:12px;width:${v.est/mgrMax*100}%"></div>
+          ${v.appr?`<div class="bf2" style="background:#1a7f4e;height:8px;width:${v.appr/mgrMax*100}%"></div>`:''}
+          ${v.actual?`<div class="bf2" style="background:#5b21b6;height:5px;width:${v.actual/mgrMax*100}%"></div>`:''}
+        </div>
+      </td>
+      <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--blue)">${fmt(v.est)} <span style="font-size:10px;font-weight:600;color:#3b82f6;background:#e0ecff;border-radius:8px;padding:1px 5px;">${estPct}%</span></td>
+      <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--green-dk)">${v.appr?`${fmt(v.appr)} <span style="font-size:10px;font-weight:600;color:var(--green-dk);background:var(--green-lt);border-radius:8px;padding:1px 5px;">${apprPct}%</span>`:'—'}</td>
+      <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--green)">${v.actual?`${fmt(v.actual)} <span style="font-size:10px;font-weight:600;color:#5b21b6;background:#ede9fe;border-radius:8px;padding:1px 5px;">${actPct}%</span>`:'—'}</td>
+      <td style="padding:9px 12px;text-align:right;font-weight:700;color:${variColor}">${vari!==null?fmtD(vari):'—'}</td>
+    </tr>`;
+  }).join('');
 
   // ── Status Breakdown ───────────────────────────────────
   const bySt = {};
