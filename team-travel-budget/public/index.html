@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>IS&T SAP Travel Budget</title>
+<title>IS&T SAP Travel Budget Manager</title>
 <meta name="robots" content="noindex"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -31,7 +31,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-se
 .fy-dropdown{display:none;position:absolute;top:calc(100% + 6px);left:0;background:var(--white);
   border-radius:var(--r);box-shadow:0 8px 30px rgba(0,0,0,.2);min-width:160px;overflow:hidden;z-index:300;}
 .fy-dropdown.open{display:block;}
-.fy-option{padding:9px 14px;font-size:13px;cursor:pointer;border-bottom:1px solid var(--g2);}
+.fy-option{padding:9px 14px;font-size:13px;cursor:pointer;border-bottom:1px solid var(--g2);color:var(--navy);}
 .fy-option:last-child{border:none;}
 .fy-option:hover{background:var(--blue-lt);}
 .fy-option.active{font-weight:700;color:var(--blue);}
@@ -472,7 +472,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <h1><svg style="width:16px;height:16px;fill:#fff;vertical-align:middle;margin-right:6px;flex-shrink:0;" viewBox="0 0 814 1000"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 790.7 0 663 0 541.8c0-207.5 135.4-317.3 270-317.3 70.1 0 128.4 46.4 172.5 46.4 42.8 0 109.6-49 192.5-49 31 0 108.2 2.6 168.6 79.4zm-130.5-254c-31.4 37.4-80.3 67-128.1 67-5.2 0-10.3-.3-15.5-1-1.9-54.7 19.4-109.5 51.9-147 35.2-40.8 90.1-71.2 138.1-73.2 1.3 6.4 2.6 12.2 2.6 22.5 0 53.4-21 108.8-49 131.7z"/></svg>IS&T SAP Travel Budget</h1>
+  <h1><svg style="width:16px;height:16px;fill:#fff;vertical-align:middle;margin-right:6px;flex-shrink:0;" viewBox="0 0 814 1000"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 790.7 0 663 0 541.8c0-207.5 135.4-317.3 270-317.3 70.1 0 128.4 46.4 172.5 46.4 42.8 0 109.6-49 192.5-49 31 0 108.2 2.6 168.6 79.4zm-130.5-254c-31.4 37.4-80.3 67-128.1 67-5.2 0-10.3-.3-15.5-1-1.9-54.7 19.4-109.5 51.9-147 35.2-40.8 90.1-71.2 138.1-73.2 1.3 6.4 2.6 12.2 2.6 22.5 0 53.4-21 108.8-49 131.7z"/></svg>IS&T SAP Travel Budget Manager</h1>
   <div class="fy-selector" id="fy-selector">
     <button class="fy-btn" onclick="toggleFYDropdown()">
       <span id="fy-active-label">FY2026</span> ▾
@@ -590,6 +590,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
             <th>IS&amp;T UNIT</th><th>IMT</th><th>MANAGER</th><th>TRAVELER</th>
             <th>REGION</th><th>PURPOSE</th><th style="width:70px">QTR</th>
             <th class="r" style="width:52px">DAYS</th>
+            <th style="width:180px">TRIP DESCRIPTION</th>
             <th class="r" style="width:60px">VISA</th>
             <th class="r" style="width:75px">REG FEES</th>
             <th class="r" style="width:95px;background:#1a3050!important;">EST TOTAL</th>
@@ -914,7 +915,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
     <div class="card">
       <div class="card-head">
         <h2>Team Members</h2>
-        <span class="hint">Manage who can access the IS&T SAP Travel Budget app</span>
+        <span class="hint">Manage who can access the IS&T SAP Travel Budget Manager app</span>
       </div>
       <div class="card-body">
         <div style="overflow-x:auto" id="users-table-wrap">
@@ -1049,14 +1050,14 @@ const DEST_CITIES = {
 };
 
 const MANAGER_TRAVELERS = {
-  'Rajiv Ranjan': ['Arupa Banerjee','Deepak Kumar','Sekar Krishnamurthy','Chandru Natarajan',
-    'Gaurav Rawal','Satishkumar Varadarajulu','Diandra Hanna','Idan Bianco','Luisa Guenther',
-    'Gayathri Shenoy','Laura Smart','Umanand Jha','David Jackson','Naveen Potluri',
-    'Subhadeep Nandi','Guilherme Cervezao','Satya Chekuri','William Sanchez','Kumar Kuppusamy',
-    'Monika Dabrowski','Vinit Chalana','Satyanarayana Bandaru','Aditya Dave','Kimiko Kuei',
-    'Valemia Njuh','Edgar Gabriel','Kushboo Pidwa','Satheesh Waran','Teeracha Sinthavanarong'],
-  'Maggie Leiker': ['Ankita Vijayan','Isha Gummid','Frank Firicano','Vipul Singh',
-    'Martha Hubney','Shravan Koneru','Cebastian Chinolla','Jabbar Ahmad Shaik','Sagata Das'],
+  'Rajiv Ranjan': ['Aditya Dave','Chandru Natarajan','David Jackson','Diandra Hanna',
+    'Edgar Gabriel','Gayathri Shenoy','Guilherme Cervezao','Idan Bianco','Kimiko Kuei',
+    'Kumar Kuppusamy','Kushboo Pidwa','Laura Smart','Luisa Guenther','Monika Dabrowski',
+    'Naveen Potluri','Rajiv Ranjan','Sagata Das','Satheesh Waran','Satya Chekuri',
+    'Satyanarayana Bandaru','Subhadeep Nandi','Teeracha Sinthavanarong','Umanand Jha',
+    'Valemia Njuh','Vinit Chalana','William Sanchez'],
+  'Maggie Leiker': ['Ankita Vijayan','Cebastian Chinolla','Frank Firicano','Isha Gummid',
+    'Jabbar Ahmad Shaik','Maggie Leiker','Martha Hubney','Sagata Das','Shravan Koneru','Vipul Singh'],
 };
 
 const IMT_TRAVELERS = {
@@ -1359,11 +1360,29 @@ function getEstDayLocal(region){
 // ═══════════════════════════════════════════════════════
 // FY SELECTOR
 // ═══════════════════════════════════════════════════════
+function deleteFY(fy){
+  if(!confirm(`Permanently delete ${fy} and all its trips? This cannot be undone.`)) return;
+  delete db.years[fy];
+  if(db.activeFY === fy){
+    const remaining = Object.keys(db.years).filter(k => !db.years[k].archived);
+    db.activeFY = remaining[remaining.length - 1] || '';
+  }
+  logAudit('delete', fy, `Deleted fiscal year ${fy}`);
+  saveDB();
+  document.getElementById('fy-dropdown').classList.remove('open');
+  renderFYSelector();
+  renderTable();
+  buildRateGuide();
+}
+
 function renderFYSelector(){
   const fys = Object.keys(db.years).filter(k => !db.years[k].archived).sort();
   document.getElementById('fy-active-label').textContent = db.activeFY;
   document.getElementById('fy-dropdown').innerHTML = fys.map(fy=>`
-    <div class="fy-option${fy===db.activeFY?' active':''}" onclick="switchFY('${fy}')">${fy}</div>`).join('');
+    <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--g2);">
+      <div class="fy-option${fy===db.activeFY?' active':''}" onclick="switchFY('${fy}')" style="flex:1;border:none;">${fy}</div>
+      ${fys.length > 1 ? `<button onclick="deleteFY('${fy}')" title="Delete ${fy}" style="background:none;border:none;cursor:pointer;color:var(--g4);font-size:13px;padding:0 10px;line-height:1;" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--g4)'">✕</button>` : ''}
+    </div>`).join('');
   document.getElementById('budget-fy-label').textContent = db.activeFY;
   document.getElementById('rates-fy-label').textContent  = db.activeFY;
 }
@@ -1416,8 +1435,8 @@ function mkIMTSel(val,rid){
 }
 function mkTravelerSel(val,rid,manager,imt){
   let opts;
-  if(imt && IMT_TRAVELERS[imt])          opts = IMT_TRAVELERS[imt];
-  else if(manager && MANAGER_TRAVELERS[manager]) opts = MANAGER_TRAVELERS[manager];
+  if(manager && MANAGER_TRAVELERS[manager])  opts = MANAGER_TRAVELERS[manager];
+  else if(imt && IMT_TRAVELERS[imt])         opts = IMT_TRAVELERS[imt];
   else opts = db.travelers||[];
   return `<select onchange="upd(${rid},'traveler',this.value)"><option value="">—</option>`
     +opts.map(o=>`<option value="${escH(o)}"${o===val?' selected':''}>${escH(o)}</option>`).join('')+'</select>';
@@ -1472,12 +1491,13 @@ function renderTable(){
       <td class="td-st">${stSel(r.status,r.id)}</td>
       <td ${reqSel(r.owner)}>${mkMasterSel(r.owner,'owner',r.id,'owners')}</td>
       <td ${reqSel(r.imt)}>${mkIMTSel(r.imt,r.id)}</td>
-      <td ${reqSel(r.manager)}>${mkMasterSel(r.manager,'manager',r.id,'managers')}</td>
+      <td ${r.traveler==='Wayne Lawrence' ? '' : reqSel(r.manager)}>${mkMasterSel(r.manager,'manager',r.id,'managers')}</td>
       <td ${reqSel(r.traveler)}>${mkTravelerSel(r.traveler,r.id,r.manager,r.imt)}</td>
       <td ${reqSel(r.region)}>${mkSelP(REGIONS,r.region,'region',r.id)}</td>
       <td ${reqSel(r.purpose)}>${mkSelP(PURPOSES,r.purpose,'purpose',r.id,'min-width:140px')}</td>
       <td ${reqSel(r.quarter)}>${mkSelP(QUARTERS,r.quarter,'quarter',r.id)}</td>
       <td ${req(num(r.days))}>${mkIn(r.days,'number','days',r.id,'50px')}</td>
+      <td><input type="text" value="${escH(r.description||'')}" placeholder="Add description…" style="width:100%;border:1px solid var(--g3);border-radius:5px;padding:3px 6px;font-size:12px;font-family:inherit;background:var(--white);color:var(--navy);outline:none;" onchange="upd(${r.id},'description',this.value)"/></td>
       <td>${mkIn(r.visa,'number','visa',r.id,'48px')}</td>
       <td>${mkIn(r.reg,'number','reg',r.id,'62px')}</td>
       <td class="col-pl" style="${active?'':'opacity:.38'};${isLocalTrip(r)?'border-left:3px solid var(--amber);':''}">${fmt(planned)}</td>
@@ -1489,7 +1509,7 @@ function renderTable(){
   const vPA = awarded-tP;
   tfoot.innerHTML = `
   <tr>
-    <td colspan="10" class="lbl">ACTIVE TOTALS (${rows.filter(isActive).length} trips)</td>
+    <td colspan="11" class="lbl">ACTIVE TOTALS (${rows.filter(isActive).length} trips)</td>
     <td></td>
     <td style="text-align:right">${fmt(tVis)}</td>
     <td style="text-align:right">${fmt(tRg)}</td>
@@ -1497,7 +1517,7 @@ function renderTable(){
     <td></td>
   </tr>
   <tr>
-    <td colspan="13" class="lbl" style="padding-left:10px">
+    <td colspan="14" class="lbl" style="padding-left:10px">
       Awarded: <strong>${fmt(awarded)}</strong> &nbsp;·&nbsp;
       Cancelled: <strong style="color:var(--red)">${fmt(tCx)}</strong> &nbsp;·&nbsp;
       Deferred: <strong style="color:var(--amber)">${fmt(tDf)}</strong> &nbsp;·&nbsp;
@@ -1557,7 +1577,7 @@ function validateRow(r){
   const missing = [];
   if(!r.owner)    missing.push('IS&T Unit');
   if(!r.imt)      missing.push('IMT');
-  if(!r.manager)  missing.push('Manager');
+  if(!r.manager && r.traveler !== 'Wayne Lawrence') missing.push('Manager');
   if(!r.traveler) missing.push('Traveler');
   if(!r.region)   missing.push('Region');
   if(!r.purpose)  missing.push('Purpose');
@@ -1616,7 +1636,7 @@ function addRow(){
   History.push();
   const rows = currentRows();
   const now = Date.now();
-  rows.push({id:++nextId,owner:'',imt:'',manager:'',traveler:'',city:'',country:'',
+  rows.push({id:++nextId,owner:'',imt:'',manager:'',traveler:'',city:'',country:'',description:'',
     region:'',purpose:'',quarter:'',
     depart:'',ret:'',airfare:0,nights:0,hrate:0,visa:0,
     taxi:0,fpd:75,days:0,reg:0,status:'Proposed',actual:0,
@@ -2743,6 +2763,7 @@ function migrateDB(){
       if(!r.modified) r.modified=Date.now();
       if(r.manager===undefined)      r.manager='';
       if(r.imt===undefined)          r.imt='';
+      if(r.description===undefined)  r.description='';
       if(r.htl_actual===undefined)   r.htl_actual=0;
       if(r.food_actual===undefined)  r.food_actual=0;
       if(r.misc===undefined)         r.misc=0;
