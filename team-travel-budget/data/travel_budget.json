@@ -1,9 +1,447 @@
 {
-  "updatedAt": 1781646292678,
+  "updatedAt": 1782175018819,
   "updatedBy": "admin",
   "state": {
     "activeFY": "FY2026",
     "auditLog": [
+      {
+        "ts": 1782175018407,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 320: days changed from \"0\" to \"1\""
+      },
+      {
+        "ts": 1782175016531,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 318: days changed from \"0\" to \"1\""
+      },
+      {
+        "ts": 1782175013633,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 320: region changed from \"\" to \"Africa\""
+      },
+      {
+        "ts": 1782175008256,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 321)"
+      },
+      {
+        "ts": 1782175007156,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 320)"
+      },
+      {
+        "ts": 1782175006126,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 318: region changed from \"\" to \"Asia\""
+      },
+      {
+        "ts": 1782174997290,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 316: region changed from \"Africa\" to \"Latin America\""
+      },
+      {
+        "ts": 1782174986170,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted: Wayne Lawrence → "
+      },
+      {
+        "ts": 1782174983306,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted: William Sanchez → "
+      },
+      {
+        "ts": 1782174980997,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted: Gayathri Shenoy → "
+      },
+      {
+        "ts": 1782174963851,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 313: region changed from \"Latin America\" to \"North America\""
+      },
+      {
+        "ts": 1782174944711,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted:  → "
+      },
+      {
+        "ts": 1782174940253,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted: Ankita Vijayan → "
+      },
+      {
+        "ts": 1782174935573,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted: Wayne Lawrence → "
+      },
+      {
+        "ts": 1782174933157,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted:  → "
+      },
+      {
+        "ts": 1782174930852,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted:  → "
+      },
+      {
+        "ts": 1782174928362,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted:  → "
+      },
+      {
+        "ts": 1782174925595,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted:  → "
+      },
+      {
+        "ts": 1782173885598,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 314: manager changed from \"\" to \"Rajiv Ranjan\""
+      },
+      {
+        "ts": 1782173871463,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: region changed from \"\" to \"North America\""
+      },
+      {
+        "ts": 1782173725255,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 313: manager changed from \"\" to \"Maggie Leiker\""
+      },
+      {
+        "ts": 1782173523357,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: imt changed from \"\" to \"David Champion\""
+      },
+      {
+        "ts": 1782173520424,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: traveler changed from \"\" to \"Wayne Lawrence\""
+      },
+      {
+        "ts": 1782173236585,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 311: manager changed from \"\" to \"Maggie Leiker\""
+      },
+      {
+        "ts": 1782173234754,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 311: imt changed from \"\" to \"David Champion\""
+      },
+      {
+        "ts": 1782173222330,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: manager changed from \"Maggie Leiker\" to \"Wayne Lawrence\""
+      },
+      {
+        "ts": 1782172931766,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: manager changed from \"David Champion\" to \"Maggie Leiker\""
+      },
+      {
+        "ts": 1782172923500,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: imt changed from \"\" to \"David Champion\""
+      },
+      {
+        "ts": 1782171849248,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted: Aditya Dave → "
+      },
+      {
+        "ts": 1782171691613,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted: Wayne Lawrence → "
+      },
+      {
+        "ts": 1782171683957,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: reg changed from \"0\" to \"0\""
+      },
+      {
+        "ts": 1782170556072,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: misc changed from \"5000\" to \"50000\""
+      },
+      {
+        "ts": 1782170407379,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: misc changed from \"500\" to \"5000\""
+      },
+      {
+        "ts": 1782170093609,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 319)"
+      },
+      {
+        "ts": 1782170042566,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 318: days changed from \"1\" to \"0\""
+      },
+      {
+        "ts": 1782170028678,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 318)"
+      },
+      {
+        "ts": 1782169967104,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 310: manager changed from \"\" to \"David Champion\""
+      },
+      {
+        "ts": 1782169856938,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Ankita Vijayan: purpose changed from \"Training\" to \"Conference\""
+      },
+      {
+        "ts": 1782169849342,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"2\" to \"1\""
+      },
+      {
+        "ts": 1782169845226,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"3\" to \"2\""
+      },
+      {
+        "ts": 1782169834919,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: purpose changed from \"Conference\" to \"Local Conference\""
+      },
+      {
+        "ts": 1782169665888,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Gayathri Shenoy: quarter changed from \"\" to \"Q1\""
+      },
+      {
+        "ts": 1782137842684,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: region changed from \"Asia\" to \"North America\""
+      },
+      {
+        "ts": 1781810104603,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 317: region changed from \"\" to \"Europe\""
+      },
+      {
+        "ts": 1781810096077,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 317)"
+      },
+      {
+        "ts": 1781810091142,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 316: region changed from \"\" to \"Africa\""
+      },
+      {
+        "ts": 1781810086703,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 316)"
+      },
+      {
+        "ts": 1781809992127,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 315: region changed from \"\" to \"Europe\""
+      },
+      {
+        "ts": 1781809989436,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 314: region changed from \"\" to \"Asia\""
+      },
+      {
+        "ts": 1781809987139,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 315)"
+      },
+      {
+        "ts": 1781809986269,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 314)"
+      },
+      {
+        "ts": 1781809983101,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 313: region changed from \"\" to \"Latin America\""
+      },
+      {
+        "ts": 1781809980360,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 313)"
+      },
+      {
+        "ts": 1781809961395,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 312: region changed from \"\" to \"Latin America\""
+      },
+      {
+        "ts": 1781809959447,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 311: region changed from \"\" to \"Asia\""
+      },
+      {
+        "ts": 1781809957697,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 310: region changed from \"\" to \"Europe\""
+      },
+      {
+        "ts": 1781809955023,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 312)"
+      },
+      {
+        "ts": 1781809952926,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 311)"
+      },
+      {
+        "ts": 1781809952666,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 310)"
+      },
+      {
+        "ts": 1781738075949,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"2\" to \"3\""
+      },
+      {
+        "ts": 1781737793414,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Gayathri Shenoy: traveler changed from \"Luisa Guenther\" to \"Gayathri Shenoy\""
+      },
+      {
+        "ts": 1781737789852,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Luisa Guenther: traveler changed from \"Idan Bianco\" to \"Luisa Guenther\""
+      },
+      {
+        "ts": 1781737526789,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: visa changed from \"24\" to \"0\""
+      },
+      {
+        "ts": 1781737524695,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: visa changed from \"25\" to \"24\""
+      },
+      {
+        "ts": 1781737413305,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Idan Bianco: days changed from \"3\" to \"2\""
+      },
+      {
+        "ts": 1781737412710,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Idan Bianco: days changed from \"4\" to \"3\""
+      },
+      {
+        "ts": 1781737408553,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Idan Bianco: region changed from \"Latin America\" to \"North America\""
+      },
+      {
+        "ts": 1781737405959,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Idan Bianco: region changed from \"North America\" to \"Latin America\""
+      },
+      {
+        "ts": 1781737403078,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Ankita Vijayan: region changed from \"North America\" to \"Europe\""
+      },
+      {
+        "ts": 1781737278805,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"3\" to \"2\""
+      },
+      {
+        "ts": 1781737276509,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"4\" to \"3\""
+      },
+      {
+        "ts": 1781737275796,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"5\" to \"4\""
+      },
+      {
+        "ts": 1781737269847,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: region changed from \"North America\" to \"Asia\""
+      },
       {
         "ts": 1781646292270,
         "action": "update",
@@ -158,43 +596,43 @@
         "ts": 1781646212000,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted: Wayne Lawrence \u2192 "
+        "detail": "Deleted: Wayne Lawrence → "
       },
       {
         "ts": 1781646209123,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted: William Sanchez \u2192 "
+        "detail": "Deleted: William Sanchez → "
       },
       {
         "ts": 1781646206492,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted: Rajiv Ranjan \u2192 New York"
+        "detail": "Deleted: Rajiv Ranjan → New York"
       },
       {
         "ts": 1781646203957,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted: Wayne Lawrence \u2192 "
+        "detail": "Deleted: Wayne Lawrence → "
       },
       {
         "ts": 1781646201491,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted: Jabbar Ahmad Shaik \u2192 "
+        "detail": "Deleted: Jabbar Ahmad Shaik → "
       },
       {
         "ts": 1781646198943,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted: Chandru Natarajan \u2192 "
+        "detail": "Deleted: Chandru Natarajan → "
       },
       {
         "ts": 1781646194973,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted: Ankita Vijayan \u2192 London"
+        "detail": "Deleted: Ankita Vijayan → London"
       },
       {
         "ts": 1781646186811,
@@ -308,7 +746,7 @@
         "ts": 1781239342134,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $10,000 \u2192 $100,000"
+        "detail": "Awarded budget changed: $10,000 → $100,000"
       },
       {
         "ts": 1781237887341,
@@ -704,7 +1142,7 @@
         "ts": 1781223055668,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted: William Sanchez \u2192 "
+        "detail": "Deleted: William Sanchez → "
       },
       {
         "ts": 1781223047793,
@@ -788,25 +1226,25 @@
         "ts": 1781221993759,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $1,000 \u2192 $10,000"
+        "detail": "Awarded budget changed: $1,000 → $10,000"
       },
       {
         "ts": 1781221989410,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $10 \u2192 $1,000"
+        "detail": "Awarded budget changed: $10 → $1,000"
       },
       {
         "ts": 1781221984446,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $100,000 \u2192 $10"
+        "detail": "Awarded budget changed: $100,000 → $10"
       },
       {
         "ts": 1781221978761,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $120,000 \u2192 $100,000"
+        "detail": "Awarded budget changed: $120,000 → $100,000"
       },
       {
         "ts": 1781220595549,
@@ -848,7 +1286,7 @@
         "ts": 1781220519852,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted:  \u2192 "
+        "detail": "Deleted:  → "
       },
       {
         "ts": 1781220381537,
@@ -1082,13 +1520,13 @@
         "ts": 1781219837777,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $100,000 \u2192 $120,000"
+        "detail": "Awarded budget changed: $100,000 → $120,000"
       },
       {
         "ts": 1781211889368,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $800,000 \u2192 $100,000"
+        "detail": "Awarded budget changed: $800,000 → $100,000"
       },
       {
         "ts": 1781211750478,
@@ -1316,19 +1754,19 @@
         "ts": 1781206777651,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted:  \u2192 "
+        "detail": "Deleted:  → "
       },
       {
         "ts": 1781206776602,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted: Ankita Vijayan \u2192 "
+        "detail": "Deleted: Ankita Vijayan → "
       },
       {
         "ts": 1781195645479,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $200,000 \u2192 $800,000"
+        "detail": "Awarded budget changed: $200,000 → $800,000"
       },
       {
         "ts": 1781192717198,
@@ -1340,25 +1778,25 @@
         "ts": 1781118027719,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $200,000 \u2192 $200,000"
+        "detail": "Awarded budget changed: $200,000 → $200,000"
       },
       {
         "ts": 1781118018718,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $200,000 \u2192 $200,000"
+        "detail": "Awarded budget changed: $200,000 → $200,000"
       },
       {
         "ts": 1781118016094,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $200,000 \u2192 $200,000"
+        "detail": "Awarded budget changed: $200,000 → $200,000"
       },
       {
         "ts": 1781118005461,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $0 \u2192 $200,000"
+        "detail": "Awarded budget changed: $0 → $200,000"
       },
       {
         "ts": 1781117691523,
@@ -1580,13 +2018,13 @@
         "ts": 1781116477620,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $100 \u2192 $0"
+        "detail": "Awarded budget changed: $100 → $0"
       },
       {
         "ts": 1781116461946,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $400,000 \u2192 $100"
+        "detail": "Awarded budget changed: $400,000 → $100"
       },
       {
         "ts": 1781116427211,
@@ -1598,19 +2036,19 @@
         "ts": 1781020453187,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted:  \u2192 "
+        "detail": "Deleted:  → "
       },
       {
         "ts": 1781020183484,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted:  \u2192 "
+        "detail": "Deleted:  → "
       },
       {
         "ts": 1781020179552,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted:  \u2192 "
+        "detail": "Deleted:  → "
       },
       {
         "ts": 1781020170900,
@@ -1628,7 +2066,7 @@
         "ts": 1781020166083,
         "action": "delete",
         "fy": "FY2026",
-        "detail": "Deleted:  \u2192 "
+        "detail": "Deleted:  → "
       },
       {
         "ts": 1781017370377,
@@ -1694,7 +2132,7 @@
         "ts": 1781014011080,
         "action": "update",
         "fy": "FY2026",
-        "detail": "Awarded budget changed: $40,000 \u2192 $400,000"
+        "detail": "Awarded budget changed: $40,000 → $400,000"
       },
       {
         "ts": 1781013955075,
@@ -1777,45 +2215,171 @@
         "awarded": 100000,
         "rows": [
           {
-            "id": 108,
+            "id": 313,
             "owner": "",
-            "manager": "David Champion",
-            "traveler": "Aditya Dave",
+            "manager": "Maggie Leiker",
+            "traveler": "",
             "city": "",
             "country": "",
             "region": "North America",
-            "purpose": "Conference",
-            "quarter": "Q2",
+            "purpose": "",
+            "quarter": "",
             "depart": "",
             "ret": "",
-            "airfare": 500,
-            "nights": "1",
-            "hrate": 200,
+            "airfare": 470,
+            "nights": 0,
+            "hrate": 300,
             "visa": 0,
-            "taxi": 35,
+            "taxi": 50,
+            "fpd": 75,
+            "days": 1,
+            "reg": 0,
+            "status": "Proposed",
+            "actual": 0,
+            "archived": false,
+            "created": 1781809980360,
+            "modified": 1782174963850,
+            "htl_actual": 0,
+            "food_actual": 0,
+            "misc": 0,
+            "planned_budget": null,
+            "direct_mgr": "",
+            "imt": ""
+          },
+          {
+            "id": 316,
+            "owner": "",
+            "manager": "",
+            "traveler": "",
+            "city": "",
+            "country": "",
+            "region": "Latin America",
+            "purpose": "",
+            "quarter": "",
+            "depart": "",
+            "ret": "",
+            "airfare": 2500,
+            "nights": 0,
+            "hrate": 215,
+            "visa": 50,
+            "taxi": 50,
+            "fpd": 75,
+            "days": 1,
+            "reg": 0,
+            "status": "Proposed",
+            "actual": 0,
+            "archived": false,
+            "created": 1781810086703,
+            "modified": 1782174997289,
+            "htl_actual": 0,
+            "food_actual": 0,
+            "misc": 0,
+            "planned_budget": null,
+            "direct_mgr": "",
+            "imt": ""
+          },
+          {
+            "id": 317,
+            "owner": "",
+            "manager": "",
+            "traveler": "",
+            "city": "",
+            "country": "",
+            "region": "Europe",
+            "purpose": "",
+            "quarter": "",
+            "depart": "",
+            "ret": "",
+            "airfare": 1350,
+            "nights": 0,
+            "hrate": 230,
+            "visa": 0,
+            "taxi": 30,
+            "fpd": 75,
+            "days": 1,
+            "reg": 0,
+            "status": "Proposed",
+            "actual": 0,
+            "archived": false,
+            "created": 1781810096077,
+            "modified": 1781810104603,
+            "htl_actual": 0,
+            "food_actual": 0,
+            "misc": 0,
+            "planned_budget": null,
+            "direct_mgr": "",
+            "imt": ""
+          },
+          {
+            "id": 318,
+            "owner": "",
+            "manager": "",
+            "traveler": "",
+            "city": "",
+            "country": "",
+            "region": "Asia",
+            "purpose": "",
+            "quarter": "",
+            "depart": "",
+            "ret": "",
+            "airfare": 6250,
+            "nights": 0,
+            "hrate": 195,
+            "visa": 50,
+            "taxi": 50,
             "fpd": 75,
             "days": "1",
             "reg": 0,
-            "status": "Actualize",
-            "actual": "1500",
+            "status": "Proposed",
+            "actual": 0,
             "archived": false,
-            "created": 1781117665540,
-            "modified": 1781237512557,
-            "htl_actual": "1",
-            "food_actual": "1",
-            "misc": "1",
-            "planned_budget": null
+            "created": 1782170028678,
+            "modified": 1782175016531,
+            "htl_actual": 0,
+            "food_actual": 0,
+            "misc": 0,
+            "planned_budget": null,
+            "direct_mgr": "",
+            "imt": ""
           },
           {
-            "id": 111,
+            "id": 320,
             "owner": "",
-            "manager": "David Champion",
-            "traveler": "Wayne Lawrence",
+            "imt": "",
+            "manager": "",
+            "traveler": "",
+            "city": "",
+            "country": "",
+            "region": "Africa",
+            "purpose": "",
+            "quarter": "",
+            "depart": "",
+            "ret": "",
+            "airfare": 4550,
+            "nights": 0,
+            "hrate": 180,
+            "visa": 100,
+            "taxi": 50,
+            "fpd": 75,
+            "days": "1",
+            "reg": 0,
+            "status": "Proposed",
+            "actual": 0,
+            "archived": false,
+            "created": 1782175007156,
+            "modified": 1782175018407
+          },
+          {
+            "id": 321,
+            "owner": "",
+            "imt": "",
+            "manager": "",
+            "traveler": "",
             "city": "",
             "country": "",
             "region": "",
             "purpose": "",
-            "quarter": "Q1",
+            "quarter": "",
             "depart": "",
             "ret": "",
             "airfare": 0,
@@ -1824,125 +2388,13 @@
             "visa": 0,
             "taxi": 0,
             "fpd": 75,
-            "days": 1,
-            "reg": 0,
-            "status": "Actualize",
-            "actual": 0,
-            "archived": false,
-            "created": 1781117690547,
-            "modified": 1781220595549,
-            "htl_actual": 0,
-            "food_actual": 0,
-            "misc": 0,
-            "planned_budget": null
-          },
-          {
-            "id": 113,
-            "owner": "",
-            "manager": "Rajiv Ranjan",
-            "traveler": "William Sanchez",
-            "city": "",
-            "country": "",
-            "region": "North America",
-            "purpose": "",
-            "quarter": "Q1",
-            "depart": "",
-            "ret": "",
-            "airfare": "603",
-            "nights": 0,
-            "hrate": 200,
-            "visa": 0,
-            "taxi": 105,
-            "fpd": 75,
-            "days": "7",
-            "reg": 0,
-            "status": "Actualize",
-            "actual": 0,
-            "archived": false,
-            "created": 1781237841443,
-            "modified": 1781237887340,
-            "planned_budget": 2223,
-            "misc": "500",
-            "htl_actual": 0,
-            "food_actual": 0
-          },
-          {
-            "id": 307,
-            "owner": "PD2",
-            "manager": "David Champion",
-            "traveler": "Wayne Lawrence",
-            "city": "",
-            "country": "",
-            "region": "North America",
-            "purpose": "Conference",
-            "quarter": "Q1",
-            "depart": "",
-            "ret": "",
-            "airfare": 500,
-            "nights": 0,
-            "hrate": 200,
-            "visa": 0,
-            "taxi": 35,
-            "fpd": 75,
-            "days": "5",
-            "reg": 0,
-            "status": "Approved",
-            "actual": 0,
-            "archived": false,
-            "created": 1781646216735,
-            "modified": 1781646285681
-          },
-          {
-            "id": 308,
-            "owner": "PD2",
-            "manager": "Maggie Leiker",
-            "traveler": "Ankita Vijayan",
-            "city": "",
-            "country": "",
-            "region": "North America",
-            "purpose": "Training",
-            "quarter": "Q2",
-            "depart": "",
-            "ret": "",
-            "airfare": 500,
-            "nights": 0,
-            "hrate": 200,
-            "visa": 0,
-            "taxi": 35,
-            "fpd": 75,
-            "days": "2",
-            "reg": 0,
-            "status": "Approved",
-            "actual": 0,
-            "archived": false,
-            "created": 1781646234422,
-            "modified": 1781646292270
-          },
-          {
-            "id": 309,
-            "owner": "Payments",
-            "manager": "Rajiv Ranjan",
-            "traveler": "Idan Bianco",
-            "city": "",
-            "country": "",
-            "region": "North America",
-            "purpose": "Training",
-            "quarter": "",
-            "depart": "",
-            "ret": "",
-            "airfare": 500,
-            "nights": 0,
-            "hrate": 200,
-            "visa": 0,
-            "taxi": 35,
-            "fpd": 75,
-            "days": "4",
+            "days": 0,
             "reg": 0,
             "status": "Proposed",
             "actual": 0,
             "archived": false,
-            "created": 1781646249838,
-            "modified": 1781646263489
+            "created": 1782175008256,
+            "modified": 1782175008256
           }
         ],
         "rates": null,
@@ -1985,7 +2437,9 @@
             "htl_actual": 800,
             "food_actual": 320,
             "misc": 50,
-            "planned_budget": 2720
+            "planned_budget": 2720,
+            "direct_mgr": "",
+            "imt": ""
           },
           {
             "id": 302,
@@ -2015,7 +2469,9 @@
             "htl_actual": 1200,
             "food_actual": 600,
             "misc": 100,
-            "planned_budget": 3650
+            "planned_budget": 3650,
+            "direct_mgr": "",
+            "imt": ""
           },
           {
             "id": 303,
@@ -2045,7 +2501,9 @@
             "htl_actual": 1320,
             "food_actual": 480,
             "misc": 200,
-            "planned_budget": 4565
+            "planned_budget": 4565,
+            "direct_mgr": "",
+            "imt": ""
           },
           {
             "id": 304,
@@ -2075,14 +2533,16 @@
             "htl_actual": 0,
             "food_actual": 0,
             "misc": 0,
-            "planned_budget": null
+            "planned_budget": null,
+            "direct_mgr": "",
+            "imt": ""
           },
           {
             "id": 305,
             "owner": "PD2",
             "manager": "Rajiv Ranjan",
             "traveler": "Aditya Dave",
-            "city": "S\u00e3o Paulo",
+            "city": "São Paulo",
             "country": "Brazil",
             "region": "Latin America",
             "purpose": "Sales",
@@ -2105,7 +2565,9 @@
             "htl_actual": 0,
             "food_actual": 0,
             "misc": 0,
-            "planned_budget": null
+            "planned_budget": null,
+            "direct_mgr": "",
+            "imt": ""
           },
           {
             "id": 306,
@@ -2135,7 +2597,9 @@
             "htl_actual": 0,
             "food_actual": 0,
             "misc": 0,
-            "planned_budget": null
+            "planned_budget": null,
+            "direct_mgr": "",
+            "imt": ""
           }
         ],
         "rates": null,
@@ -2183,14 +2647,18 @@
       "William Sanchez"
     ],
     "owners": [
+      "Finance",
+      "Operations",
       "PD2",
       "Payments",
       "Retail"
     ],
     "managers": [
-      "David Champion",
       "Maggie Leiker",
-      "Rajiv Ranjan",
+      "Rajiv Ranjan"
+    ],
+    "imts": [
+      "David Champion",
       "Wayne Lawrence"
     ]
   }
