@@ -1,9 +1,321 @@
 {
-  "updatedAt": 1782331836442,
+  "updatedAt": 1782509693540,
   "updatedBy": "admin",
   "state": {
     "activeFY": "FY2026",
     "auditLog": [
+      {
+        "ts": 1782509693134,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Ankita Vijayan: taxi changed from \"50\" to \"100\""
+      },
+      {
+        "ts": 1782509688370,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Ankita Vijayan: hrate changed from \"300\" to \"400\""
+      },
+      {
+        "ts": 1782509116226,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Ankita Vijayan: status changed from \"Proposed\" to \"Actualize\""
+      },
+      {
+        "ts": 1782509099368,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Ankita Vijayan: status changed from \"Actualize\" to \"Proposed\""
+      },
+      {
+        "ts": 1782509060370,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Ankita Vijayan: status changed from \"Proposed\" to \"Actualize\""
+      },
+      {
+        "ts": 1782509054170,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Ankita Vijayan: days changed from \"\" to \"2\""
+      },
+      {
+        "ts": 1782509051883,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Ankita Vijayan: quarter changed from \"\" to \"Q3\""
+      },
+      {
+        "ts": 1782509049998,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Ankita Vijayan: purpose changed from \"\" to \"Conference\""
+      },
+      {
+        "ts": 1782509047781,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Ankita Vijayan: traveler changed from \"\" to \"Ankita Vijayan\""
+      },
+      {
+        "ts": 1782509045927,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 303: description changed from \"\" to \"test\""
+      },
+      {
+        "ts": 1782509040147,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 303: owner changed from \"\" to \"Finance\""
+      },
+      {
+        "ts": 1782509020469,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Cebastian Chinolla: fpd changed from \"0\" to \"200\""
+      },
+      {
+        "ts": 1782509015387,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Cebastian Chinolla: taxi changed from \"0\" to \"400\""
+      },
+      {
+        "ts": 1782509010553,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Cebastian Chinolla: hrate changed from \"0\" to \"1677\""
+      },
+      {
+        "ts": 1782509006728,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Maggie Leiker: misc changed from \"1046.49\" to \"\""
+      },
+      {
+        "ts": 1782509000142,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: misc changed from \"1928.85\" to \"\""
+      },
+      {
+        "ts": 1782508997991,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Cebastian Chinolla: misc changed from \"1516.44\" to \"\""
+      },
+      {
+        "ts": 1782508988537,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Cebastian Chinolla: airfare changed from \"0\" to \"356\""
+      },
+      {
+        "ts": 1782508410957,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 303: days changed from \"5\" to \"\""
+      },
+      {
+        "ts": 1782508400969,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 303: days changed from \"1\" to \"5\""
+      },
+      {
+        "ts": 1782508397069,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 303: days changed from \"0\" to \"1\""
+      },
+      {
+        "ts": 1782508393415,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 303: region changed from \"\" to \"North America\""
+      },
+      {
+        "ts": 1782505957447,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Cebastian Chinolla: traveler changed from \"Rajiv Ranjan\" to \"Cebastian Chinolla\""
+      },
+      {
+        "ts": 1782505954081,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Rajiv Ranjan: purpose changed from \"Local Conference\" to \"Conference\""
+      },
+      {
+        "ts": 1782505950940,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Rajiv Ranjan: purpose changed from \"Conference\" to \"Local Conference\""
+      },
+      {
+        "ts": 1782505851397,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 303: imt changed from \"David Champion\" to \"Wayne Lawrence\""
+      },
+      {
+        "ts": 1782505279655,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Removed from owners master list: Payments"
+      },
+      {
+        "ts": 1782505275072,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Removed from owners master list: PD2"
+      },
+      {
+        "ts": 1782504709491,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: fpd changed from \"0\" to \"536\""
+      },
+      {
+        "ts": 1782504705136,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: taxi changed from \"0\" to \"3400\""
+      },
+      {
+        "ts": 1782504699937,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: hrate changed from \"4\" to \"600\""
+      },
+      {
+        "ts": 1782504696370,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: airfare changed from \"469\" to \"4\""
+      },
+      {
+        "ts": 1782504694703,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: hrate changed from \"0\" to \"4\""
+      },
+      {
+        "ts": 1782504691687,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: airfare changed from \"0\" to \"469\""
+      },
+      {
+        "ts": 1782413676195,
+        "action": "update",
+        "fy": "FY2027",
+        "detail": "Awarded budget changed: $0 → $0"
+      },
+      {
+        "ts": 1782413449358,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "William Sanchez: status changed from \"Proposed\" to \"Approved\""
+      },
+      {
+        "ts": 1782413322351,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: status changed from \"Proposed\" to \"Actualize\""
+      },
+      {
+        "ts": 1782413241054,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: misc changed from \"2264.21\" to \"\""
+      },
+      {
+        "ts": 1782413106030,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 303: manager changed from \"\" to \"Maggie Leiker\""
+      },
+      {
+        "ts": 1782413104095,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 303: imt changed from \"\" to \"David Champion\""
+      },
+      {
+        "ts": 1782413098387,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 303)"
+      },
+      {
+        "ts": 1782413004218,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: region changed from \"Latin America\" to \"North America\""
+      },
+      {
+        "ts": 1782413001104,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"1\" to \"5\""
+      },
+      {
+        "ts": 1782412710770,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: region changed from \"Asia\" to \"Latin America\""
+      },
+      {
+        "ts": 1782412697271,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: region changed from \"North America\" to \"Asia\""
+      },
+      {
+        "ts": 1782412687904,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: region changed from \"Europe\" to \"North America\""
+      },
+      {
+        "ts": 1782412682338,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"5\" to \"1\""
+      },
+      {
+        "ts": 1782412665875,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"3\" to \"5\""
+      },
+      {
+        "ts": 1782412663327,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"3\" to \"5\""
+      },
+      {
+        "ts": 1782412655959,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"5\" to \"3\""
+      },
+      {
+        "ts": 1782412651277,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"5\" to \"3\""
+      },
+      {
+        "ts": 1782412626881,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Maggie Leiker: description changed from \"Austin Trip June 2026\" to \"Austin Trip June 2026 \""
+      },
       {
         "ts": 1782257321618,
         "action": "update",
@@ -65,23 +377,23 @@
             "region": "North America",
             "purpose": "Conference",
             "quarter": "Q3",
-            "days": 5,
-            "airfare": 0,
+            "days": "5",
+            "airfare": "4",
             "nights": 0,
-            "hrate": 0,
+            "hrate": "600",
             "visa": 0,
-            "taxi": 0,
-            "fpd": 0,
+            "taxi": "3400",
+            "fpd": "536",
             "reg": 0,
             "description": "IS&T SAP Leadership Meeting",
             "status": "Actualize",
             "actual": 0,
             "archived": false,
             "created": 1782254289660,
-            "modified": 1782254289660,
+            "modified": 1782504709491,
             "htl_actual": 0,
             "food_actual": 0,
-            "misc": 2264.21,
+            "misc": "",
             "planned_budget": 2491
           },
           {
@@ -103,15 +415,15 @@
             "taxi": 0,
             "fpd": 0,
             "reg": 0,
-            "description": "Austin Trip June 2026",
+            "description": "Austin Trip June 2026 ",
             "status": "Actualize",
             "actual": 0,
             "archived": false,
             "created": 1782254289660,
-            "modified": 1782254289660,
+            "modified": 1782509006728,
             "htl_actual": 0,
             "food_actual": 0,
-            "misc": 1046.49,
+            "misc": "",
             "planned_budget": 1151
           },
           {
@@ -138,10 +450,10 @@
             "actual": 0,
             "archived": false,
             "created": 1782254289660,
-            "modified": 1782254289660,
+            "modified": 1782509000142,
             "htl_actual": 0,
             "food_actual": 0,
-            "misc": 1928.85,
+            "misc": "",
             "planned_budget": 2122
           },
           {
@@ -149,29 +461,29 @@
             "owner": "Retail",
             "imt": "David Champion",
             "manager": "Maggie Leiker",
-            "traveler": "Rajiv Ranjan",
+            "traveler": "Cebastian Chinolla",
             "city": "Austin",
             "country": "USA",
             "region": "North America",
             "purpose": "Conference",
             "quarter": "Q3",
             "days": 5,
-            "airfare": 0,
+            "airfare": "356",
             "nights": 0,
-            "hrate": 0,
+            "hrate": "1677",
             "visa": 0,
-            "taxi": 0,
-            "fpd": 0,
+            "taxi": "400",
+            "fpd": "200",
             "reg": 0,
             "description": "Austin Trip June 2026",
             "status": "Actualize",
             "actual": 0,
             "archived": false,
             "created": 1782254289660,
-            "modified": 1782257321618,
+            "modified": 1782509020469,
             "htl_actual": 0,
             "food_actual": 0,
-            "misc": 1516.44,
+            "misc": "",
             "planned_budget": 1668
           },
           {
@@ -185,7 +497,7 @@
             "region": "Asia",
             "purpose": "Conference",
             "quarter": "Q4",
-            "days": 5,
+            "days": "5",
             "airfare": 0,
             "nights": 0,
             "hrate": 0,
@@ -198,7 +510,7 @@
             "actual": 0,
             "archived": false,
             "created": 1782254289660,
-            "modified": 1782254289660,
+            "modified": 1782412663327,
             "htl_actual": 0,
             "food_actual": 0,
             "misc": 0,
@@ -228,7 +540,7 @@
             "actual": 0,
             "archived": false,
             "created": 1782254289660,
-            "modified": 1782254289660,
+            "modified": 1782505954081,
             "htl_actual": 0,
             "food_actual": 0,
             "misc": 0,
@@ -344,11 +656,11 @@
             "fpd": 0,
             "reg": 0,
             "description": "New Hire Interviews (Cork)",
-            "status": "Proposed",
+            "status": "Approved",
             "actual": 0,
             "archived": false,
             "created": 1782254289660,
-            "modified": 1782254289660,
+            "modified": 1782413449358,
             "htl_actual": 0,
             "food_actual": 0,
             "misc": 0,
@@ -360,29 +672,61 @@
             "imt": "David Champion",
             "manager": "",
             "traveler": "Wayne Lawrence",
-            "city": "Cork",
-            "country": "Ireland",
-            "region": "Europe",
+            "city": "",
+            "country": "",
+            "region": "North America",
             "purpose": "Conference",
             "quarter": "Q4",
-            "days": 5,
-            "airfare": 0,
+            "days": "5",
+            "airfare": 470,
             "nights": 0,
-            "hrate": 0,
-            "visa": 0,
-            "taxi": 0,
-            "fpd": 0,
+            "hrate": 300,
+            "visa": 50,
+            "taxi": 250,
+            "fpd": 75,
             "reg": 0,
             "description": "New Hire Interviews and Meet Retail Team (Cork)",
-            "status": "Proposed",
+            "status": "Actualize",
             "actual": 0,
             "archived": false,
             "created": 1782254289660,
-            "modified": 1782254289660,
+            "modified": 1782413322351,
             "htl_actual": 0,
             "food_actual": 0,
             "misc": 0,
-            "planned_budget": null
+            "planned_budget": 2845
+          },
+          {
+            "id": 303,
+            "owner": "Finance",
+            "imt": "Wayne Lawrence",
+            "manager": "Maggie Leiker",
+            "traveler": "Ankita Vijayan",
+            "city": "",
+            "country": "",
+            "description": "test",
+            "region": "North America",
+            "purpose": "Conference",
+            "quarter": "Q3",
+            "depart": "",
+            "ret": "",
+            "airfare": 470,
+            "nights": 0,
+            "hrate": "400",
+            "visa": 0,
+            "taxi": "100",
+            "fpd": 75,
+            "days": "2",
+            "reg": 0,
+            "status": "Actualize",
+            "actual": 0,
+            "archived": false,
+            "created": 1782413098387,
+            "modified": 1782509693134,
+            "htl_actual": 0,
+            "food_actual": 0,
+            "misc": 0,
+            "planned_budget": 1500
           }
         ],
         "rates": null,
@@ -506,8 +850,6 @@
     "owners": [
       "Finance",
       "Operations",
-      "PD2",
-      "Payments",
       "Retail"
     ],
     "managers": [

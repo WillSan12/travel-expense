@@ -148,9 +148,25 @@ tbody td{padding:4px 5px;vertical-align:middle;}
 tbody td input,tbody td select:not(.status-sel){width:100%;border:1px solid var(--g3);
   border-radius:5px;padding:3px 5px;font-size:12px;background:var(--white);color:var(--navy);
   outline:none;font-family:inherit;transition:border-color .12s;min-width:0;box-sizing:border-box;}
-tbody td select:not(.status-sel){min-width:0;}
+tbody td select:not(.status-sel){min-width:0;max-width:100%;text-overflow:ellipsis;}
 tbody td input:focus,tbody td select:not(.status-sel):focus{border-color:var(--blue);background:var(--blue-lt);}
 tbody td input[type=number]{text-align:right;}
+/* Column min-widths so names don't get crushed */
+#budget-tbody td:nth-child(3){min-width:90px;}   /* IS&T Unit */
+#budget-tbody td:nth-child(4){min-width:150px;}  /* Trip Description */
+#budget-tbody td:nth-child(5){min-width:140px;}  /* IMT */
+#budget-tbody td:nth-child(6){min-width:130px;}  /* Manager */
+#budget-tbody td:nth-child(7){min-width:155px;}  /* Traveler */
+#budget-tbody td:nth-child(8){min-width:130px;}  /* Region */
+#budget-tbody td:nth-child(9){min-width:140px;}  /* Purpose */
+#budget-tbody td:nth-child(10){min-width:80px;}  /* QTR */
+/* Actualize tab column min-widths */
+#actualize-tbody td:nth-child(3){min-width:90px;}   /* IS&T Unit */
+#actualize-tbody td:nth-child(4){min-width:160px;}  /* Trip Description */
+#actualize-tbody td:nth-child(5){min-width:140px;}  /* Manager */
+#actualize-tbody td:nth-child(6){min-width:155px;}  /* Traveler */
+#actualize-tbody td:nth-child(7){min-width:130px;}  /* Region */
+#actualize-tbody td:nth-child(8){min-width:140px;}  /* Purpose */
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0;}
 input[type=number]{-moz-appearance:textfield;}
@@ -200,12 +216,16 @@ tfoot td.lbl{color:var(--g4);font-weight:400;}
 /* DASHBOARD */
 .kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:11px;margin-bottom:16px;}
 .kpi{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);padding:14px 16px;
-  position:relative;overflow:hidden;}
+  position:relative;overflow:hidden;cursor:default;}
 .kpi::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;}
 .kpi-aw::after{background:#a1a1a6;} .kpi-pl::after{background:#3b82f6;}
 .kpi-ac::after{background:var(--green);} .kpi-rm::after{background:#f59e0b;}
 .kpi-vr::after{background:var(--purple);}
-.kpi-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--g4);margin-bottom:4px;}
+/* Hover tooltip */
+.dash-tip{position:fixed;z-index:9999;background:#1d1d1f;color:#f5f5f7;font-size:11px;line-height:1.5;
+  padding:8px 12px;border-radius:8px;pointer-events:none;max-width:240px;white-space:pre-line;
+  box-shadow:0 4px 16px rgba(0,0,0,.22);opacity:0;transition:opacity .15s;}
+.dash-tip.show{opacity:1;}
 .kpi-val{font-size:20px;font-weight:700;line-height:1.2;}
 .kpi-sub{font-size:11px;color:var(--g4);margin-top:2px;}
 .kpi-tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;margin-top:3px;}
@@ -587,10 +607,9 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
           <thead><tr>
             <th style="width:28px">#</th>
             <th style="width:95px">STATUS</th>
-            <th>IS&amp;T UNIT</th><th>IMT</th><th>MANAGER</th><th>TRAVELER</th>
-            <th>REGION</th><th>PURPOSE</th><th style="width:70px">QTR</th>
+            <th>IS&amp;T UNIT</th><th style="width:180px">TRIP DESCRIPTION</th><th>IMT</th><th>MANAGER</th><th>TRAVELER</th>
+            <th>REGION</th><th>PURPOSE</th><th style="width:80px">QTR</th>
             <th class="r" style="width:52px">DAYS</th>
-            <th style="width:180px">TRIP DESCRIPTION</th>
             <th class="r" style="width:60px">VISA</th>
             <th class="r" style="width:75px">REG FEES</th>
             <th class="r" style="width:95px;background:#1a3050!important;">EST TOTAL</th>
@@ -621,7 +640,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
           <thead><tr>
             <th style="width:28px">#</th>
             <th style="width:95px">STATUS</th>
-            <th style="width:72px">IS&amp;T UNIT</th><th style="width:140px">IMT</th><th style="width:140px">MANAGER</th><th style="width:155px">TRAVELER</th>
+            <th style="width:72px">IS&amp;T UNIT</th><th style="width:160px">TRIP DESCRIPTION</th><th style="width:140px">MANAGER</th><th style="width:155px">TRAVELER</th>
             <th style="width:135px">REGION</th><th style="width:100px">PURPOSE</th><th style="width:70px">QTR</th>
             <th class="r" style="width:46px">DAYS</th>
             <th class="r" style="width:65px">AIRFARE</th><th class="r" style="width:70px">HOTEL</th>
@@ -642,6 +661,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
 </div>
 
 <!-- PAGE: DASHBOARD -->
+<div id="dash-tip" class="dash-tip"></div>
 <div class="page" id="page-dashboard">
   <div style="display:flex;justify-content:flex-end;margin-bottom:10px;">
     <button class="btn btn-blue" onclick="printDashboard()">⬇ Export PDF</button>
@@ -1343,7 +1363,7 @@ function getEstDay(region){
   if(!r) return null;
   const taxi = TAXI_PER_DAY[region]||50;
   const hotelAvg   = Math.round((r.hotel[0] + r.hotel[1]) / 2);
-  const airfareAvg = Math.round((r.airfare_eco[0] + r.airfare_eco[1]) / 2);
+  const airfareAvg = r.airfare_eco[1];
   const dailyHi = hotelAvg + r.food[1] + taxi;
   return {dailyHi, airfareHi: airfareAvg};
 }
@@ -1475,9 +1495,10 @@ function renderTable(){
   let tP=0,tA=0,tCx=0,tDf=0,tAir=0,tVis=0,tRg=0;
 
   tbody.innerHTML = rows.map((r,i)=>{
-    const planned=calcP(r), actual=num(r.actual), active=isActive(r);
+    const planned=calcP(r), actual=r.status==='Actualize'?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc):num(r.actual), active=isActive(r);
     const vari = (actual>0&&active)?actual-planned:null;
     if(active){ tP+=planned; tAir+=num(r.airfare); tVis+=num(r.visa); tRg+=num(r.reg); }
+    if(r.status==='Actualize'){ tP+=planned; tVis+=num(r.visa); tRg+=num(r.reg); }
     if(actual>0&&active) tA+=actual;
     if(r.status==='Cancelled') tCx+=planned;
     if(r.status==='Deferred')  tDf+=planned;
@@ -1490,6 +1511,7 @@ function renderTable(){
       <td style="text-align:center;color:var(--g4);font-size:11px">${i+1}</td>
       <td class="td-st">${stSel(r.status,r.id)}</td>
       <td ${reqSel(r.owner)}>${mkMasterSel(r.owner,'owner',r.id,'owners')}</td>
+      <td><input type="text" value="${escH(r.description||'')}" placeholder="Add description…" style="width:100%;border:1px solid var(--g3);border-radius:5px;padding:3px 6px;font-size:12px;font-family:inherit;background:var(--white);color:var(--navy);outline:none;" onchange="upd(${r.id},'description',this.value)"/></td>
       <td ${reqSel(r.imt)}>${mkIMTSel(r.imt,r.id)}</td>
       <td ${r.traveler==='Wayne Lawrence' ? '' : reqSel(r.manager)}>${mkMasterSel(r.manager,'manager',r.id,'managers')}</td>
       <td ${reqSel(r.traveler)}>${mkTravelerSel(r.traveler,r.id,r.manager,r.imt)}</td>
@@ -1497,10 +1519,9 @@ function renderTable(){
       <td ${reqSel(r.purpose)}>${mkSelP(PURPOSES,r.purpose,'purpose',r.id,'min-width:140px')}</td>
       <td ${reqSel(r.quarter)}>${mkSelP(QUARTERS,r.quarter,'quarter',r.id)}</td>
       <td ${req(num(r.days))}>${mkIn(r.days,'number','days',r.id,'50px')}</td>
-      <td><input type="text" value="${escH(r.description||'')}" placeholder="Add description…" style="width:100%;border:1px solid var(--g3);border-radius:5px;padding:3px 6px;font-size:12px;font-family:inherit;background:var(--white);color:var(--navy);outline:none;" onchange="upd(${r.id},'description',this.value)"/></td>
       <td>${mkIn(r.visa,'number','visa',r.id,'48px')}</td>
       <td>${mkIn(r.reg,'number','reg',r.id,'62px')}</td>
-      <td class="col-pl" style="${active?'':'opacity:.38'};${isLocalTrip(r)?'border-left:3px solid var(--amber);':''}">${fmt(planned)}</td>
+      <td class="col-pl" style="${(active||r.status==='Actualize')?'':'opacity:.38'};${isLocalTrip(r)?'border-left:3px solid var(--amber);':''}">${fmt(planned)}</td>
       ${delCell}
     </tr>`;
   }).join('');
@@ -1509,7 +1530,7 @@ function renderTable(){
   const vPA = awarded-tP;
   tfoot.innerHTML = `
   <tr>
-    <td colspan="11" class="lbl">ACTIVE TOTALS (${rows.filter(isActive).length} trips)</td>
+    <td colspan="11" class="lbl">PLANNED TOTALS (${rows.filter(r=>isActive(r)||r.status==='Actualize').length} trips)</td>
     <td></td>
     <td style="text-align:right">${fmt(tVis)}</td>
     <td style="text-align:right">${fmt(tRg)}</td>
@@ -1547,9 +1568,12 @@ function updateBOV(pl,ac,ex,aw){
   document.getElementById('bov-pl').style.width = Math.min(pl/base*100,100)+'%';
   document.getElementById('bov-ac').style.width = Math.min(ac/base*100,100)+'%';
 
-  // Big percentage
+  const plTip = `Utilization\n= Planned ÷ Awarded\n= ${fmt(pl)} ÷ ${fmt(aw)}\n= ${plPct}%\n\nPlanned: ${fmt(pl)}\nAwarded: ${fmt(aw)}${ac?'\nActual Spent: '+fmt(ac):''}${ex?'\nExcluded (Cancelled/Deferred): '+fmt(ex):''}`;
+  const bovTrack = document.querySelector('#bov-bar .bov-track');
+  if(bovTrack) bovTrack.setAttribute('data-tip', plTip);
   const bigEl = document.getElementById('bov-big-pct');
   if(bigEl){
+    bigEl.setAttribute('data-tip', plTip);
     bigEl.textContent = aw>0 ? plPct+'%' : '—';
     bigEl.className = 'bov-big-pct'+(isOver?' over':isFull?' full':'');
   }
@@ -1757,19 +1781,21 @@ function buildDashboard(){
 
   // ── KPIs ──────────────────────────────────────────────
   const kpis = [
-    {cls:'kpi-aw', lbl:'Awarded Budget',         val:fmt(aw),                         sub:`FY ${db.activeFY}`},
-    {cls:'kpi-pl', lbl:'Total Estimated',        val:fmt(tEstimated),                 sub:`${active.length} active trip${active.length!==1?'s':''}`},
-    {cls:'kpi-ac', lbl:'Total Approved',         val:fmt(tApproved),                  sub:`${approved.length} approved trip${approved.length!==1?'s':''}`},
-    {cls:'kpi-vr', lbl:'Total Actualized',       val:tActualized?fmt(tActualized):'—',sub: actualize.length ? `${actualize.length} actualized` : 'No actuals yet'},
+    {cls:'kpi-aw', lbl:'Awarded Budget',         val:fmt(aw),                         sub:`FY ${db.activeFY}`,                        tip:`Awarded Budget\n= ${fmt(aw)}\n\nTotal budget allocated for ${db.activeFY}`},
+    {cls:'kpi-pl', lbl:'Total Estimated',        val:fmt(tEstimated),                 sub:`${active.length} active trip${active.length!==1?'s':''}`,  tip:`Total Estimated\n= Airfare (high) + (Hotel avg + Food + Taxi) × Days + Reg Fees\n\nSum of all Proposed + Approved trips\n= ${fmt(tEstimated)}`},
+    {cls:'kpi-ac', lbl:'Total Approved',         val:fmt(tApproved),                  sub:`${approved.length} approved trip${approved.length!==1?'s':''}`, tip:`Total Approved\n= Est. cost of all Approved trips\n= ${fmt(tApproved)}`},
+    {cls:'kpi-vr', lbl:'Total Actualized',       val:tActualized?fmt(tActualized):'—',sub: actualize.length ? `${actualize.length} actualized` : 'No actuals yet', tip:`Total Actualized\n= Airfare + Hotel + Taxi + Food + Misc\nfor all Actualize-status trips\n= ${tActualized?fmt(tActualized):'No actuals yet'}`},
     {cls:'kpi-rm', lbl:'Remaining (Actualized)', val:fmt(Math.max(tRemainingActual,0)),
       sub:'Awarded − Actualized',
+      tip:`Remaining (Actualized)\n= Awarded − Actualized\n= ${fmt(aw)} − ${fmt(tActualized)}\n= ${fmt(Math.max(tRemainingActual,0))}`,
       tag: tRemainingActual >= 0 ? {t:'On Track',s:'background:#d1ede0;color:#0f5132'} : {t:'Over Budget',s:'background:#fde8e6;color:#c0392b'}},
     {cls:'kpi-rm', lbl:'Remaining (Estimated)',  val:fmt(Math.max(tRemainingEst,0)),
       sub:'Awarded − (Estimated + Actualized)',
+      tip:`Remaining (Estimated)\n= Awarded − (Estimated + Actualized)\n= ${fmt(aw)} − (${fmt(tEstimated)} + ${fmt(tActualized)})\n= ${fmt(Math.max(tRemainingEst,0))}`,
       tag: tRemainingEst >= 0 ? {t:'On Track',s:'background:#d1ede0;color:#0f5132'} : {t:'Over Budget',s:'background:#fde8e6;color:#c0392b'}},
   ];
   document.getElementById('kpi-grid').innerHTML = kpis.map(k=>`
-    <div class="kpi ${k.cls}">
+    <div class="kpi ${k.cls}" data-tip="${escH(k.tip||'')}">
       <div class="kpi-lbl">${k.lbl}</div>
       <div class="kpi-val">${k.val}</div>
       ${k.tag?`<span class="kpi-tag" style="${k.tag.s}">${k.tag.t}</span>`:''}
@@ -1787,13 +1813,14 @@ function buildDashboard(){
   const apprH   = pct(Math.max(tApproved - tActualized, 0));
   const propH   = pct(Math.max(tProposed, 0));
 
-  function bar(lbl, val, color, segments){
+  function bar(lbl, val, color, segments, tip=''){
     const p = aw > 0 ? Math.round(val/aw*100) : 0;
     const inner = segments
-      ? segments.map(s=>`<div style="width:100%;height:${s.h}%;background:${s.color};transition:height .4s;" title="${s.label}"></div>`).join('')
-      : `<div style="width:100%;height:${pct(val)}%;background:${color};border-radius:8px;" title="${lbl}: ${fmt(val)}"></div>`;
+      ? segments.map(s=>`<div style="width:100%;height:${s.h}%;background:${s.color};transition:height .4s;"></div>`).join('')
+      : `<div style="width:100%;height:${pct(val)}%;background:${color};border-radius:8px;"></div>`;
+    const tipText = tip || `${lbl}\n= ${fmt(val)}\n${p}% of Awarded (${fmt(aw)})`;
     return `
-      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;min-width:70px;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;min-width:70px;" data-tip="${escH(tipText)}">
         <div style="font-size:10px;font-weight:700;color:var(--g5);text-transform:uppercase;letter-spacing:.04em;text-align:center;">${lbl}</div>
         <div style="width:60px;height:200px;background:var(--g2);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;">${inner}</div>
         <div style="font-size:12px;font-weight:800;color:#1d1d1f;">${fmt(val)}</div>
@@ -1803,16 +1830,16 @@ function buildDashboard(){
 
   document.getElementById('dash-wf').innerHTML = `
     <div style="display:flex;gap:6px;align-items:flex-end;padding:0 10px;">
-      ${bar('Awarded', aw, '#1d1d1f')}
-      ${bar('Actualized', tActualized, '#5b21b6')}
-      ${bar('Approved', tApproved, '#1a7f4e')}
-      ${bar('Proposed', tProposed, '#3b82f6')}
+      ${bar('Awarded', aw, '#1d1d1f', null, `Awarded Budget\n= ${fmt(aw)}\nTotal budget for ${db.activeFY}`)}
+      ${bar('Actualized', tActualized, '#5b21b6', null, `Actualized\n= Airfare + Hotel + Taxi + Food + Misc\nfor Actualize-status trips\n= ${fmt(tActualized)}\n${Math.round(tActualized/Math.max(aw,1)*100)}% of Awarded`)}
+      ${bar('Approved', tApproved, '#1a7f4e', null, `Approved\n= Est. cost of all Approved trips\n= ${fmt(tApproved)}\n${Math.round(tApproved/Math.max(aw,1)*100)}% of Awarded`)}
+      ${bar('Proposed', tProposed, '#3b82f6', null, `Proposed\n= Est. cost of all Proposed trips\n= ${fmt(tProposed)}\n${Math.round(tProposed/Math.max(aw,1)*100)}% of Awarded`)}
       ${bar('Remaining (Act)', Math.max(tRemainingActual,0), '#34d399', [
           {h: remActH, color:'#34d399', label:'Remaining (Actualized): '+fmt(Math.max(tRemainingActual,0))}
-        ])}
+        ], `Remaining (Actualized)\n= Awarded − Actualized\n= ${fmt(aw)} − ${fmt(tActualized)}\n= ${fmt(Math.max(tRemainingActual,0))}`)}
       ${bar('Remaining (Est)', Math.max(tRemainingEst,0), '#93c5fd', [
           {h: remEstH, color:'#93c5fd', label:'Remaining (Estimated): '+fmt(Math.max(tRemainingEst,0))}
-        ])}
+        ], `Remaining (Estimated)\n= Awarded − (Estimated + Actualized)\n= ${fmt(aw)} − (${fmt(tEstimated)} + ${fmt(tActualized)})\n= ${fmt(Math.max(tRemainingEst,0))}`)}
     </div>
     <div style="display:flex;gap:16px;flex-wrap:wrap;padding:14px 16px 4px;font-size:11px;">
       <span><span style="display:inline-block;width:10px;height:10px;background:#1d1d1f;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Awarded</span>
@@ -1831,7 +1858,7 @@ function buildDashboard(){
       if(!filterFn(row)) return;
       if(isActive(row))             { r.est    += calcP(row); r.trips++; }
       if(row.status==='Approved')     r.appr   += calcP(row);
-      if(row.status==='Actualize')  { r.actual += num(row.actual); r.trips++; }
+      if(row.status==='Actualize')  { r.actual += num(row.airfare)+num(row.hrate)+num(row.taxi)+num(row.fpd)+num(row.misc); r.trips++; }
     });
     return r;
   }
@@ -1863,16 +1890,16 @@ function buildDashboard(){
       <td style="padding:9px 12px;padding-left:${12+h.indent*16}px;font-weight:${h.bold?'800':'500'};color:${h.highlight?'var(--blue)':'inherit'};font-family:monospace;">${h.label}</td>
       <td style="padding:9px 12px;text-align:center;color:var(--g4)">${v.trips}</td>
       <td style="padding:9px 12px;">
-        <div class="bw">
-          <div class="bf" style="background:#0071e3;height:12px;width:${v.est/mgrMax*100}%"></div>
-          ${v.appr?`<div class="bf2" style="background:#1a7f4e;height:8px;width:${v.appr/mgrMax*100}%"></div>`:''}
-          ${v.actual?`<div class="bf2" style="background:#5b21b6;height:5px;width:${v.actual/mgrMax*100}%"></div>`:''}
+        <div class="bw" data-tip="Estimated: ${fmt(v.est)}\nApproved: ${v.appr?fmt(v.appr):'—'}\nActualized: ${v.actual?fmt(v.actual):'—'}">
+          <div class="bf" style="background:#93c5fd;height:14px;border-radius:4px;width:${v.est/mgrMax*100}%"></div>
+          ${v.appr?`<div class="bf2" style="background:#059669;height:10px;border-radius:4px;width:${v.appr/mgrMax*100}%"></div>`:''}
+          ${v.actual?`<div class="bf2" style="background:#f59e0b;height:6px;border-radius:4px;width:${v.actual/mgrMax*100}%"></div>`:''}
         </div>
       </td>
-      <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--blue)">${fmt(v.est)} <span style="font-size:10px;font-weight:600;color:#3b82f6;background:#e0ecff;border-radius:8px;padding:1px 5px;">${estPct}%</span></td>
-      <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--green-dk)">${v.appr?`${fmt(v.appr)} <span style="font-size:10px;font-weight:600;color:var(--green-dk);background:var(--green-lt);border-radius:8px;padding:1px 5px;">${apprPct}%</span>`:'—'}</td>
-      <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--green)">${v.actual?`${fmt(v.actual)} <span style="font-size:10px;font-weight:600;color:#5b21b6;background:#ede9fe;border-radius:8px;padding:1px 5px;">${actPct}%</span>`:'—'}</td>
-      <td style="padding:9px 12px;text-align:right;font-weight:700;color:${variColor}">${vari!==null?fmtD(vari):'—'}</td>
+      <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--blue)" data-tip="Estimated\n= Est. cost of all active trips\n= ${fmt(v.est)}\n${estPct}% of Awarded (${fmt(aw)})">${fmt(v.est)} <span style="font-size:10px;font-weight:600;color:#3b82f6;background:#e0ecff;border-radius:8px;padding:1px 5px;">${estPct}%</span></td>
+      <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--green-dk)" data-tip="Approved\n= Est. cost of Approved trips\n= ${v.appr?fmt(v.appr):'—'}\n${apprPct}% of Awarded (${fmt(aw)})">${v.appr?`${fmt(v.appr)} <span style="font-size:10px;font-weight:600;color:var(--green-dk);background:var(--green-lt);border-radius:8px;padding:1px 5px;">${apprPct}%</span>`:'—'}</td>
+      <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--green)" data-tip="Actualized\n= Airfare + Hotel + Taxi + Food + Misc\n= ${v.actual?fmt(v.actual):'—'}\n${actPct}% of Awarded (${fmt(aw)})">${v.actual?`${fmt(v.actual)} <span style="font-size:10px;font-weight:600;color:#5b21b6;background:#ede9fe;border-radius:8px;padding:1px 5px;">${actPct}%</span>`:'—'}</td>
+      <td style="padding:9px 12px;text-align:right;font-weight:700;color:${variColor}" data-tip="Variance\n= Actualized − Approved\n= ${v.actual?fmt(v.actual):'—'} − ${v.appr?fmt(v.appr):'—'}\n= ${vari!==null?fmtD(vari):'No actuals yet'}">${vari!==null?fmtD(vari):'—'}</td>
     </tr>`;
   }).join('');
 
@@ -1891,7 +1918,7 @@ function buildDashboard(){
   // ── By Quarter ─────────────────────────────────────────
   const byQ = {}; QUARTERS.forEach(q => byQ[q] = {est:0, actual:0, n:0});
   active.forEach(r   => { if(byQ[r.quarter]){ byQ[r.quarter].est += calcP(r); byQ[r.quarter].n++; }});
-  actualize.forEach(r=> { if(byQ[r.quarter])  byQ[r.quarter].actual += num(r.actual); });
+  actualize.forEach(r=> { if(byQ[r.quarter])  byQ[r.quarter].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc); });
   const qMax = Math.max(...QUARTERS.map(q => byQ[q].est), 1);
   document.getElementById('dash-q').innerHTML = QUARTERS.map(q=>`
     <tr><td class="lbl">${q}</td>
@@ -1906,7 +1933,7 @@ function buildDashboard(){
   // ── By Region ──────────────────────────────────────────
   const byR = {}; REGIONS.forEach(r => byR[r] = {est:0, actual:0, n:0});
   active.forEach(r    => { if(byR[r.region]){ byR[r.region].est += calcP(r); byR[r.region].n++; }});
-  actualize.forEach(r => { if(byR[r.region])  byR[r.region].actual += num(r.actual); });
+  actualize.forEach(r => { if(byR[r.region])  byR[r.region].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc); });
   const rMax = Math.max(...REGIONS.map(r => byR[r].est), 1);
   document.getElementById('dash-r').innerHTML = REGIONS.map(r=>`
     <tr><td class="lbl"><span class="badge ${REGION_BADGE[r]}">${r}</span></td>
@@ -1927,7 +1954,7 @@ function buildDashboard(){
     <tbody>${topRows.map((r,i)=>{
       const est = calcP(r);
       const appr = r.status==='Approved' || r.status==='Actualize' ? est : 0;
-      const act  = num(r.actual);
+      const act  = r.status==='Actualize' ? num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc) : num(r.actual);
       const vari = act > 0 ? act - appr : null;
       return `<tr style="background:${i%2?'var(--g1)':'#fff'}">
         <td style="padding:7px 9px;font-weight:600">${r.traveler||'—'}</td>
@@ -1952,7 +1979,7 @@ function summarizeFY(fy){
   const yd=getYD(fy); if(!yd) return null;
   const rows=yd.rows||[], active=rows.filter(isActive);
   const tP=active.reduce((s,r)=>s+calcP(r),0);
-  const tA=active.filter(r=>num(r.actual)>0).reduce((s,r)=>s+num(r.actual),0);
+  const tA=rows.filter(r=>r.status==='Actualize').reduce((s,r)=>s+num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc),0);
   const aw=yd.awarded||0;
   const byQ={},byR={},byO={},bySt={};
   QUARTERS.forEach(q=>byQ[q]={p:0,a:0,n:0});
@@ -1961,7 +1988,7 @@ function summarizeFY(fy){
   rows.forEach(r=>{
     if(bySt[r.status]){bySt[r.status].n++;bySt[r.status].p+=calcP(r);}
     if(isActive(r)){
-      const p=calcP(r),a=num(r.actual);
+      const p=calcP(r),a=r.status==='Actualize'?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc):num(r.actual);
       if(byQ[r.quarter]){byQ[r.quarter].p+=p;byQ[r.quarter].a+=a;byQ[r.quarter].n++;}
       if(byR[r.region]){byR[r.region].p+=p;byR[r.region].a+=a;byR[r.region].n++;}
       const o=r.owner||'(unassigned)';
@@ -2425,6 +2452,7 @@ function renderActualizeTable(){
       <td style="text-align:center;color:var(--g4);font-size:11px">${i+1}</td>
       <td class="td-st">${stSel(r.status,r.id)}</td>
       <td>${mkMasterSel(r.owner,'owner',r.id,'owners')}</td>
+      <td><input type="text" value="${escH(r.description||'')}" placeholder="—" style="width:100%;border:1px solid var(--g3);border-radius:5px;padding:3px 6px;font-size:12px;font-family:inherit;background:var(--white);color:var(--navy);outline:none;" onchange="upd(${r.id},'description',this.value)"/></td>
       <td>${mkMasterSel(r.manager,'manager',r.id,'managers')}</td>
       <td>${mkTravelerSel(r.traveler,r.id,r.manager)}</td>
       <td style="padding:4px 8px;font-weight:600;color:var(--g5);">${r.region||'—'}</td>
@@ -2460,10 +2488,13 @@ function renderActualizeTable(){
   const aw = getYD().awarded || 0;
   const actPct = aw > 0 ? Math.round(tA/aw*100) : 0;
   const isOver = tA > aw;
+  const actTip = `Actualized\n= Airfare + Hotel + Taxi + Food + Misc\nfor all Actualize-status trips\n\n= ${fmt(tA)} ÷ ${fmt(aw)} Awarded\n= ${actPct}%\n\n${isOver?'▲ Over by '+fmt(tA-aw):'▼ '+fmt(aw-tA)+' remaining'}`;
   const bigEl = document.getElementById('bov-act-pct');
-  if(bigEl){ bigEl.textContent = aw>0 ? actPct+'%' : '—'; bigEl.className = 'bov-big-pct'+(isOver?' over':''); }
+  if(bigEl){ bigEl.textContent = aw>0 ? actPct+'%' : '—'; bigEl.className = 'bov-big-pct'+(isOver?' over':''); bigEl.setAttribute('data-tip', actTip); }
   const fillEl = document.getElementById('bov-act-bar-fill');
   if(fillEl){ fillEl.style.width = Math.min(tA/Math.max(aw,1)*100,100)+'%'; }
+  const actTrack = document.querySelector('#bov-act-bar .bov-track');
+  if(actTrack) actTrack.setAttribute('data-tip', actTip);
   const lblEl = document.getElementById('bov-act-lbl');
   if(lblEl) lblEl.textContent = actPct>=18 ? actPct+'% actualized' : actPct+'%';
   const statsEl = document.getElementById('bov-act-stats');
@@ -2881,7 +2912,7 @@ function exportCSV(){
   const esc=v=>{ const s=String(v==null?'':v); return(s.includes(',')||s.includes('"')||s.includes('\n'))?`"${s.replace(/"/g,'""')}"`:`${s}`; };
   const csv=[hdrs.map(esc).join(','),...rows.map(r=>{
     const hotel=num(r.nights)*num(r.hrate), food=num(r.fpd)*num(r.days);
-    const planned=calcP(r), actual=num(r.actual);
+    const planned=calcP(r), actual=r.status==='Actualize'?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc):num(r.actual);
     const vari=(actual>0&&isActive(r))?actual-planned:'';
     return[r.fy,r.status,r.owner,r.manager||'',r.traveler,r.city,r.country,r.region,r.purpose,
       r.quarter,r.depart,r.ret,r.airfare,r.nights,r.hrate,hotel,r.visa,
@@ -3089,7 +3120,7 @@ function buildRecordsBrowser(){
   dmPage=Math.min(dmPage,pages-1);
   const pageRows=rows.slice(dmPage*DM_PAGE_SIZE,(dmPage+1)*DM_PAGE_SIZE);
   const tP=pageRows.reduce((s,r)=>s+(isActive(r)?calcP(r):0),0);
-  const tA=pageRows.reduce((s,r)=>s+(isActive(r)?num(r.actual):0),0);
+  const tA=pageRows.reduce((s,r)=>s+(isActive(r)?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc):0),0);
 
   function th(lbl,field,extra=''){
     const sorted=dmSort.field===field;
@@ -3100,7 +3131,7 @@ function buildRecordsBrowser(){
   tblEl.innerHTML=`<table class="dm-tbl">
     <thead><tr>${th('FY','_fy')}${th('STATUS','status')}${th('IS&T UNIT','owner')}${th('MANAGER','manager')}${th('TRAVELER','traveler')}${th('CITY','city')}${th('REGION','region')}${th('PURPOSE','purpose')}${th('QTR','quarter')}${th('DEPART','depart')}${th('PLANNED','airfare','r')}${th('ACTUAL','actual','r')}<th>ACTIONS</th></tr></thead>
     <tbody>${pageRows.map(r=>{
-      const planned=isActive(r)?calcP(r):0, actual=num(r.actual);
+      const planned=isActive(r)?calcP(r):0, actual=r.status==='Actualize'?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc):num(r.actual);
       return `<tr>
         <td><span class="badge r-na">${r._fy}</span></td>
         <td><span class="badge st-${r.status}" style="font-size:11px">${r.status}</span></td>
@@ -3392,6 +3423,29 @@ document.addEventListener('keydown', e=>{
   if(mod && !e.shiftKey && e.key==='y'){ e.preventDefault(); History.redo(); }
   if(e.key==='Escape' && pendingDeleteId!==null){ cancelDel(); }
 });
+
+// ── Dashboard hover tooltips ──────────────────────────────
+(function(){
+  const tip = document.getElementById('dash-tip');
+  if(!tip) return;
+  document.addEventListener('mouseover', e=>{
+    const el = e.target.closest('[data-tip]');
+    if(!el){ tip.classList.remove('show'); return; }
+    tip.textContent = el.dataset.tip;
+    tip.classList.add('show');
+  });
+  document.addEventListener('mousemove', e=>{
+    if(!tip.classList.contains('show')) return;
+    const x = e.clientX + 14, y = e.clientY + 14;
+    const tw = tip.offsetWidth, th = tip.offsetHeight;
+    tip.style.left = (x + tw > window.innerWidth  ? e.clientX - tw - 8 : x) + 'px';
+    tip.style.top  = (y + th > window.innerHeight ? e.clientY - th - 8 : y) + 'px';
+  });
+  document.addEventListener('mouseout', e=>{
+    if(!e.target.closest('[data-tip]')) return;
+    tip.classList.remove('show');
+  });
+})();
 </script>
 </body>
 </html>
