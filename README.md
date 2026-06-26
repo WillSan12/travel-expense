@@ -1,6 +1,6 @@
 # Team Travel Budget
 
-A web-based travel expense reporting and budget tracking tool for the Retail PD2 Payments team.
+A web-based travel expense reporting and budget tracking tool for the Apple Retail PD2 Payments team.
 
 ---
 
@@ -18,12 +18,20 @@ A web-based travel expense reporting and budget tracking tool for the Retail PD2
 
 Before getting started, make sure you have the following installed:
 
-- [Node.js](https://nodejs.org) — download the **LTS** version
+- [Node.js](https://nodejs.org) — download the **LTS** version (v18 or higher required)
 - [Git](https://git-scm.com/downloads)
 
-#### START HERE ###
+To verify Node.js is installed, run:
+```
+node -v
+```
+You should see `v18.x.x` or higher.
 
-## Setup Instructions ##
+---
+
+## Setup Instructions
+
+> **Start here if this is your first time running the app.**
 
 **Step 1 — Clone the repo**
 ```
@@ -57,7 +65,7 @@ Go to: `http://localhost:3000`
 
 ## Running the App After Initial Setup
 
-Once the repo is cloned and dependencies are installed, just run the following each time:
+Once the repo is cloned and dependencies are installed, just run these two commands each time:
 
 ```
 cd travel-expense/team-travel-budget
@@ -66,19 +74,36 @@ node server.js
 
 Then open `http://localhost:3000` in your browser.
 
+To stop the server press `Ctrl + C` in the terminal.
+
+---
+
+## Getting the Latest Updates
+
+If someone else has pushed changes and you want to sync your local copy:
+
+```
+cd travel-expense
+git pull origin main
+```
+
+Then restart the server.
+
 ---
 
 ## Features
 
-- Budget Entry — add and track travel requests by traveler, manager, and IS&T unit
-- Dashboard — visual summary of planned vs. actual spend
-- Year Comparison — compare spending across fiscal years
-- Rate Guide — airfare, hotel, and food rate references by region
-- Data Manager — import/export, audit log, and master data management
+- **Budget Entry** — add and track travel requests by traveler, manager, and IS&T unit
+- **Dashboard** — visual summary of planned vs. approved vs. actualized spend with hover tooltips
+- **Actualize** — record actual spend per trip (airfare, hotel, taxi, food, misc)
+- **Year Comparison** — compare spending across fiscal years
+- **Rate Guide** — airfare, hotel, and food rate references by region
+- **Data Manager** — import/export, audit log, and master data management
 
 ---
 
 ## Notes
 
 - Data is saved automatically to the server — no manual save needed
-- To stop the server press `Ctrl + C` in the terminal
+- All budget data is stored in `data/travel_budget.json` and is synced via Git
+- Actualize-status trips remain visible on Budget Entry for accounting purposes
