@@ -1,9 +1,27 @@
 {
-  "updatedAt": 1782788837201,
+  "updatedAt": 1782837783626,
   "updatedBy": "admin",
   "state": {
     "activeFY": "FY2026",
     "auditLog": [
+      {
+        "ts": 1782822884854,
+        "action": "update",
+        "fy": "FY2027",
+        "detail": "Awarded budget changed: $0 \u2192 $0"
+      },
+      {
+        "ts": 1782822879767,
+        "action": "update",
+        "fy": "FY2027",
+        "detail": "Awarded budget changed: $0 \u2192 $0"
+      },
+      {
+        "ts": 1782822305926,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "Added to owners master list: Operations"
+      },
       {
         "ts": 1782788345923,
         "action": "update",
@@ -38,19 +56,22 @@
         "ts": 1782788044642,
         "action": "update",
         "fy": "FY2027",
-        "detail": "Awarded budget changed: $10,000 → $0"
+        "detail": "Awarded budget changed: $10,000 \u2192 $0"
       },
       {
         "ts": 1782788036802,
         "action": "update",
         "fy": "FY2027",
-        "detail": "Awarded budget changed: $0 → $10,000"
+        "detail": "Awarded budget changed: $0 \u2192 $10,000"
       }
     ],
     "owners": [
+      "Operations",
+      "Payments",
       "Retail"
     ],
     "managers": [
+      "David Champion",
       "Maggie Leiker",
       "Rajiv Ranjan",
       "Wayne Lawrence"
@@ -71,8 +92,114 @@
     "years": {
       "FY2026": {
         "awarded": 100000,
-        "rates": null,
-        "ratesSource": "Defaults",
+        "rates": [
+          {
+            "region": "North America",
+            "flag": "\ud83c\udf0e",
+            "airfare_eco": [
+              390,
+              550
+            ],
+            "airfare_biz": [
+              390,
+              550
+            ],
+            "hotel": [
+              220,
+              380
+            ],
+            "food": [
+              125,
+              125
+            ],
+            "visa": 0
+          },
+          {
+            "region": "Europe",
+            "flag": "\ud83c\udf0d",
+            "airfare_eco": [
+              3000,
+              5000
+            ],
+            "airfare_biz": [
+              3000,
+              5000
+            ],
+            "hotel": [
+              220,
+              350
+            ],
+            "food": [
+              125,
+              125
+            ],
+            "visa": 20
+          },
+          {
+            "region": "Asia",
+            "flag": "\ud83c\udf0f",
+            "airfare_eco": [
+              4500,
+              8000
+            ],
+            "airfare_biz": [
+              4500,
+              8000
+            ],
+            "hotel": [
+              130,
+              260
+            ],
+            "food": [
+              125,
+              125
+            ],
+            "visa": 50
+          },
+          {
+            "region": "Africa",
+            "flag": "\ud83c\udf0d",
+            "airfare_eco": [
+              3600,
+              5500
+            ],
+            "airfare_biz": [
+              3600,
+              5500
+            ],
+            "hotel": [
+              120,
+              240
+            ],
+            "food": [
+              125,
+              125
+            ],
+            "visa": 100
+          },
+          {
+            "region": "Latin America",
+            "flag": "\ud83c\udf0e",
+            "airfare_eco": [
+              1500,
+              3500
+            ],
+            "airfare_biz": [
+              1500,
+              3500
+            ],
+            "hotel": [
+              160,
+              270
+            ],
+            "food": [
+              125,
+              125
+            ],
+            "visa": 160
+          }
+        ],
+        "ratesSource": "Manually edited",
         "archived": false,
         "rows": [
           {
@@ -106,7 +233,8 @@
             "ret": "",
             "approved_at": 1782700000000,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 2,
@@ -139,7 +267,8 @@
             "ret": "",
             "approved_at": 1782700000000,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 3,
@@ -172,7 +301,8 @@
             "ret": "",
             "approved_at": 1782700000000,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 4,
@@ -205,7 +335,8 @@
             "ret": "",
             "approved_at": 1782700000000,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 5,
@@ -238,7 +369,8 @@
             "ret": "",
             "approved_at": 1782700000000,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 6,
@@ -271,7 +403,8 @@
             "ret": "",
             "approved_at": 1782700000000,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 7,
@@ -304,7 +437,8 @@
             "ret": "",
             "approved_at": 1782700000000,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 8,
@@ -337,7 +471,8 @@
             "ret": "2026-05-23",
             "approved_at": 1782700000000,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 9,
@@ -370,7 +505,8 @@
             "ret": "2026-06-13",
             "approved_at": 1782700000000,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 10,
@@ -403,7 +539,8 @@
             "ret": "2026-06-20",
             "approved_at": 1782700000000,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 11,
@@ -436,7 +573,8 @@
             "ret": "2026-06-20",
             "approved_at": 1782700000000,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 12,
@@ -469,7 +607,8 @@
             "ret": "2026-06-13",
             "approved_at": null,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 13,
@@ -502,7 +641,8 @@
             "ret": "2026-07-11",
             "approved_at": null,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 14,
@@ -535,7 +675,8 @@
             "ret": "2026-07-11",
             "approved_at": null,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 15,
@@ -568,7 +709,8 @@
             "ret": "2026-09-12",
             "approved_at": null,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 16,
@@ -601,7 +743,8 @@
             "ret": "2026-09-12",
             "approved_at": null,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 17,
@@ -634,7 +777,8 @@
             "ret": "2026-09-12",
             "approved_at": null,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 18,
@@ -667,7 +811,8 @@
             "ret": "2026-08-08",
             "approved_at": null,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 19,
@@ -700,7 +845,8 @@
             "ret": "2026-09-12",
             "approved_at": null,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 20,
@@ -733,7 +879,8 @@
             "ret": "2026-10-10",
             "approved_at": null,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 21,
@@ -766,7 +913,8 @@
             "ret": "2026-11-07",
             "approved_at": null,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 22,
@@ -799,7 +947,8 @@
             "ret": "2026-11-07",
             "approved_at": null,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           }
         ],
         "created": 1782787859597,
@@ -842,7 +991,8 @@
             "ret": "2027-01-16",
             "approved_at": null,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 102,
@@ -875,7 +1025,8 @@
             "ret": "2027-01-16",
             "approved_at": null,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           },
           {
             "id": 103,
@@ -908,12 +1059,62 @@
             "ret": "2027-01-16",
             "approved_at": null,
             "htl_actual": 0,
-            "food_actual": 0
+            "food_actual": 0,
+            "status_reason": ""
           }
         ],
         "created": 1782787859597,
         "modified": 1782787859597
       }
+    },
+    "managerTravelers": {
+      "Wayne Lawrence": [
+        "Maggie Leiker",
+        "Rajiv Ranjan"
+      ],
+      "Rajiv Ranjan": [
+        "Aditya Dave",
+        "Chandru Natarajan",
+        "David Jackson",
+        "Diandra Hanna",
+        "Edgar Gabriel",
+        "Gayathri Shenoy",
+        "Guilherme Cervezao",
+        "Idan Bianco",
+        "Kimiko Kuei",
+        "Kumar Kuppusamy",
+        "Kushboo Pidwa",
+        "Laura Smart",
+        "Luisa Guenther",
+        "Monika Dabrowski",
+        "Naveen Potluri",
+        "Rajiv Ranjan",
+        "Sagata Das",
+        "Satheesh Waran",
+        "Satya Chekuri",
+        "Satyanarayana Bandaru",
+        "Subhadeep Nandi",
+        "Teeracha Sinthavanarong",
+        "Umanand Jha",
+        "Valemia Njuh",
+        "Vinit Chalana",
+        "William Sanchez"
+      ],
+      "Maggie Leiker": [
+        "Ankita Vijayan",
+        "Cebastian Chinolla",
+        "Frank Firicano",
+        "Isha Gummid",
+        "Jabbar Ahmad Shaik",
+        "Maggie Leiker",
+        "Martha Hubney",
+        "Sagata Das",
+        "Shravan Koneru",
+        "Vipul Singh"
+      ],
+      "David Champion": [
+        "Wayne Lawrence"
+      ]
     }
   }
 }

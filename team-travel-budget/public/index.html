@@ -925,6 +925,54 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
           </div>
         </div>
       </div>
+      <div class="card">
+        <div class="card-head" style="display:flex;justify-content:space-between;align-items:center">
+          <span>Regions</span><span class="hint" id="md-count-regions"></span>
+        </div>
+        <div class="card-body" style="padding:12px 16px">
+          <div class="md-list" id="md-list-regions"></div>
+          <div style="display:flex;gap:6px">
+            <input type="text" id="md-input-regions" class="dm-search" style="flex:1" placeholder="Add Region…" onkeydown="if(event.key==='Enter')addMasterEntry('regions',this)"/>
+            <button class="btn btn-blue btn-sm" onclick="addMasterEntry('regions',document.getElementById('md-input-regions'))">Add</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head" style="display:flex;justify-content:space-between;align-items:center">
+          <span>Purposes</span><span class="hint" id="md-count-purposes"></span>
+        </div>
+        <div class="card-body" style="padding:12px 16px">
+          <div class="md-list" id="md-list-purposes"></div>
+          <div style="display:flex;gap:6px">
+            <input type="text" id="md-input-purposes" class="dm-search" style="flex:1" placeholder="Add Purpose…" onkeydown="if(event.key==='Enter')addMasterEntry('purposes',this)"/>
+            <button class="btn btn-blue btn-sm" onclick="addMasterEntry('purposes',document.getElementById('md-input-purposes'))">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Manager → Travelers assignment -->
+    <div class="card" style="margin-top:14px">
+      <div class="card-head" style="display:flex;justify-content:space-between;align-items:center">
+        <span>Traveler Assignments by Manager</span>
+        <span class="hint">Controls which travelers appear in the dropdown for each manager</span>
+      </div>
+      <div class="card-body" style="padding:12px 16px">
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+          <select id="md-mgr-sel" class="dm-search" style="flex:1;min-width:160px" onchange="buildMgrTravelerPanel()">
+            <option value="">— Select Manager —</option>
+          </select>
+        </div>
+        <div id="md-mgr-traveler-panel" style="display:none">
+          <div class="md-list" id="md-list-mgr-travelers" style="margin-bottom:8px"></div>
+          <div style="display:flex;gap:6px">
+            <select id="md-mgr-traveler-add" class="dm-search" style="flex:1">
+              <option value="">— Add Traveler —</option>
+            </select>
+            <button class="btn btn-blue btn-sm" onclick="addMgrTraveler()">Add</button>
+          </div>
+        </div>
+        <div id="md-mgr-traveler-empty" style="color:var(--g4);font-size:12px;padding:4px 0">Select a manager above to manage their traveler list.</div>
+      </div>
     </div>
     <div style="background:var(--blue-lt);border-left:4px solid var(--blue);border-radius:8px;padding:12px 16px;margin-top:14px;font-size:13px;color:var(--navy)">
       Names added here appear as dropdown suggestions in the budget table. Typing a new name directly in a table cell also adds it here automatically. Click × to remove a name from suggestions (existing rows are not changed).
@@ -942,14 +990,15 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
         <div style="overflow-x:auto" id="users-table-wrap">
           <p style="padding:20px;color:var(--g4)">Loading…</p>
         </div>
+        <div id="user-action-status" style="padding:8px 16px;font-size:12px;min-height:24px;"></div>
         <div class="user-form" id="add-user-form">
           <div>
             <label style="font-size:11px;font-weight:600;color:var(--g4);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Username</label>
-            <input type="text" id="new-username" placeholder="e.g. jsmith"/>
+            <input type="text" id="new-username" placeholder="e.g. jsmith" onkeydown="if(event.key==='Enter')addUser()"/>
           </div>
           <div>
             <label style="font-size:11px;font-weight:600;color:var(--g4);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Password</label>
-            <input type="password" id="new-password" placeholder="Temporary password"/>
+            <input type="password" id="new-password" placeholder="Temporary password" onkeydown="if(event.key==='Enter')addUser()"/>
           </div>
           <div>
             <label style="font-size:11px;font-weight:600;color:var(--g4);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Role</label>
@@ -958,9 +1007,10 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
               <option value="admin">Admin (full access)</option>
             </select>
           </div>
-          <button class="btn btn-blue" onclick="addUser()">Add User</button>
+          <div style="display:flex;align-items:flex-end">
+            <button class="btn btn-blue" style="width:100%" onclick="addUser()">Add User</button>
+          </div>
         </div>
-        <div id="user-action-status" style="padding:0 16px 12px;font-size:12px;"></div>
       </div>
     </div>
   </div>
@@ -1052,9 +1102,9 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
 // ═══════════════════════════════════════════════════════
 // CONSTANTS
 // ═══════════════════════════════════════════════════════
-const REGIONS  = ['North America','Europe','Asia','Africa','Latin America'];
+function REGIONS()  { return (typeof db!=='undefined'&&db.regions&&db.regions.length) ? db.regions : ['North America','Europe','Asia','Africa','Latin America']; }
 const QUARTERS = ['Q1','Q2','Q3','Q4'];
-const PURPOSES = ['Conference','Local Conference','Team Offsite','Customer Meeting','Internal Meeting','External Meeting','Training','Sales','Field Visit','Recruiting','Other'];
+function PURPOSES() { return (typeof db!=='undefined'&&db.purposes&&db.purposes.length) ? db.purposes : ['Conference','Local Conference','Team Offsite','Customer Meeting','Internal Meeting','External Meeting','Training','Sales','Field Visit','Recruiting','Other']; }
 const STATUSES = ['Proposed','Approved','Cancelled','Deferred','Actualize'];
 const REGION_BADGE = {
   'North America':'r-na','Europe':'r-eu','Asia':'r-as','Africa':'r-af','Latin America':'r-la'};
@@ -1459,8 +1509,9 @@ function mkIMTSel(val,rid){
 }
 function mkTravelerSel(val,rid,manager,imt){
   let opts;
-  if(manager && MANAGER_TRAVELERS[manager])  opts = MANAGER_TRAVELERS[manager];
-  else if(imt && IMT_TRAVELERS[imt])         opts = IMT_TRAVELERS[imt];
+  const mt = db.managerTravelers || MANAGER_TRAVELERS;
+  if(manager && mt[manager])         opts = mt[manager];
+  else if(imt && IMT_TRAVELERS[imt]) opts = IMT_TRAVELERS[imt];
   else opts = db.travelers||[];
   return `<select onchange="upd(${rid},'traveler',this.value)"><option value="">—</option>`
     +opts.map(o=>`<option value="${escH(o)}"${o===val?' selected':''}>${escH(o)}</option>`).join('')+'</select>';
@@ -1519,8 +1570,8 @@ function renderTable(){
       <td ${reqSel(r.imt)}>${mkIMTSel(r.imt,r.id)}</td>
       <td ${r.traveler==='Wayne Lawrence' ? '' : reqSel(r.manager)}>${mkMasterSel(r.manager,'manager',r.id,'managers')}</td>
       <td ${reqSel(r.traveler)}>${mkTravelerSel(r.traveler,r.id,r.manager,r.imt)}</td>
-      <td ${reqSel(r.region)}>${mkSelP(REGIONS,r.region,'region',r.id)}</td>
-      <td ${reqSel(r.purpose)}>${mkSelP(PURPOSES,r.purpose,'purpose',r.id,'min-width:140px')}</td>
+      <td ${reqSel(r.region)}>${mkSelP(REGIONS(),r.region,'region',r.id)}</td>
+      <td ${reqSel(r.purpose)}>${mkSelP(PURPOSES(),r.purpose,'purpose',r.id,'min-width:140px')}</td>
       <td ${reqSel(r.quarter)}>${mkSelP(QUARTERS,r.quarter,'quarter',r.id)}</td>
       <td ${req(num(r.days))}>${mkIn(r.days,'number','days',r.id,'50px')}</td>
       <td style="padding:4px 6px;font-size:11px;color:var(--g4);white-space:nowrap;">${r.approved_at?new Date(r.approved_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'}):'—'}</td>
@@ -1735,7 +1786,7 @@ function autoFillRow(rowId, changedField){
     if(r.country && !validCountries.includes(r.country)){ r.country=''; r.city=''; }
   }
   // Clear city if it no longer belongs to the new country
-  if(changedField==='country'){f
+  if(changedField==='country'){
     const validCities = ((GEO_DATA[r.region]||{})[r.country])||[];
     if(r.city && !validCities.includes(r.city)) r.city='';
   }
@@ -1934,11 +1985,11 @@ function buildDashboard(){
     </tr>`).join('');
 
   // ── By Region ──────────────────────────────────────────
-  const byR = {}; REGIONS.forEach(r => byR[r] = {est:0, actual:0, n:0});
+  const byR = {}; REGIONS().forEach(r => byR[r] = {est:0, actual:0, n:0});
   active.forEach(r    => { if(byR[r.region]){ byR[r.region].est += calcP(r); byR[r.region].n++; }});
   actualize.forEach(r => { if(byR[r.region])  byR[r.region].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa); });
-  const rMax = Math.max(...REGIONS.map(r => byR[r].est), 1);
-  document.getElementById('dash-r').innerHTML = REGIONS.map(r=>`
+  const rMax = Math.max(...REGIONS().map(r => byR[r] ? byR[r].est : 0), 1);
+  document.getElementById('dash-r').innerHTML = REGIONS().map(r=>`
     <tr><td class="lbl"><span class="badge ${REGION_BADGE[r]}">${r}</span></td>
     <td><div class="bw" data-tip="${r} · Estimated: ${fmt(byR[r].est)}${byR[r].actual?' · Actualized: '+fmt(byR[r].actual):''}">
       <div class="bf ${REGION_BAR[r]}" style="width:${byR[r].est/rMax*100}%"></div>
@@ -1984,7 +2035,7 @@ function summarizeFY(fy){
   const aw=yd.awarded||0;
   const byQ={},byR={},byO={},bySt={};
   QUARTERS.forEach(q=>byQ[q]={p:0,a:0,n:0});
-  REGIONS.forEach(r=>byR[r]={p:0,a:0,n:0});
+  REGIONS().forEach(r=>byR[r]={p:0,a:0,n:0});
   STATUSES.forEach(s=>bySt[s]={n:0,p:0});
   rows.forEach(r=>{
     if(bySt[r.status]){bySt[r.status].n++;bySt[r.status].p+=calcP(r);}
@@ -2075,8 +2126,8 @@ function buildComparison(){
       </td></tr>`).join('');
   }
   function rChart(){
-    const maxR=Math.max(...cols.flatMap(c=>REGIONS.map(r=>c.byR[r].p)),1);
-    return REGIONS.map(r=>`
+    const maxR=Math.max(...cols.flatMap(c=>REGIONS().map(r=>c.byR[r]?c.byR[r].p:0)),1);
+    return REGIONS().map(r=>`
       <tr><td class="lbl"><span class="badge ${REGION_BADGE[r]}" style="font-size:10px">${r}</span></td>
       <td colspan="${cols.length+1}">
         <div class="yr-bar-group">
@@ -2389,11 +2440,27 @@ function confirmNewFY(){
     archived:false, created:Date.now(), modified:Date.now()};
   db.activeFY=label;
   logAudit('fy_create', label, `Created fiscal year ${label}, awarded ${fmt(awarded)}, ${rows.length} seed rows`);
+
+  // Auto-archive FYs older than 4 years
+  const allFYKeys = Object.keys(db.years).sort();
+  const activeKeys = allFYKeys.filter(k => !db.years[k].archived);
+  if(activeKeys.length > 4){
+    const toArchive = activeKeys.slice(0, activeKeys.length - 4);
+    toArchive.forEach(k => {
+      db.years[k].archived = true;
+      db.years[k].archivedAt = Date.now();
+      db.years[k].modified = Date.now();
+      logAudit('archive', k, `Auto-archived ${k} (older than 4 years)`);
+    });
+  }
+
   saveDB();
   closeNewFYModal();
   renderFYSelector();
   document.getElementById('awarded-input').value=fmt(awarded);
   renderTable();
+  renderActualizeTable();
+  buildDashboard();
   buildRateGuide();
 }
 
@@ -2461,7 +2528,7 @@ function renderActualizeTable(){
       <td>${mkMasterSel(r.manager,'manager',r.id,'managers')}</td>
       <td>${mkTravelerSel(r.traveler,r.id,r.manager)}</td>
       <td style="padding:4px 8px;font-weight:600;color:var(--g5);">${r.region||'—'}</td>
-      <td>${mkSelP(PURPOSES,r.purpose,'purpose',r.id,'min-width:140px')}</td>
+      <td>${mkSelP(PURPOSES(),r.purpose,'purpose',r.id,'min-width:140px')}</td>
       <td>${mkSelP(QUARTERS,r.quarter,'quarter',r.id)}</td>
       <td style="text-align:center;color:var(--g5);font-weight:600;">${num(r.days)||'—'}</td>
       <td style="${gStyle}">${mkIn(r.airfare,'number','airfare',r.id,'68px')}</td>
@@ -2478,7 +2545,7 @@ function renderActualizeTable(){
 
   const vAP = tA - tP;
   tfoot.innerHTML=`<tr>
-    <td colspan="9" class="lbl">ACTUALIZE TOTALS (${rows.length} trips)</td>
+    <td colspan="10" class="lbl">ACTUALIZE TOTALS (${rows.length} trips)</td>
     <td style="text-align:right;background:#f0faf5">${fmt(tAir)}</td>
     <td style="text-align:right;background:#f0faf5"></td>
     <td style="text-align:right;background:#f0faf5">${fmt(tTx)}</td>
@@ -2551,7 +2618,7 @@ function printDashboard(){
   actualize.forEach(r => { if(byQ[r.quarter])  byQ[r.quarter].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa); });
 
   // By Region
-  const byR = {}; REGIONS.forEach(r => byR[r] = {est:0, actual:0, n:0});
+  const byR = {}; REGIONS().forEach(r => byR[r] = {est:0, actual:0, n:0});
   active.forEach(r    => { if(byR[r.region]){ byR[r.region].est += calcP(r); byR[r.region].n++; }});
   actualize.forEach(r => { if(byR[r.region])  byR[r.region].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa); });
 
@@ -2761,8 +2828,8 @@ function printDashboard(){
 <div class="two-even">
   <div class="section">
     <h2>By Region</h2>
-    ${REGIONS.map(r=>{
-      const rMax = Math.max(...REGIONS.map(rr=>byR[rr].est),1);
+    ${REGIONS().map(r=>{
+      const rMax = Math.max(...REGIONS().map(rr=>byR[rr]?byR[rr].est:0),1);
       return `<div class="brow">
         <div class="brow-lbl">${r}</div>
         <div class="brow-bar"><div style="height:100%;background:${RCOLORS[r]};width:${byR[r].est/rMax*100}%"></div></div>
@@ -2838,6 +2905,9 @@ function migrateDB(){
   if(!db.owners)     db.owners=[];
   if(!db.managers)   db.managers=[];
   if(!db.imts)       db.imts=['David Champion','Wayne Lawrence'];
+  if(!db.regions)    db.regions=['North America','Europe','Asia','Africa','Latin America'];
+  if(!db.purposes)   db.purposes=['Conference','Local Conference','Team Offsite','Customer Meeting','Internal Meeting','External Meeting','Training','Sales','Field Visit','Recruiting','Other'];
+  if(!db.managerTravelers) db.managerTravelers = JSON.parse(JSON.stringify(MANAGER_TRAVELERS));
   // Ensure default IS&T units always exist
   ['Operations','Retail','Payments'].forEach(u=>{ if(!db.owners.includes(u)) db.owners.push(u); });
   Object.values(db.years).forEach(yd=>{
@@ -3147,7 +3217,7 @@ function buildRecordsBrowser(){
 
   const regSel=document.getElementById('dm-filter-region');
   const curReg=regSel?.value||'';
-  if(regSel) regSel.innerHTML='<option value="">All Regions</option>'+REGIONS.map(r=>`<option value="${r}"${r===curReg?' selected':''}>${r}</option>`).join('');
+  if(regSel) regSel.innerHTML='<option value="">All Regions</option>'+REGIONS().map(r=>`<option value="${r}"${r===curReg?' selected':''}>${r}</option>`).join('');
 
   const search=(document.getElementById('dm-search')?.value||'').toLowerCase();
   const fFY=document.getElementById('dm-filter-fy')?.value||'';
@@ -3307,7 +3377,7 @@ function clearAuditLog(){
 // MASTER DATA MANAGEMENT
 // ═══════════════════════════════════════════════════════
 function buildMasterData(){
-  ['owners','travelers','managers'].forEach(key=>{
+  ['owners','travelers','managers','regions','purposes'].forEach(key=>{
     const listEl  = document.getElementById('md-list-'+key);
     const countEl = document.getElementById('md-count-'+key);
     const items   = db[key]||[];
@@ -3316,17 +3386,65 @@ function buildMasterData(){
       : items.map(v=>`<span class="md-tag">${escH(v)}<button class="md-tag-del" onclick="removeMasterEntry('${key}','${escH(v).replace(/'/g,'\\\'')}')" title="Remove">×</button></span>`).join('');
     if(countEl) countEl.textContent = items.length+' entr'+(items.length!==1?'ies':'y');
   });
+  // Populate manager selector for traveler assignments
+  const mgrSel = document.getElementById('md-mgr-sel');
+  if(mgrSel){
+    const cur = mgrSel.value;
+    const mgrs = db.managers||[];
+    mgrSel.innerHTML = `<option value="">— Select Manager —</option>`
+      + mgrs.map(m=>`<option value="${escH(m)}"${m===cur?' selected':''}>${escH(m)}</option>`).join('');
+    if(cur) buildMgrTravelerPanel();
+  }
 }
 function addMasterEntry(key, inputEl){
   const val=(inputEl.value||'').trim(); if(!val) return;
   if(!db[key]) db[key]=[];
   if(!db[key].includes(val)){ db[key].push(val); db[key].sort(); saveDB(); renderDataLists(); logAudit('create',db.activeFY,`Added to ${key} master list: ${val}`); }
   inputEl.value=''; buildMasterData();
+  if(key==='regions'||key==='purposes') renderTable();
 }
 function removeMasterEntry(key, val){
   if(!db[key]) return;
   db[key]=db[key].filter(v=>v!==val);
   saveDB(); renderDataLists(); logAudit('delete',db.activeFY,`Removed from ${key} master list: ${val}`); buildMasterData();
+  if(key==='regions'||key==='purposes') renderTable();
+}
+
+function buildMgrTravelerPanel(){
+  const mgr = document.getElementById('md-mgr-sel')?.value;
+  const panel = document.getElementById('md-mgr-traveler-panel');
+  const empty = document.getElementById('md-mgr-traveler-empty');
+  if(!mgr){ panel.style.display='none'; empty.style.display='block'; return; }
+  panel.style.display='block'; empty.style.display='none';
+  if(!db.managerTravelers) db.managerTravelers={};
+  if(!db.managerTravelers[mgr]) db.managerTravelers[mgr]=[];
+  const assigned = db.managerTravelers[mgr];
+  document.getElementById('md-list-mgr-travelers').innerHTML = assigned.length===0
+    ? `<span class="md-empty">No travelers assigned — add below</span>`
+    : assigned.map(t=>`<span class="md-tag">${escH(t)}<button class="md-tag-del" onclick="removeMgrTraveler('${escH(mgr).replace(/'/g,"\\'")}','${escH(t).replace(/'/g,"\\'")}')">×</button></span>`).join('');
+  const allTravelers = (db.travelers||[]).filter(t=>!assigned.includes(t)).sort();
+  document.getElementById('md-mgr-traveler-add').innerHTML =
+    `<option value="">— Add Traveler —</option>`+allTravelers.map(t=>`<option value="${escH(t)}">${escH(t)}</option>`).join('');
+}
+function addMgrTraveler(){
+  const mgr = document.getElementById('md-mgr-sel')?.value; if(!mgr) return;
+  const sel = document.getElementById('md-mgr-traveler-add');
+  const val = sel?.value; if(!val) return;
+  if(!db.managerTravelers) db.managerTravelers={};
+  if(!db.managerTravelers[mgr]) db.managerTravelers[mgr]=[];
+  if(!db.managerTravelers[mgr].includes(val)){
+    db.managerTravelers[mgr].push(val);
+    db.managerTravelers[mgr].sort();
+    saveDB(); logAudit('create',db.activeFY,`Assigned traveler ${val} to manager ${mgr}`);
+    renderTable();
+  }
+  buildMgrTravelerPanel();
+}
+function removeMgrTraveler(mgr, traveler){
+  if(!db.managerTravelers||!db.managerTravelers[mgr]) return;
+  db.managerTravelers[mgr]=db.managerTravelers[mgr].filter(t=>t!==traveler);
+  saveDB(); logAudit('delete',db.activeFY,`Removed traveler ${traveler} from manager ${mgr}`);
+  buildMgrTravelerPanel(); renderTable();
 }
 
 // ═══════════════════════════════════════════════════════
@@ -3431,20 +3549,29 @@ async function buildUsersPanel() {
 }
 
 async function addUser() {
-  const username = document.getElementById('new-username').value.trim();
+  const username = (document.getElementById('new-username').value||'').trim();
   const password = document.getElementById('new-password').value;
   const role     = document.getElementById('new-role').value;
   const status   = document.getElementById('user-action-status');
-  if (!username || !password) { status.innerHTML = `<span style="color:var(--red)">Username and password required</span>`; return; }
-  const res  = await fetch('/api/users', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({username,password,role}) });
-  const data = await res.json();
-  if (res.ok) {
-    status.innerHTML = `<span style="color:var(--green)">✓ User "${escH(username)}" created as ${role}</span>`;
-    document.getElementById('new-username').value = '';
-    document.getElementById('new-password').value = '';
-    buildUsersPanel();
-  } else {
-    status.innerHTML = `<span style="color:var(--red)">✕ ${escH(data.error)}</span>`;
+  status.innerHTML = '';
+  if (!username || !password) {
+    status.innerHTML = `<span style="color:var(--red)">✕ Username and password are required.</span>`;
+    return;
+  }
+  status.innerHTML = `<span style="color:var(--g4)">Creating user…</span>`;
+  try {
+    const res  = await fetch('/api/users', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({username,password,role}) });
+    const data = await res.json();
+    if (res.ok) {
+      status.innerHTML = `<span style="color:var(--green)">✓ User "<strong>${escH(username)}</strong>" created as ${role}.</span>`;
+      document.getElementById('new-username').value = '';
+      document.getElementById('new-password').value = '';
+      buildUsersPanel();
+    } else {
+      status.innerHTML = `<span style="color:var(--red)">✕ ${escH(data.error||'Unknown error')}</span>`;
+    }
+  } catch(e) {
+    status.innerHTML = `<span style="color:var(--red)">✕ Network error: ${escH(e.message)}</span>`;
   }
 }
 
