@@ -242,9 +242,10 @@ tfoot td.lbl{color:var(--g4);font-weight:400;}
 .bw{position:relative;height:12px;background:var(--g2);border-radius:6px;overflow:visible;}
 .bf{position:absolute;left:0;top:0;height:100%;border-radius:6px;transition:width .4s;}
 .bf2{position:absolute;left:0;top:2px;height:8px;border-radius:4px;opacity:.9;transition:width .4s;}
-.bq1{background:#3b82f6;} .bq2{background:#8b5cf6;} .bq3{background:#10b981;} .bq4{background:#f59e0b;}
+.bq1{background:#2563eb;} .bq2{background:#7c3aed;} .bq3{background:#059669;} .bq4{background:#d97706;}
 .bna{background:#3b82f6;} .beu{background:#8b5cf6;} .bas{background:#10b981;}
-.baf{background:#f59e0b;} .bla{background:#ef4444;} .bow{background:var(--blue);} .bac{background:var(--green);}
+.bna{background:#2563eb;} .beu{background:#7c3aed;} .bas{background:#059669;}
+.baf{background:#d97706;} .bla{background:#dc2626;} .bow{background:var(--blue);} .bac{background:#f97316;}
 .cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;padding:13px;}
 .cat-item{background:var(--g1);border-radius:8px;padding:10px 12px;}
 .cat-lbl{font-size:10px;color:var(--g4);text-transform:uppercase;letter-spacing:.06em;}
@@ -1921,12 +1922,12 @@ function buildDashboard(){
   const qMax = Math.max(...QUARTERS.map(q => byQ[q].est), 1);
   document.getElementById('dash-q').innerHTML = QUARTERS.map(q=>`
     <tr><td class="lbl">${q}</td>
-    <td><div class="bw">
+    <td><div class="bw" data-tip="Q${q.slice(1)} · Estimated: ${fmt(byQ[q].est)}${byQ[q].actual?' · Actualized: '+fmt(byQ[q].actual):''}">
       <div class="bf ${QBAR[q]}" style="width:${byQ[q].est/qMax*100}%"></div>
       ${byQ[q].actual?`<div class="bf2 bac" style="width:${byQ[q].actual/qMax*100}%"></div>`:''}
     </div></td>
-    <td class="amt">${fmt(byQ[q].est)}</td>
-    <td class="${byQ[q].actual?'amt2':'cnt'}">${byQ[q].actual?fmt(byQ[q].actual):'—'}</td>
+    <td class="amt" data-tip="${q} Estimated: ${fmt(byQ[q].est)}">${fmt(byQ[q].est)}</td>
+    <td class="${byQ[q].actual?'amt2':'cnt'}" data-tip="${q} Actualized: ${byQ[q].actual?fmt(byQ[q].actual):'—'}">${byQ[q].actual?fmt(byQ[q].actual):'—'}</td>
     </tr>`).join('');
 
   // ── By Region ──────────────────────────────────────────
@@ -1936,13 +1937,13 @@ function buildDashboard(){
   const rMax = Math.max(...REGIONS.map(r => byR[r].est), 1);
   document.getElementById('dash-r').innerHTML = REGIONS.map(r=>`
     <tr><td class="lbl"><span class="badge ${REGION_BADGE[r]}">${r}</span></td>
-    <td><div class="bw">
+    <td><div class="bw" data-tip="${r} · Estimated: ${fmt(byR[r].est)}${byR[r].actual?' · Actualized: '+fmt(byR[r].actual):''}">
       <div class="bf ${REGION_BAR[r]}" style="width:${byR[r].est/rMax*100}%"></div>
       ${byR[r].actual?`<div class="bf2 bac" style="width:${byR[r].actual/rMax*100}%"></div>`:''}
     </div></td>
-    <td class="amt">${fmt(byR[r].est)}</td>
-    <td class="${byR[r].actual?'amt2':'cnt'}">${byR[r].actual?fmt(byR[r].actual):'—'}</td>
-    <td class="cnt">${byR[r].n}t</td></tr>`).join('');
+    <td class="amt" data-tip="${r} Estimated: ${fmt(byR[r].est)}">${fmt(byR[r].est)}</td>
+    <td class="${byR[r].actual?'amt2':'cnt'}" data-tip="${r} Actualized: ${byR[r].actual?fmt(byR[r].actual):'—'}">${byR[r].actual?fmt(byR[r].actual):'—'}</td>
+    <td class="cnt" data-tip="${r}: ${byR[r].n} trip${byR[r].n!==1?'s':''}">${byR[r].n}t</td></tr>`).join('');
 
   // ── Top Trips ──────────────────────────────────────────
   const topRows = [...active, ...actualize].sort((a,b) => calcP(b)-calcP(a)).slice(0,10);

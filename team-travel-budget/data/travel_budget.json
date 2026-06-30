@@ -1,9 +1,81 @@
 {
-  "updatedAt": 1782774799274,
+  "updatedAt": 1782781127805,
   "updatedBy": "admin",
   "state": {
     "activeFY": "FY2026",
     "auditLog": [
+      {
+        "ts": 1782781127397,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: days changed from \"0\" to \"6\""
+      },
+      {
+        "ts": 1782781125211,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: quarter changed from \"\" to \"Q2\""
+      },
+      {
+        "ts": 1782781122532,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: purpose changed from \"\" to \"Team Offsite\""
+      },
+      {
+        "ts": 1782781119665,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: region changed from \"North America\" to \"Asia\""
+      },
+      {
+        "ts": 1782781110225,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: region changed from \"\" to \"North America\""
+      },
+      {
+        "ts": 1782781101294,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: traveler changed from \"\" to \"Wayne Lawrence\""
+      },
+      {
+        "ts": 1782781099774,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 304: manager changed from \"Maggie Leiker\" to \"\""
+      },
+      {
+        "ts": 1782781093881,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 304: manager changed from \"\" to \"Maggie Leiker\""
+      },
+      {
+        "ts": 1782781092097,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 304: imt changed from \"\" to \"David Champion\""
+      },
+      {
+        "ts": 1782781090281,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 304: description changed from \"\" to \"test2\""
+      },
+      {
+        "ts": 1782781085841,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 304: owner changed from \"\" to \"Retail\""
+      },
+      {
+        "ts": 1782781083130,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 304)"
+      },
       {
         "ts": 1782774798870,
         "action": "delete",
@@ -746,6 +818,34 @@
             "misc": 0,
             "planned_budget": 1500,
             "approved_at": 1782773686131
+          },
+          {
+            "id": 304,
+            "owner": "Retail",
+            "imt": "David Champion",
+            "manager": "",
+            "traveler": "Wayne Lawrence",
+            "city": "",
+            "country": "",
+            "description": "test2",
+            "region": "Asia",
+            "purpose": "Team Offsite",
+            "quarter": "Q2",
+            "depart": "",
+            "ret": "",
+            "airfare": 6250,
+            "nights": 0,
+            "hrate": 195,
+            "visa": 50,
+            "taxi": 50,
+            "fpd": 75,
+            "days": "6",
+            "reg": 0,
+            "status": "Proposed",
+            "actual": 0,
+            "archived": false,
+            "created": 1782781083130,
+            "modified": 1782781127397
           }
         ],
         "rates": null,
