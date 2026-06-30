@@ -1054,7 +1054,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
 // ═══════════════════════════════════════════════════════
 const REGIONS  = ['North America','Europe','Asia','Africa','Latin America'];
 const QUARTERS = ['Q1','Q2','Q3','Q4'];
-const PURPOSES = ['Conference','Local Conference','Team Offsite','Customer Meeting','Training','Sales','Field Visit','Recruiting','Other'];
+const PURPOSES = ['Conference','Local Conference','Team Offsite','Customer Meeting','Internal Meeting','External Meeting','Training','Sales','Field Visit','Recruiting','Other'];
 const STATUSES = ['Proposed','Approved','Cancelled','Deferred','Actualize'];
 const REGION_BADGE = {
   'North America':'r-na','Europe':'r-eu','Asia':'r-as','Africa':'r-af','Latin America':'r-la'};
@@ -1425,6 +1425,8 @@ function switchFY(fy){
   document.getElementById('awarded-input').value = fmt(yd.awarded);
   renderFYSelector();
   renderTable();
+  renderActualizeTable();
+  buildDashboard();
   buildRateGuide();
   document.getElementById('fy-dropdown').classList.remove('open');
 }
@@ -2007,7 +2009,7 @@ function buildComparison(){
   document.getElementById('cmp-checks').innerHTML=fys.map(fy=>`
     <label class="fy-check-label${cmpSelected.includes(fy)?' checked':''}"
       onclick="toggleCmpFY('${fy}')">
-      <input type="checkbox" ${cmpSelected.includes(fy)?'checked':''}/> ${fy}
+      <input type="checkbox" ${cmpSelected.includes(fy)?'checked':''} onclick="event.stopPropagation()"/> ${fy}
     </label>`).join('');
 
   const summaries=cmpSelected.map(summarizeFY).filter(Boolean);
@@ -2152,16 +2154,20 @@ function buildRateGuide(){
     const airAvg   = Math.round((r.airfare_eco[0]+r.airfare_eco[1])/2);
     const hotelAvg = Math.round((r.hotel[0]+r.hotel[1])/2);
     const taxi     = TAXI_PER_DAY[r.region]||50;
-    const food     = r.food[1]; // flat $125
+    const food     = r.food[1];
+    const inp = (val, field) =>
+      `<input type="number" value="${val}" min="0"
+        style="width:72px;border:1px solid var(--g3);border-radius:5px;padding:3px 5px;font-size:12px;text-align:right;background:#fff;"
+        onchange="updateRate('${r.region}','${field}',this.value)"/>`;
     return `<tr style="background:${i%2?'var(--g1)':'#fff'}">
       <td style="padding:10px 14px;font-weight:700">${r.flag} ${r.region}</td>
-      <td style="padding:10px 14px;text-align:right;color:var(--g5)">${fmt(r.airfare_eco[0])} – ${fmt(r.airfare_eco[1])}</td>
+      <td style="padding:6px 14px;text-align:right">${inp(r.airfare_eco[0],'airfare_eco_lo')} – ${inp(r.airfare_eco[1],'airfare_eco_hi')}</td>
       <td style="padding:10px 14px;text-align:right;font-weight:700;color:var(--blue)">${fmt(airAvg)}</td>
-      <td style="padding:10px 14px;text-align:right;color:var(--g5)">${fmt(r.hotel[0])} – ${fmt(r.hotel[1])}</td>
+      <td style="padding:6px 14px;text-align:right">${inp(r.hotel[0],'hotel_lo')} – ${inp(r.hotel[1],'hotel_hi')}</td>
       <td style="padding:10px 14px;text-align:right;font-weight:700;color:var(--blue)">${fmt(hotelAvg)}</td>
-      <td style="padding:10px 14px;text-align:right;font-weight:700">${fmt(food)}</td>
+      <td style="padding:6px 14px;text-align:right">${inp(r.food[1],'food_hi')}</td>
       <td style="padding:10px 14px;text-align:right;font-weight:700">${fmt(taxi)}</td>
-      <td style="padding:10px 14px;text-align:right;font-weight:700;color:var(--amber)">${r.visa>0?fmt(r.visa):'—'}</td>
+      <td style="padding:6px 14px;text-align:right">${inp(r.visa,'visa')}</td>
     </tr>`;
   }).join('');
 }
@@ -2181,12 +2187,12 @@ function updateRate(region, field, value){
   else if(field==='food_hi') r.food[1]=v;
   else if(field==='visa') r.visa=v;
   if(!yd.ratesSource||yd.ratesSource==='Defaults') yd.ratesSource='Manually edited';
-  saveDB(); buildRateGuide();
+  saveDB(); buildRateGuide(); renderTable(); buildDashboard();
 }
 
 function resetRatesToDefault(){
   getYD().rates=null; getYD().ratesSource='Defaults';
-  saveDB(); buildRateGuide();
+  saveDB(); buildRateGuide(); renderTable(); buildDashboard();
 }
 
 // BLS fetch (main Rate Guide tab)
@@ -2832,6 +2838,8 @@ function migrateDB(){
   if(!db.owners)     db.owners=[];
   if(!db.managers)   db.managers=[];
   if(!db.imts)       db.imts=['David Champion','Wayne Lawrence'];
+  // Ensure default IS&T units always exist
+  ['Operations','Retail','Payments'].forEach(u=>{ if(!db.owners.includes(u)) db.owners.push(u); });
   Object.values(db.years).forEach(yd=>{
     if(yd.archived===undefined) yd.archived=false;
     if(!yd.created)  yd.created=Date.now();
