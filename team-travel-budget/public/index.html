@@ -1706,6 +1706,13 @@ function upd(id,field,value){
     // Set planned_budget BEFORE saveDB/renderTable so the table never flashes zero
     if(field==='status' && value==='Actualize'){
       r.planned_budget = calcP({...r, status: 'Approved'});
+      // Convert per-night/per-day rates to trip totals for actual tracking
+      const days   = Math.max(num(r.days), 1);
+      const nights = num(r.nights) > 0 ? num(r.nights) : Math.max(days-1, 0);
+      const txRate = (TAXI_PER_DAY && TAXI_PER_DAY[r.region]) || 50;
+      if(num(r.hrate) > 0 && num(r.hrate) <= 500) r.hrate = Math.round(num(r.hrate) * Math.max(nights,1));
+      if(num(r.fpd)   > 0 && num(r.fpd)   <= 200) r.fpd   = Math.round(num(r.fpd)   * days);
+      r.taxi = Math.round(txRate * days);
     }
     autoFillRow(id, field);
     if(field==='traveler'||field==='owner'||field==='manager') addToList(field, value);
@@ -2689,8 +2696,12 @@ function printDashboard(){
     const res={est:0, actual:0, trips:0};
     allRows.forEach(row => {
       if(!filterFn(row)) return;
-      if(isActive(row))            { res.est    += calcP(row); res.trips++; }
-      if(row.status==='Actualize') { res.actual += num(row.airfare)+num(row.hrate)+num(row.taxi)+num(row.fpd)+num(row.misc)+num(row.visa); res.trips++; }
+      if(isActive(row)){ res.est += calcP(row); res.trips++; }
+      if(row.status==='Actualize'){
+        res.est    += num(row.planned_budget) || calcP({...row, status:'Approved'});
+        res.actual += num(row.airfare)+num(row.hrate)+num(row.taxi)+num(row.fpd)+num(row.misc)+num(row.visa);
+        res.trips++;
+      }
     });
     return res;
   }
