@@ -1,9 +1,57 @@
 {
-  "updatedAt": 1782509693540,
+  "updatedAt": 1782774799274,
   "updatedBy": "admin",
   "state": {
     "activeFY": "FY2026",
     "auditLog": [
+      {
+        "ts": 1782774798870,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted: Wayne Lawrence → "
+      },
+      {
+        "ts": 1782774793832,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Wayne Lawrence: visa changed from \"50\" to \"0\""
+      },
+      {
+        "ts": 1782774789158,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Shravan Koneru: visa changed from \"60\" to \"\""
+      },
+      {
+        "ts": 1782774474589,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Shravan Koneru: visa changed from \"2\" to \"60\""
+      },
+      {
+        "ts": 1782774464149,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Shravan Koneru: visa changed from \"50\" to \"2\""
+      },
+      {
+        "ts": 1782774085472,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Shravan Koneru: visa changed from \"0\" to \"50\""
+      },
+      {
+        "ts": 1782773686126,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Ankita Vijayan: status changed from \"Actualize\" to \"Approved\""
+      },
+      {
+        "ts": 1782773674760,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Ankita Vijayan: days changed from \"2\" to \"5\""
+      },
       {
         "ts": 1782509693134,
         "action": "update",
@@ -591,7 +639,7 @@
             "airfare": 0,
             "nights": 0,
             "hrate": 0,
-            "visa": 0,
+            "visa": "",
             "taxi": 0,
             "fpd": 0,
             "reg": 0,
@@ -600,7 +648,7 @@
             "actual": 0,
             "archived": false,
             "created": 1782254289660,
-            "modified": 1782254289660,
+            "modified": 1782774789158,
             "htl_actual": 0,
             "food_actual": 0,
             "misc": 0,
@@ -667,36 +715,6 @@
             "planned_budget": null
           },
           {
-            "id": 211,
-            "owner": "Retail",
-            "imt": "David Champion",
-            "manager": "",
-            "traveler": "Wayne Lawrence",
-            "city": "",
-            "country": "",
-            "region": "North America",
-            "purpose": "Conference",
-            "quarter": "Q4",
-            "days": "5",
-            "airfare": 470,
-            "nights": 0,
-            "hrate": 300,
-            "visa": 50,
-            "taxi": 250,
-            "fpd": 75,
-            "reg": 0,
-            "description": "New Hire Interviews and Meet Retail Team (Cork)",
-            "status": "Actualize",
-            "actual": 0,
-            "archived": false,
-            "created": 1782254289660,
-            "modified": 1782413322351,
-            "htl_actual": 0,
-            "food_actual": 0,
-            "misc": 0,
-            "planned_budget": 2845
-          },
-          {
             "id": 303,
             "owner": "Finance",
             "imt": "Wayne Lawrence",
@@ -716,17 +734,18 @@
             "visa": 0,
             "taxi": "100",
             "fpd": 75,
-            "days": "2",
+            "days": "5",
             "reg": 0,
-            "status": "Actualize",
+            "status": "Approved",
             "actual": 0,
             "archived": false,
             "created": 1782413098387,
-            "modified": 1782509693134,
+            "modified": 1782773686126,
             "htl_actual": 0,
             "food_actual": 0,
             "misc": 0,
-            "planned_budget": 1500
+            "planned_budget": 1500,
+            "approved_at": 1782773686131
           }
         ],
         "rates": null,

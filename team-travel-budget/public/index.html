@@ -160,6 +160,7 @@ tbody td input[type=number]{text-align:right;}
 #budget-tbody td:nth-child(8){min-width:130px;}  /* Region */
 #budget-tbody td:nth-child(9){min-width:140px;}  /* Purpose */
 #budget-tbody td:nth-child(10){min-width:80px;}  /* QTR */
+#budget-tbody td:nth-child(11){min-width:90px;}  /* Approved date */
 /* Actualize tab column min-widths */
 #actualize-tbody td:nth-child(3){min-width:90px;}   /* IS&T Unit */
 #actualize-tbody td:nth-child(4){min-width:160px;}  /* Trip Description */
@@ -610,6 +611,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
             <th>IS&amp;T UNIT</th><th style="width:180px">TRIP DESCRIPTION</th><th>IMT</th><th>MANAGER</th><th>TRAVELER</th>
             <th>REGION</th><th>PURPOSE</th><th style="width:80px">QTR</th>
             <th class="r" style="width:52px">DAYS</th>
+            <th style="width:90px">APPROVED</th>
             <th class="r" style="width:60px">VISA</th>
             <th class="r" style="width:75px">REG FEES</th>
             <th class="r" style="width:95px;background:#1a3050!important;">EST TOTAL</th>
@@ -1351,7 +1353,7 @@ function calcP(r){
   const days = Math.max(num(r.days), 1);
   const daily = est ? est.dailyHi * days : 0;
   const airfare = est ? est.airfareHi : 0;
-  return airfare + daily + num(r.reg);
+  return airfare + daily + num(r.reg) + num(r.visa);
 }
 function parseAmt(s){ return parseFloat(String(s||'').replace(/[$,\s]/g,''))||0; }
 function getFYRates(fy){ return getYD(fy).rates || DEFAULT_RATES; }
@@ -1495,7 +1497,7 @@ function renderTable(){
   let tP=0,tA=0,tCx=0,tDf=0,tAir=0,tVis=0,tRg=0;
 
   tbody.innerHTML = rows.map((r,i)=>{
-    const planned=calcP(r), actual=r.status==='Actualize'?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc):num(r.actual), active=isActive(r);
+    const planned=calcP(r), actual=r.status==='Actualize'?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa):num(r.actual), active=isActive(r);
     const vari = (actual>0&&active)?actual-planned:null;
     if(active){ tP+=planned; tAir+=num(r.airfare); tVis+=num(r.visa); tRg+=num(r.reg); }
     if(r.status==='Actualize'){ tP+=planned; tVis+=num(r.visa); tRg+=num(r.reg); }
@@ -1519,6 +1521,7 @@ function renderTable(){
       <td ${reqSel(r.purpose)}>${mkSelP(PURPOSES,r.purpose,'purpose',r.id,'min-width:140px')}</td>
       <td ${reqSel(r.quarter)}>${mkSelP(QUARTERS,r.quarter,'quarter',r.id)}</td>
       <td ${req(num(r.days))}>${mkIn(r.days,'number','days',r.id,'50px')}</td>
+      <td style="padding:4px 6px;font-size:11px;color:var(--g4);white-space:nowrap;">${r.approved_at?new Date(r.approved_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'}):'—'}</td>
       <td>${mkIn(r.visa,'number','visa',r.id,'48px')}</td>
       <td>${mkIn(r.reg,'number','reg',r.id,'62px')}</td>
       <td class="col-pl" style="${(active||r.status==='Actualize')?'':'opacity:.38'};${isLocalTrip(r)?'border-left:3px solid var(--amber);':''}">${fmt(planned)}</td>
@@ -1530,25 +1533,19 @@ function renderTable(){
   const vPA = awarded-tP;
   tfoot.innerHTML = `
   <tr>
-    <td colspan="11" class="lbl">PLANNED TOTALS (${rows.filter(r=>isActive(r)||r.status==='Actualize').length} trips)</td>
+    <td colspan="12" class="lbl">PLANNED TOTALS (${rows.filter(r=>isActive(r)||r.status==='Actualize').length} trips)</td>
     <td></td>
-    <td style="text-align:right">${fmt(tVis)}</td>
-    <td style="text-align:right">${fmt(tRg)}</td>
-    <td class="tf-pl">${fmt(tP)}</td>
     <td></td>
-  </tr>
-  <tr>
-    <td colspan="14" class="lbl" style="padding-left:10px">
-      Awarded: <strong>${fmt(awarded)}</strong> &nbsp;·&nbsp;
-      Cancelled: <strong style="color:var(--red)">${fmt(tCx)}</strong> &nbsp;·&nbsp;
-      Deferred: <strong style="color:var(--amber)">${fmt(tDf)}</strong> &nbsp;·&nbsp;
-      Active Planned vs. Awarded:
+    <td></td>
+    <td class="tf-pl" style="text-align:right;">
+      <div>${fmt(tP)}</div>
+      <div style="font-size:10px;font-weight:600;margin-top:2px;color:${vPA>=0?'var(--green)':'var(--red)'};">${fmtD(vPA)} ${vPA>=0?'remaining':'over'}</div>
     </td>
-    <td class="${vPA>=0?'tf-vp':'tf-vn'}">${fmtD(vPA)}</td><td></td>
+    <td></td>
   </tr>`;
 
   document.getElementById('tb-planned').textContent = fmt(tP);
-  const actualSpent = currentRows().filter(r => r.status === 'Actualize').reduce((s,r) => s + (num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)), 0);
+  const actualSpent = currentRows().filter(r => r.status === 'Actualize').reduce((s,r) => s + (num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)), 0);
   document.getElementById('tb-actual').textContent = actualSpent ? fmt(actualSpent) : '—';
   const pill = document.getElementById('tb-var-pill');
   const d = awarded - tP;
@@ -1634,6 +1631,8 @@ function upd(id,field,value){
     logAudit('update', db.activeFY, `${r.traveler||'Row '+id}: ${field} changed${prev!==undefined?' from "'+prev+'"':''} to "${value}"`);
     saveDB(); renderTable();
     if(field==='status'){
+      if(value==='Approved' && !r.approved_at) r.approved_at = Date.now();
+      if(value!=='Approved' && value!=='Actualize') r.approved_at = null;
       if(value==='Actualize'){
         if(r.planned_budget == null) r.planned_budget = calcP({...r, status: 'Approved'});
         showTab('actualize');
@@ -1774,7 +1773,7 @@ function buildDashboard(){
 
   const tEstimated       = active.reduce((s,r) => s + calcP(r), 0);
   const tApproved        = approved.reduce((s,r) => s + calcP(r), 0);
-  const tActualized      = actualize.reduce((s,r) => s + (num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)), 0);
+  const tActualized      = actualize.reduce((s,r) => s + (num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)+num(r.visa)), 0);
   const tRemainingActual = aw - tActualized;                          // Awarded - Actualized
   const tRemainingEst    = aw - (tEstimated + tActualized);           // Awarded - (Estimated + Actualized)
   const tVariance        = tActualized - tApproved;
@@ -1782,7 +1781,7 @@ function buildDashboard(){
   // ── KPIs ──────────────────────────────────────────────
   const kpis = [
     {cls:'kpi-aw', lbl:'Awarded Budget',         val:fmt(aw),                         sub:`FY ${db.activeFY}`,                        tip:`Awarded Budget\n= ${fmt(aw)}\n\nTotal budget allocated for ${db.activeFY}`},
-    {cls:'kpi-pl', lbl:'Total Estimated',        val:fmt(tEstimated),                 sub:`${active.length} active trip${active.length!==1?'s':''}`,  tip:`Total Estimated\n= Airfare (high) + (Hotel avg + Food + Taxi) × Days + Reg Fees\n\nSum of all Proposed + Approved trips\n= ${fmt(tEstimated)}`},
+    {cls:'kpi-pl', lbl:'Total Estimated',        val:fmt(tEstimated),                 sub:`${active.length} active trip${active.length!==1?'s':''}`,  tip:`Total Estimated\n= Airfare (high) + (Hotel avg + Food + Taxi) × Days + Reg Fees + Visa\n\nSum of all Proposed + Approved trips\n= ${fmt(tEstimated)}`},
     {cls:'kpi-ac', lbl:'Total Approved',         val:fmt(tApproved),                  sub:`${approved.length} approved trip${approved.length!==1?'s':''}`, tip:`Total Approved\n= Est. cost of all Approved trips\n= ${fmt(tApproved)}`},
     {cls:'kpi-vr', lbl:'Total Actualized',       val:tActualized?fmt(tActualized):'—',sub: actualize.length ? `${actualize.length} actualized` : 'No actuals yet', tip:`Total Actualized\n= Airfare + Hotel + Taxi + Food + Misc\nfor all Actualize-status trips\n= ${tActualized?fmt(tActualized):'No actuals yet'}`},
     {cls:'kpi-rm', lbl:'Remaining (Actualized)', val:fmt(Math.max(tRemainingActual,0)),
@@ -1918,7 +1917,7 @@ function buildDashboard(){
   // ── By Quarter ─────────────────────────────────────────
   const byQ = {}; QUARTERS.forEach(q => byQ[q] = {est:0, actual:0, n:0});
   active.forEach(r   => { if(byQ[r.quarter]){ byQ[r.quarter].est += calcP(r); byQ[r.quarter].n++; }});
-  actualize.forEach(r=> { if(byQ[r.quarter])  byQ[r.quarter].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc); });
+  actualize.forEach(r=> { if(byQ[r.quarter])  byQ[r.quarter].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa); });
   const qMax = Math.max(...QUARTERS.map(q => byQ[q].est), 1);
   document.getElementById('dash-q').innerHTML = QUARTERS.map(q=>`
     <tr><td class="lbl">${q}</td>
@@ -1933,7 +1932,7 @@ function buildDashboard(){
   // ── By Region ──────────────────────────────────────────
   const byR = {}; REGIONS.forEach(r => byR[r] = {est:0, actual:0, n:0});
   active.forEach(r    => { if(byR[r.region]){ byR[r.region].est += calcP(r); byR[r.region].n++; }});
-  actualize.forEach(r => { if(byR[r.region])  byR[r.region].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc); });
+  actualize.forEach(r => { if(byR[r.region])  byR[r.region].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa); });
   const rMax = Math.max(...REGIONS.map(r => byR[r].est), 1);
   document.getElementById('dash-r').innerHTML = REGIONS.map(r=>`
     <tr><td class="lbl"><span class="badge ${REGION_BADGE[r]}">${r}</span></td>
@@ -1954,7 +1953,7 @@ function buildDashboard(){
     <tbody>${topRows.map((r,i)=>{
       const est = calcP(r);
       const appr = r.status==='Approved' || r.status==='Actualize' ? est : 0;
-      const act  = r.status==='Actualize' ? num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc) : num(r.actual);
+      const act  = r.status==='Actualize' ? num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa) : num(r.actual);
       const vari = act > 0 ? act - appr : null;
       return `<tr style="background:${i%2?'var(--g1)':'#fff'}">
         <td style="padding:7px 9px;font-weight:600">${r.traveler||'—'}</td>
@@ -1979,7 +1978,7 @@ function summarizeFY(fy){
   const yd=getYD(fy); if(!yd) return null;
   const rows=yd.rows||[], active=rows.filter(isActive);
   const tP=active.reduce((s,r)=>s+calcP(r),0);
-  const tA=rows.filter(r=>r.status==='Actualize').reduce((s,r)=>s+num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc),0);
+  const tA=rows.filter(r=>r.status==='Actualize').reduce((s,r)=>s+num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa),0);
   const aw=yd.awarded||0;
   const byQ={},byR={},byO={},bySt={};
   QUARTERS.forEach(q=>byQ[q]={p:0,a:0,n:0});
@@ -1988,7 +1987,7 @@ function summarizeFY(fy){
   rows.forEach(r=>{
     if(bySt[r.status]){bySt[r.status].n++;bySt[r.status].p+=calcP(r);}
     if(isActive(r)){
-      const p=calcP(r),a=r.status==='Actualize'?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc):num(r.actual);
+      const p=calcP(r),a=r.status==='Actualize'?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa):num(r.actual);
       if(byQ[r.quarter]){byQ[r.quarter].p+=p;byQ[r.quarter].a+=a;byQ[r.quarter].n++;}
       if(byR[r.region]){byR[r.region].p+=p;byR[r.region].a+=a;byR[r.region].n++;}
       const o=r.owner||'(unassigned)';
@@ -2518,7 +2517,7 @@ function printDashboard(){
   const aw = yd.awarded || 0;
   const tEstimated  = active.reduce((s,r) => s + calcP(r), 0);
   const tApproved   = approved.reduce((s,r) => s + calcP(r), 0);
-  const tActualized = actualize.reduce((s,r) => s + (num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)), 0);
+  const tActualized = actualize.reduce((s,r) => s + (num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)), 0);
   const tRemaining  = aw - tActualized;
   const tVariance   = tActualized - tApproved;
   const utilizePct  = aw > 0 ? Math.round(tEstimated/aw*100) : 0;
@@ -2530,18 +2529,18 @@ function printDashboard(){
     if(!byMgr[m]) byMgr[m] = {est:0, appr:0, actual:0, trips:0};
     if(isActive(r))          { byMgr[m].est   += calcP(r); byMgr[m].trips++; }
     if(r.status==='Approved')  byMgr[m].appr   += calcP(r);
-    if(r.status==='Actualize'){ byMgr[m].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc); byMgr[m].trips++; }
+    if(r.status==='Actualize'){ byMgr[m].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa); byMgr[m].trips++; }
   });
 
   // By Quarter
   const byQ = {}; QUARTERS.forEach(q => byQ[q] = {est:0, actual:0, n:0});
   active.forEach(r    => { if(byQ[r.quarter]){ byQ[r.quarter].est += calcP(r); byQ[r.quarter].n++; }});
-  actualize.forEach(r => { if(byQ[r.quarter])  byQ[r.quarter].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc); });
+  actualize.forEach(r => { if(byQ[r.quarter])  byQ[r.quarter].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa); });
 
   // By Region
   const byR = {}; REGIONS.forEach(r => byR[r] = {est:0, actual:0, n:0});
   active.forEach(r    => { if(byR[r.region]){ byR[r.region].est += calcP(r); byR[r.region].n++; }});
-  actualize.forEach(r => { if(byR[r.region])  byR[r.region].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc); });
+  actualize.forEach(r => { if(byR[r.region])  byR[r.region].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa); });
 
   // Top trips
   const topTrips = [...active, ...actualize].sort((a,b) => calcP(b)-calcP(a)).slice(0,8);
@@ -2730,7 +2729,7 @@ function printDashboard(){
       </tr></thead>
       <tbody>${topTrips.map((r,i)=>{
         const est = calcP(r);
-        const act = r.status==='Actualize' ? num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc) : 0;
+        const act = r.status==='Actualize' ? num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa) : 0;
         const vari = act > 0 ? act - est : null;
         return `<tr>
           <td><strong>${r.traveler||'—'}</strong></td>
@@ -2912,7 +2911,7 @@ function exportCSV(){
   const esc=v=>{ const s=String(v==null?'':v); return(s.includes(',')||s.includes('"')||s.includes('\n'))?`"${s.replace(/"/g,'""')}"`:`${s}`; };
   const csv=[hdrs.map(esc).join(','),...rows.map(r=>{
     const hotel=num(r.nights)*num(r.hrate), food=num(r.fpd)*num(r.days);
-    const planned=calcP(r), actual=r.status==='Actualize'?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc):num(r.actual);
+    const planned=calcP(r), actual=r.status==='Actualize'?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa):num(r.actual);
     const vari=(actual>0&&isActive(r))?actual-planned:'';
     return[r.fy,r.status,r.owner,r.manager||'',r.traveler,r.city,r.country,r.region,r.purpose,
       r.quarter,r.depart,r.ret,r.airfare,r.nights,r.hrate,hotel,r.visa,
@@ -3120,7 +3119,7 @@ function buildRecordsBrowser(){
   dmPage=Math.min(dmPage,pages-1);
   const pageRows=rows.slice(dmPage*DM_PAGE_SIZE,(dmPage+1)*DM_PAGE_SIZE);
   const tP=pageRows.reduce((s,r)=>s+(isActive(r)?calcP(r):0),0);
-  const tA=pageRows.reduce((s,r)=>s+(isActive(r)?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc):0),0);
+  const tA=pageRows.reduce((s,r)=>s+(isActive(r)?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa):0),0);
 
   function th(lbl,field,extra=''){
     const sorted=dmSort.field===field;
@@ -3131,7 +3130,7 @@ function buildRecordsBrowser(){
   tblEl.innerHTML=`<table class="dm-tbl">
     <thead><tr>${th('FY','_fy')}${th('STATUS','status')}${th('IS&T UNIT','owner')}${th('MANAGER','manager')}${th('TRAVELER','traveler')}${th('CITY','city')}${th('REGION','region')}${th('PURPOSE','purpose')}${th('QTR','quarter')}${th('DEPART','depart')}${th('PLANNED','airfare','r')}${th('ACTUAL','actual','r')}<th>ACTIONS</th></tr></thead>
     <tbody>${pageRows.map(r=>{
-      const planned=isActive(r)?calcP(r):0, actual=r.status==='Actualize'?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc):num(r.actual);
+      const planned=isActive(r)?calcP(r):0, actual=r.status==='Actualize'?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa):num(r.actual);
       return `<tr>
         <td><span class="badge r-na">${r._fy}</span></td>
         <td><span class="badge st-${r.status}" style="font-size:11px">${r.status}</span></td>
