@@ -1,20 +1,194 @@
 {
-  "updatedAt": 1782837783626,
+  "updatedAt": 1782858946612,
   "updatedBy": "admin",
   "state": {
     "activeFY": "FY2026",
     "auditLog": [
       {
+        "ts": 1782858946203,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Cebastian Chinolla: status changed from \"Proposed\" to \"Actualize\""
+      },
+      {
+        "ts": 1782858942852,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Cebastian Chinolla: description changed from \"\" to \"test\""
+      },
+      {
+        "ts": 1782858939138,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Cebastian Chinolla: owner changed from \"\" to \"Operations\""
+      },
+      {
+        "ts": 1782858934245,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Deleted: Maggie Leiker → "
+      },
+      {
+        "ts": 1782858925386,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Maggie Leiker: purpose changed from \"Conference\" to \"Local Conference\""
+      },
+      {
+        "ts": 1782858917896,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Cebastian Chinolla: days changed from \"0\" to \"6\""
+      },
+      {
+        "ts": 1782858915545,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Cebastian Chinolla: quarter changed from \"\" to \"Q3\""
+      },
+      {
+        "ts": 1782858914210,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Cebastian Chinolla: purpose changed from \"\" to \"Team Offsite\""
+      },
+      {
+        "ts": 1782858911872,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Cebastian Chinolla: region changed from \"\" to \"Europe\""
+      },
+      {
+        "ts": 1782858910107,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Cebastian Chinolla: traveler changed from \"\" to \"Cebastian Chinolla\""
+      },
+      {
+        "ts": 1782858908490,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 105: manager changed from \"\" to \"Maggie Leiker\""
+      },
+      {
+        "ts": 1782858907524,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 105: imt changed from \"\" to \"David Champion\""
+      },
+      {
+        "ts": 1782858905079,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 105)"
+      },
+      {
+        "ts": 1782858542863,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Maggie Leiker: purpose changed from \"Local Conference\" to \"Conference\""
+      },
+      {
+        "ts": 1782858540962,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Maggie Leiker: purpose changed from \"Conference\" to \"Local Conference\""
+      },
+      {
+        "ts": 1782858496507,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Maggie Leiker: purpose changed from \"Local Conference\" to \"Conference\""
+      },
+      {
+        "ts": 1782858486459,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Maggie Leiker: status changed from \"Proposed\" to \"Actualize\""
+      },
+      {
+        "ts": 1782858465239,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Maggie Leiker: days changed from \"0\" to \"7\""
+      },
+      {
+        "ts": 1782858463015,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Maggie Leiker: quarter changed from \"\" to \"Q1\""
+      },
+      {
+        "ts": 1782858461741,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Maggie Leiker: purpose changed from \"\" to \"Local Conference\""
+      },
+      {
+        "ts": 1782858460545,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Maggie Leiker: region changed from \"\" to \"Europe\""
+      },
+      {
+        "ts": 1782858458625,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Maggie Leiker: traveler changed from \"\" to \"Maggie Leiker\""
+      },
+      {
+        "ts": 1782858456885,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 104: manager changed from \"Maggie Leiker\" to \"Wayne Lawrence\""
+      },
+      {
+        "ts": 1782858453059,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 104: manager changed from \"\" to \"Maggie Leiker\""
+      },
+      {
+        "ts": 1782858445439,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 104: imt changed from \"\" to \"David Champion\""
+      },
+      {
+        "ts": 1782858443913,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 104: description changed from \"\" to \"test\""
+      },
+      {
+        "ts": 1782858440256,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 104: owner changed from \"\" to \"Retail\""
+      },
+      {
+        "ts": 1782858438129,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 104)"
+      },
+      {
+        "ts": 1782858367098,
+        "action": "update",
+        "fy": "FY2027",
+        "detail": "Awarded budget changed: $0 → $0"
+      },
+      {
         "ts": 1782822884854,
         "action": "update",
         "fy": "FY2027",
-        "detail": "Awarded budget changed: $0 \u2192 $0"
+        "detail": "Awarded budget changed: $0 → $0"
       },
       {
         "ts": 1782822879767,
         "action": "update",
         "fy": "FY2027",
-        "detail": "Awarded budget changed: $0 \u2192 $0"
+        "detail": "Awarded budget changed: $0 → $0"
       },
       {
         "ts": 1782822305926,
@@ -56,13 +230,13 @@
         "ts": 1782788044642,
         "action": "update",
         "fy": "FY2027",
-        "detail": "Awarded budget changed: $10,000 \u2192 $0"
+        "detail": "Awarded budget changed: $10,000 → $0"
       },
       {
         "ts": 1782788036802,
         "action": "update",
         "fy": "FY2027",
-        "detail": "Awarded budget changed: $0 \u2192 $10,000"
+        "detail": "Awarded budget changed: $0 → $10,000"
       }
     ],
     "owners": [
@@ -78,6 +252,7 @@
     ],
     "travelers": [
       "Ankita Vijayan",
+      "Cebastian Chinolla",
       "Maggie Leiker",
       "Rajiv Ranjan",
       "Shravan Koneru",
@@ -95,7 +270,7 @@
         "rates": [
           {
             "region": "North America",
-            "flag": "\ud83c\udf0e",
+            "flag": "🌎",
             "airfare_eco": [
               390,
               550
@@ -116,7 +291,7 @@
           },
           {
             "region": "Europe",
-            "flag": "\ud83c\udf0d",
+            "flag": "🌍",
             "airfare_eco": [
               3000,
               5000
@@ -137,7 +312,7 @@
           },
           {
             "region": "Asia",
-            "flag": "\ud83c\udf0f",
+            "flag": "🌏",
             "airfare_eco": [
               4500,
               8000
@@ -158,7 +333,7 @@
           },
           {
             "region": "Africa",
-            "flag": "\ud83c\udf0d",
+            "flag": "🌍",
             "airfare_eco": [
               3600,
               5500
@@ -179,7 +354,7 @@
           },
           {
             "region": "Latin America",
-            "flag": "\ud83c\udf0e",
+            "flag": "🌎",
             "airfare_eco": [
               1500,
               3500
@@ -949,6 +1124,36 @@
             "htl_actual": 0,
             "food_actual": 0,
             "status_reason": ""
+          },
+          {
+            "id": 105,
+            "owner": "Operations",
+            "imt": "David Champion",
+            "manager": "Maggie Leiker",
+            "traveler": "Cebastian Chinolla",
+            "city": "",
+            "country": "",
+            "description": "test",
+            "region": "Europe",
+            "purpose": "Team Offsite",
+            "quarter": "Q3",
+            "depart": "",
+            "ret": "",
+            "airfare": 4000,
+            "nights": 0,
+            "hrate": 285,
+            "visa": 20,
+            "taxi": 50,
+            "fpd": 75,
+            "days": "6",
+            "reg": 0,
+            "status": "Actualize",
+            "actual": 0,
+            "status_reason": "",
+            "archived": false,
+            "created": 1782858905079,
+            "modified": 1782858946203,
+            "planned_budget": 7780
           }
         ],
         "created": 1782787859597,
@@ -1115,6 +1320,26 @@
       "David Champion": [
         "Wayne Lawrence"
       ]
-    }
+    },
+    "regions": [
+      "North America",
+      "Europe",
+      "Asia",
+      "Africa",
+      "Latin America"
+    ],
+    "purposes": [
+      "Conference",
+      "Local Conference",
+      "Team Offsite",
+      "Customer Meeting",
+      "Internal Meeting",
+      "External Meeting",
+      "Training",
+      "Sales",
+      "Field Visit",
+      "Recruiting",
+      "Other"
+    ]
   }
 }

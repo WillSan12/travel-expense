@@ -1711,7 +1711,8 @@ function upd(id,field,value){
       if(value==='Approved' && !r.approved_at) r.approved_at = Date.now();
       if(value!=='Approved' && value!=='Actualize') r.approved_at = null;
       if(value==='Actualize'){
-        if(r.planned_budget == null) r.planned_budget = calcP({...r, status: 'Approved'});
+        // Always recalculate planned_budget from rate guide when moving to Actualize
+        r.planned_budget = calcP({...r, status: 'Approved'});
         showTab('actualize');
       } else {
         showTab('budget');
