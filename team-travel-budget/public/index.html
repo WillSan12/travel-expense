@@ -2087,15 +2087,19 @@ function buildDashboard(){
     { label:'Remaining (Est)',  value: Math.max(tRemainingEst,0), color:'#34d399' },
   ]);
 
-  // ── Pie Chart: By Manager (leaf-level, no double-count) ─
-  const mgrSliceColors = ['#3b82f6','#f59e0b','#10b981','#ef4444','#8b5cf6','#06b6d4'];
-  const mgrSlices = hierarchy
-    .filter(h => h.indent === 2)
-    .map((h, i) => ({
-      label: h.label.trim().replace(/^↳\s*/, ''),
-      value: h.data.est,
-      color: mgrSliceColors[i % mgrSliceColors.length],
-    }));
+  // ── Pie Chart: By Manager (dynamic — all managers with active trips) ─
+  const mgrSliceColors = ['#3b82f6','#f59e0b','#10b981','#ef4444','#8b5cf6','#06b6d4','#f43f5e','#84cc16','#0ea5e9','#a78bfa'];
+  const byMgrPie = {};
+  allRows.forEach(r => {
+    const mgr = r.manager || '(Unassigned)';
+    if (!byMgrPie[mgr]) byMgrPie[mgr] = 0;
+    if (isActive(r)) byMgrPie[mgr] += calcP(r);
+    else if (r.status === 'Actualize') byMgrPie[mgr] += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa);
+  });
+  const mgrSlices = Object.entries(byMgrPie)
+    .filter(([, v]) => v > 0)
+    .sort((a, b) => b[1] - a[1])
+    .map(([label, value], i) => ({ label, value, color: mgrSliceColors[i % mgrSliceColors.length] }));
   buildPieChart('dash-pie-mgr', mgrSlices);
 }
 
