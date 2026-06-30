@@ -709,6 +709,16 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
   </div>
   <div class="card"><div class="card-head"><h2>Top Trips by Estimated Cost</h2></div>
     <div class="card-body"><table class="bar-table" id="dash-top"></table></div></div>
+  <div class="dash-grid" style="margin-top:0">
+    <div class="card">
+      <div class="card-head"><h2>Budget Overview</h2><span class="hint">Estimated cost distribution</span></div>
+      <div class="card-body" id="dash-pie-budget"></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>By Manager</h2><span class="hint">Estimated cost by team</span></div>
+      <div class="card-body" id="dash-pie-mgr"></div>
+    </div>
+  </div>
 </div>
 
 <!-- PAGE: YEAR COMPARISON -->
@@ -1828,6 +1838,55 @@ function autoFillRow(rowId, changedField){
 }
 
 // ═══════════════════════════════════════════════════════
+// PIE / DONUT CHART HELPER
+// ═══════════════════════════════════════════════════════
+function buildPieChart(containerId, slices) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const total = slices.reduce((s, sl) => s + sl.value, 0);
+  if (total === 0) {
+    el.innerHTML = '<p style="color:var(--g4);text-align:center;padding:30px;font-size:13px">No data available</p>';
+    return;
+  }
+  const cx = 110, cy = 110, r = 90, hole = 52;
+  let angle = -Math.PI / 2;
+  const paths = slices.filter(sl => sl.value > 0).map(sl => {
+    const sweep = (sl.value / total) * 2 * Math.PI;
+    if (sweep < 0.001) return '';
+    const a1 = angle, a2 = angle + sweep;
+    angle += sweep;
+    const cos1 = Math.cos(a1), sin1 = Math.sin(a1);
+    const cos2 = Math.cos(a2), sin2 = Math.sin(a2);
+    const large = sweep > Math.PI ? 1 : 0;
+    const pct = Math.round(sl.value / total * 100);
+    const tip = `${sl.label}: ${fmt(sl.value)} (${pct}%)`;
+    return `<path d="M ${(cx+r*cos1).toFixed(1)} ${(cy+r*sin1).toFixed(1)} A ${r} ${r} 0 ${large} 1 ${(cx+r*cos2).toFixed(1)} ${(cy+r*sin2).toFixed(1)} L ${(cx+hole*cos2).toFixed(1)} ${(cy+hole*sin2).toFixed(1)} A ${hole} ${hole} 0 ${large} 0 ${(cx+hole*cos1).toFixed(1)} ${(cy+hole*sin1).toFixed(1)} Z"
+      fill="${sl.color}" stroke="#fff" stroke-width="2.5" data-tip="${escH(tip)}"
+      style="cursor:pointer;transition:opacity .15s" onmouseover="this.style.opacity='.72'" onmouseout="this.style.opacity='1'"/>`;
+  }).join('');
+  const legend = slices.filter(sl => sl.value > 0).map(sl => {
+    const pct = Math.round(sl.value / total * 100);
+    return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+      <span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:${sl.color};flex-shrink:0"></span>
+      <span style="font-size:12px;color:var(--navy);flex:1">${sl.label}</span>
+      <span style="font-size:12px;font-weight:700;color:var(--navy)">${fmt(sl.value)}</span>
+      <span style="font-size:11px;font-weight:700;background:${sl.color}22;color:${sl.color};border-radius:8px;padding:1px 7px;min-width:36px;text-align:center">${pct}%</span>
+    </div>`;
+  }).join('');
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;gap:28px;flex-wrap:wrap;justify-content:center;padding:8px 0">
+      <div style="position:relative;flex-shrink:0">
+        <svg width="220" height="220" viewBox="0 0 220 220">${paths}</svg>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none">
+          <div style="font-size:10px;color:var(--g4);font-weight:600;letter-spacing:.05em;text-transform:uppercase">Total</div>
+          <div style="font-size:17px;font-weight:800;color:var(--navy);white-space:nowrap">${fmt(total)}</div>
+        </div>
+      </div>
+      <div style="min-width:180px;max-width:280px">${legend}</div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════
 // DASHBOARD
 // ═══════════════════════════════════════════════════════
 function buildDashboard(){
@@ -2020,6 +2079,24 @@ function buildDashboard(){
         <td style="padding:7px 9px;text-align:right;font-weight:700;color:var(--green)">${act?fmt(act):'—'}</td>
         <td style="padding:7px 9px;text-align:right;font-weight:700;color:${vari===null?'var(--g4)':vari<=0?'var(--green)':'var(--red)'}">${vari!==null?fmtD(vari):'—'}</td>
       </tr>`;}).join('')}</tbody>`;
+
+  // ── Pie Chart: Budget Overview ─────────────────────────
+  buildPieChart('dash-pie-budget', [
+    { label:'Actualized',       value: tActualized,               color:'#5b21b6' },
+    { label:'Proposed',         value: tProposed,                 color:'#3b82f6' },
+    { label:'Remaining (Est)',  value: Math.max(tRemainingEst,0), color:'#34d399' },
+  ]);
+
+  // ── Pie Chart: By Manager (leaf-level, no double-count) ─
+  const mgrSliceColors = ['#3b82f6','#f59e0b','#10b981','#ef4444','#8b5cf6','#06b6d4'];
+  const mgrSlices = hierarchy
+    .filter(h => h.indent === 2)
+    .map((h, i) => ({
+      label: h.label.trim().replace(/^↳\s*/, ''),
+      value: h.data.est,
+      color: mgrSliceColors[i % mgrSliceColors.length],
+    }));
+  buildPieChart('dash-pie-mgr', mgrSlices);
 }
 
 // ═══════════════════════════════════════════════════════
