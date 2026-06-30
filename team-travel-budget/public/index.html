@@ -1703,6 +1703,10 @@ function upd(id,field,value){
     r[field]=value; r.modified=Date.now();
     if(pendingReason !== null) r.status_reason = pendingReason;
     else if(field==='status' && value!=='Cancelled' && value!=='Deferred') r.status_reason = '';
+    // Set planned_budget BEFORE saveDB/renderTable so the table never flashes zero
+    if(field==='status' && value==='Actualize'){
+      r.planned_budget = calcP({...r, status: 'Approved'});
+    }
     autoFillRow(id, field);
     if(field==='traveler'||field==='owner'||field==='manager') addToList(field, value);
     logAudit('update', db.activeFY, `${r.traveler||'Row '+id}: ${field} changed${prev!==undefined?' from "'+prev+'"':''} to "${value}"`);
@@ -1711,8 +1715,6 @@ function upd(id,field,value){
       if(value==='Approved' && !r.approved_at) r.approved_at = Date.now();
       if(value!=='Approved' && value!=='Actualize') r.approved_at = null;
       if(value==='Actualize'){
-        // Always recalculate planned_budget from rate guide when moving to Actualize
-        r.planned_budget = calcP({...r, status: 'Approved'});
         showTab('actualize');
       } else {
         showTab('budget');
@@ -1974,8 +1976,15 @@ function buildDashboard(){
     const r = {est:0, actual:0, trips:0};
     allRows.forEach(row => {
       if(!filterFn(row)) return;
-      if(isActive(row))             { r.est    += calcP(row); r.trips++; }
-      if(row.status==='Actualize')  { r.actual += num(row.airfare)+num(row.hrate)+num(row.taxi)+num(row.fpd)+num(row.misc); r.trips++; }
+      if(isActive(row)){
+        r.est += calcP(row); r.trips++;
+      }
+      if(row.status==='Actualize'){
+        // Include planned_budget in est so actualized trips still show in totals
+        r.est += num(row.planned_budget) || calcP({...row, status:'Approved'});
+        r.actual += num(row.airfare)+num(row.hrate)+num(row.taxi)+num(row.fpd)+num(row.misc);
+        r.trips++;
+      }
     });
     return r;
   }
