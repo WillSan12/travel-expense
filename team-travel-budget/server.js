@@ -38,7 +38,7 @@ async function connectDB() {
 
 // ── User helpers ──────────────────────────────────────────────────────────────
 async function findUser(username) {
-  return db.collection('users').findOne({ username });
+  return db.collection('users').findOne({ username: { $regex: new RegExp(`^${username}$`, 'i') } });
 }
 
 async function seedAdmin() {
