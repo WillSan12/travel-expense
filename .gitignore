@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Environment files — never commit secrets
+.env
+.env.production
+.env.local
+
+# Data files — live data never overwritten by deploys
+team-travel-budget/data/travel_budget.json
+team-travel-budget/data/users.json
+
+# Migration script
+team-travel-budget/migrate.js
+
+# OS
+.DS_Store
