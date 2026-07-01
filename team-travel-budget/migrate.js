@@ -7,7 +7,7 @@ const uri = 'mongodb+srv://TBM-admin:AScndHnAC2l6nHaL@travel-budget-manager.cocn
 const c = new MongoClient(uri);
 
 c.connect().then(async () => {
-  const db = c.db('travel_budget_dev');
+  const db = c.db('travel_budget_prod');
   await db.collection('state').updateOne(
     { _id: 'main' },
     { $set: { updatedAt: Date.now(), updatedBy: 'migration', state: data.state } },

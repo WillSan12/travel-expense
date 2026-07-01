@@ -120,7 +120,7 @@ app.post('/api/auth/login', async (req, res) => {
     req.session.userId   = user.id;
     req.session.username = user.username;
     req.session.role     = user.role;
-    res.json({ ok: true, username: user.username, role: user.role });
+    res.json({ ok: true, username: user.username, role: user.role, mustChangePassword: !!user.mustChangePassword });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -130,10 +130,15 @@ app.post('/api/auth/logout', (req, res) => {
   req.session.destroy(() => res.json({ ok: true }));
 });
 
-app.get('/api/auth/me', (req, res) => {
+app.get('/api/auth/me', async (req, res) => {
   if (!req.session || !req.session.userId)
     return res.status(401).json({ error: 'Not authenticated' });
-  res.json({ username: req.session.username, role: req.session.role });
+  try {
+    const user = await db.collection('users').findOne({ id: req.session.userId });
+    res.json({ username: req.session.username, role: req.session.role, mustChangePassword: !!(user && user.mustChangePassword) });
+  } catch {
+    res.json({ username: req.session.username, role: req.session.role, mustChangePassword: false });
+  }
 });
 
 // ── App state routes ──────────────────────────────────────────────────────────
@@ -185,11 +190,12 @@ app.post('/api/users', requireAuth, requireAdmin, async (req, res) => {
     const newId = last.length ? last[0].id + 1 : 1;
 
     const newUser = {
-      id:           newId,
+      id:                 newId,
       username,
-      passwordHash: bcrypt.hashSync(password, 10),
+      passwordHash:       bcrypt.hashSync(password, 10),
       role,
-      createdAt:    Date.now(),
+      mustChangePassword: true,
+      createdAt:          Date.now(),
     };
     await db.collection('users').insertOne(newUser);
     res.status(201).json({ id: newId, username, role });
@@ -203,9 +209,32 @@ app.put('/api/users/:id', requireAuth, requireAdmin, async (req, res) => {
     const id = parseInt(req.params.id, 10);
     const { password, role } = req.body;
     const update = {};
-    if (password) update.passwordHash = bcrypt.hashSync(password, 10);
+    if (password) { update.passwordHash = bcrypt.hashSync(password, 10); update.mustChangePassword = true; }
     if (role && ['admin', 'viewer'].includes(role)) update.role = role;
     await db.collection('users').updateOne({ id }, { $set: update });
+    res.json({ ok: true });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ── Change own password ───────────────────────────────────────────────────────
+app.post('/api/auth/change-password', requireAuth, async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword)
+      return res.status(400).json({ error: 'Both current and new password are required' });
+    if (newPassword.length < 6)
+      return res.status(400).json({ error: 'New password must be at least 6 characters' });
+
+    const user = await db.collection('users').findOne({ id: req.session.userId });
+    if (!user || !bcrypt.compareSync(currentPassword, user.passwordHash))
+      return res.status(401).json({ error: 'Current password is incorrect' });
+
+    await db.collection('users').updateOne(
+      { id: req.session.userId },
+      { $set: { passwordHash: bcrypt.hashSync(newPassword, 10), mustChangePassword: false } }
+    );
     res.json({ ok: true });
   } catch (e) {
     res.status(500).json({ error: e.message });

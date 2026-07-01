@@ -526,7 +526,33 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
   </span>
   <div class="tb-sep"></div>
   <span style="font-size:11px;color:#a1a1a6;white-space:nowrap;">👤 <strong id="user-display" style="color:#f5f5f7;font-size:12px;"></strong></span>
+  <button class="btn-new-fy" onclick="showChangePasswordModal()" style="border-color:rgba(255,255,255,.2);color:#d1d5db;">Change Password</button>
   <button class="btn-new-fy" id="btn-signout" onclick="doSignOut()" style="border-color:rgba(255,120,120,.4);color:#ffb3b3;">Sign Out</button>
+</div>
+
+<!-- Change Password Modal -->
+<div id="chpw-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;display:none;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:16px;padding:36px 40px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.4);">
+    <h2 id="chpw-title" style="font-size:17px;font-weight:700;color:#1d1d1f;margin-bottom:6px;">Change Password</h2>
+    <p id="chpw-subtitle" style="font-size:13px;color:#6e6e73;margin-bottom:24px;">Choose a new password for your account.</p>
+    <div style="margin-bottom:14px;">
+      <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#6e6e73;margin-bottom:5px;">Current Password</label>
+      <input type="password" id="chpw-current" placeholder="••••••••" style="width:100%;border:1px solid #d2d2d7;border-radius:9px;padding:11px 14px;font-size:14px;outline:none;font-family:inherit;"/>
+    </div>
+    <div style="margin-bottom:14px;">
+      <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#6e6e73;margin-bottom:5px;">New Password</label>
+      <input type="password" id="chpw-new" placeholder="••••••••" style="width:100%;border:1px solid #d2d2d7;border-radius:9px;padding:11px 14px;font-size:14px;outline:none;font-family:inherit;"/>
+    </div>
+    <div style="margin-bottom:20px;">
+      <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#6e6e73;margin-bottom:5px;">Confirm New Password</label>
+      <input type="password" id="chpw-confirm" placeholder="••••••••" style="width:100%;border:1px solid #d2d2d7;border-radius:9px;padding:11px 14px;font-size:14px;outline:none;font-family:inherit;"/>
+    </div>
+    <div id="chpw-error" style="display:none;background:#fde8e6;color:#c0392b;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:14px;"></div>
+    <div style="display:flex;gap:10px;">
+      <button id="chpw-cancel-btn" onclick="hideChangePasswordModal()" style="flex:1;padding:11px;border:1px solid #d2d2d7;border-radius:9px;background:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Cancel</button>
+      <button onclick="submitChangePassword()" style="flex:2;padding:11px;border:none;border-radius:9px;background:#0071e3;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Update Password</button>
+    </div>
+  </div>
 </div>
 
 <!-- TABS -->
@@ -3692,6 +3718,11 @@ function buildDataManager(){
     await fetch('/api/auth/logout', { method: 'POST' }).catch(() => {});
     window.location.href = '/login';
   };
+
+  // Force password change if flagged
+  if (me.mustChangePassword) {
+    showChangePasswordModal(true);
+  }
 })();
 
 // ─── User management (admin only) ─────────────────────────────────────────
@@ -3769,6 +3800,67 @@ async function deleteUser(id, username) {
   const data = await res.json();
   if (res.ok) { buildUsersPanel(); }
   else { document.getElementById('user-action-status').innerHTML = `<span style="color:var(--red)">✕ ${escH(data.error)}</span>`; }
+}
+
+// ─── Change Password Modal ─────────────────────────────────────────────────
+let _chpwForced = false;
+function showChangePasswordModal(forced = false) {
+  _chpwForced = forced;
+  const overlay = document.getElementById('chpw-overlay');
+  const title   = document.getElementById('chpw-title');
+  const subtitle = document.getElementById('chpw-subtitle');
+  const cancelBtn = document.getElementById('chpw-cancel-btn');
+  if (forced) {
+    title.textContent = 'Password Change Required';
+    subtitle.textContent = 'For your security, you must set a new password before continuing.';
+    cancelBtn.style.display = 'none';
+  } else {
+    title.textContent = 'Change Password';
+    subtitle.textContent = 'Choose a new password for your account.';
+    cancelBtn.style.display = '';
+  }
+  document.getElementById('chpw-current').value = '';
+  document.getElementById('chpw-new').value = '';
+  document.getElementById('chpw-confirm').value = '';
+  document.getElementById('chpw-error').style.display = 'none';
+  overlay.style.display = 'flex';
+}
+
+function hideChangePasswordModal() {
+  if (_chpwForced) return;
+  document.getElementById('chpw-overlay').style.display = 'none';
+}
+
+async function submitChangePassword() {
+  const current  = document.getElementById('chpw-current').value;
+  const newPw    = document.getElementById('chpw-new').value;
+  const confirm  = document.getElementById('chpw-confirm').value;
+  const errEl    = document.getElementById('chpw-error');
+  errEl.style.display = 'none';
+
+  if (!current || !newPw || !confirm) {
+    errEl.textContent = 'All fields are required.'; errEl.style.display = 'block'; return;
+  }
+  if (newPw !== confirm) {
+    errEl.textContent = 'New passwords do not match.'; errEl.style.display = 'block'; return;
+  }
+  if (newPw.length < 6) {
+    errEl.textContent = 'New password must be at least 6 characters.'; errEl.style.display = 'block'; return;
+  }
+
+  const res  = await fetch('/api/auth/change-password', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ currentPassword: current, newPassword: newPw }),
+  });
+  const data = await res.json();
+  if (res.ok) {
+    document.getElementById('chpw-overlay').style.display = 'none';
+    _chpwForced = false;
+  } else {
+    errEl.textContent = data.error || 'Failed to update password.';
+    errEl.style.display = 'block';
+  }
 }
 
 document.addEventListener('keydown', e=>{
