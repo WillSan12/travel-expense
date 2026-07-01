@@ -3755,6 +3755,14 @@ let currentUser = null;
   if (currentUser.mustChangePassword && currentUser.env !== 'development') {
     showChangePasswordModal(true);
   }
+
+  // Keep session alive — ping every 4 min so Render free tier doesn't drop the session
+  setInterval(async () => {
+    const res = await fetch('/api/auth/me').catch(() => null);
+    if (res && res.status === 401) {
+      window.location.href = '/login';
+    }
+  }, 4 * 60 * 1000);
 })();
 
 // ─── User management (admin only) ─────────────────────────────────────────
