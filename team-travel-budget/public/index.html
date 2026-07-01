@@ -903,6 +903,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
           <table class="audit-tbl">
             <thead><tr>
               <th style="width:165px">Timestamp</th>
+              <th style="width:110px">User</th>
               <th style="width:95px">Action</th>
               <th style="width:80px">FY</th>
               <th>Detail</th>
@@ -1423,6 +1424,20 @@ function fmt(n){ return n==null||isNaN(n)?'$0':'$'+Math.round(n).toLocaleString(
 function fmtD(n){ if(!n) return '—'; const s=n>0?'+':'-'; return s+'$'+Math.abs(Math.round(n)).toLocaleString(); }
 function fmtPct(n){ if(!n||isNaN(n)) return '—'; return (n>0?'+':'')+n.toFixed(1)+'%'; }
 function escH(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+function getInitials(username){
+  if(!username) return '';
+  const INITIALS = {
+    'Wsanchez':'WS','wsanchez':'WS',
+    'Wlawrence':'WL','wlawrence':'WL',
+    'RRanjan':'RR','rranjan':'RR',
+    'MLeiker':'ML','mleiker':'ML',
+    'RPomerleau':'RP','rpomerleau':'RP',
+  };
+  if(INITIALS[username]) return INITIALS[username];
+  const caps = username.match(/[A-Z]/g)||[];
+  if(caps.length>=2) return caps[0]+caps[1];
+  return (username.slice(0,2)).toUpperCase();
+}
 function isActive(r){ return r.status==='Proposed'||r.status==='Approved'; }
 function calcP(r){
   if(r.status === 'Actualize'){
@@ -1617,7 +1632,7 @@ function renderTable(){
       <td ${reqSel(r.purpose)}>${mkSelP(PURPOSES(),r.purpose,'purpose',r.id,'min-width:140px')}</td>
       <td ${reqSel(r.quarter)}>${mkSelP(QUARTERS,r.quarter,'quarter',r.id)}</td>
       <td ${req(num(r.days))}>${mkIn(r.days,'number','days',r.id,'50px')}</td>
-      <td style="padding:4px 6px;font-size:11px;color:var(--g4);white-space:nowrap;">${r.approved_at?new Date(r.approved_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'}):'—'}</td>
+      <td style="padding:4px 6px;font-size:11px;color:var(--g4);white-space:nowrap;">${r.approved_at ? new Date(r.approved_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'}) + (r.approved_by ? ' · '+getInitials(r.approved_by) : '') : '—'}</td>
       <td>${mkIn(r.visa,'number','visa',r.id,'48px')}</td>
       <td>${mkIn(r.reg,'number','reg',r.id,'62px')}</td>
       <td class="col-pl" style="${(active||r.status==='Actualize')?'':'opacity:.38'};${isLocalTrip(r)?'border-left:3px solid var(--amber);':''}">${fmt(planned)}</td>
@@ -1749,11 +1764,20 @@ function upd(id,field,value){
     }
     autoFillRow(id, field);
     if(field==='traveler'||field==='owner'||field==='manager') addToList(field, value);
+    if(field==='status'){
+      if(value==='Approved' || value==='Actualize'){
+        if(!r.approved_at){
+          r.approved_at = Date.now();
+          r.approved_by = currentUser ? currentUser.username : '';
+        }
+      } else {
+        r.approved_at = null;
+        r.approved_by = '';
+      }
+    }
     logAudit('update', db.activeFY, `${r.traveler||'Row '+id}: ${field} changed${prev!==undefined?' from "'+prev+'"':''} to "${value}"`);
     saveDB(); renderTable();
     if(field==='status'){
-      if(value==='Approved' && !r.approved_at) r.approved_at = Date.now();
-      if(value!=='Approved' && value!=='Actualize') r.approved_at = null;
       if(value==='Actualize'){
         showTab('actualize');
       } else {
@@ -3140,7 +3164,8 @@ const MAX_AUDIT = 500;
 
 function logAudit(action, fy, detail){
   if(!db.auditLog) db.auditLog=[];
-  db.auditLog.unshift({ts:Date.now(), action, fy:fy||db.activeFY, detail});
+  const user = currentUser ? currentUser.username : 'system';
+  db.auditLog.unshift({ts:Date.now(), action, fy:fy||db.activeFY, detail, user});
   if(db.auditLog.length>MAX_AUDIT) db.auditLog.length=MAX_AUDIT;
 }
 function fmtTS(ts){
@@ -3560,6 +3585,7 @@ function buildAuditLogPanel(){
     ?`<tr><td colspan="4" style="text-align:center;padding:24px;color:var(--g4)">No activity recorded yet</td></tr>`
     :log.map(e=>`<tr>
       <td class="muted">${fmtTS(e.ts)}</td>
+      <td style="font-weight:600;color:var(--navy)">${escH(e.user||'—')}</td>
       <td><span class="${ACT_CLS[e.action]||''}">${AUDIT_ICON[e.action]||''} ${e.action}</span></td>
       <td><span class="badge r-na">${e.fy||'—'}</span></td>
       <td>${escH(e.detail||'')}</td>
@@ -3672,9 +3698,9 @@ function buildDataManager(){
 }
 
 // ─── Application bootstrap ─────────────────────────────────────────────────
+let currentUser = null;
 (async () => {
   // 1. Auth check — redirect to /login if not authenticated
-  let currentUser = null;
   try {
     const me = await fetch('/api/auth/me').then(r => r.json());
     if (me.error) { window.location.href = '/login'; return; }
@@ -3725,8 +3751,8 @@ function buildDataManager(){
     window.location.href = '/login';
   };
 
-  // Force password change if flagged
-  if (currentUser.mustChangePassword) {
+  // Force password change if flagged (prod only)
+  if (currentUser.mustChangePassword && currentUser.env !== 'development') {
     showChangePasswordModal(true);
   }
 })();
