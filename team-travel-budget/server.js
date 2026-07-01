@@ -135,7 +135,7 @@ app.get('/api/auth/me', async (req, res) => {
     return res.status(401).json({ error: 'Not authenticated' });
   try {
     const user = await db.collection('users').findOne({ id: req.session.userId });
-    res.json({ username: req.session.username, role: req.session.role, mustChangePassword: !!(user && user.mustChangePassword) });
+    res.json({ username: req.session.username, role: req.session.role, mustChangePassword: !!(user && user.mustChangePassword), env: ENV });
   } catch {
     res.json({ username: req.session.username, role: req.session.role, mustChangePassword: false });
   }
@@ -151,7 +151,7 @@ app.get('/api/state', requireAuth, async (req, res) => {
   }
 });
 
-app.put('/api/state', requireAuth, requireAdmin, async (req, res) => {
+app.put('/api/state', requireAuth, async (req, res) => {
   try {
     const state = req.body;
     if (!state || typeof state !== 'object')
@@ -177,11 +177,11 @@ app.get('/api/users', requireAuth, requireAdmin, async (_req, res) => {
 
 app.post('/api/users', requireAuth, requireAdmin, async (req, res) => {
   try {
-    const { username, password, role = 'viewer' } = req.body;
+    const { username, password, role = 'user' } = req.body;
     if (!username || !password)
       return res.status(400).json({ error: 'username and password required' });
-    if (!['admin', 'viewer'].includes(role))
-      return res.status(400).json({ error: 'role must be admin or viewer' });
+    if (!['admin', 'user'].includes(role))
+      return res.status(400).json({ error: 'role must be admin or user' });
 
     const existing = await db.collection('users').findOne({ username });
     if (existing) return res.status(409).json({ error: 'Username already taken' });
@@ -210,7 +210,7 @@ app.put('/api/users/:id', requireAuth, requireAdmin, async (req, res) => {
     const { password, role } = req.body;
     const update = {};
     if (password) { update.passwordHash = bcrypt.hashSync(password, 10); update.mustChangePassword = true; }
-    if (role && ['admin', 'viewer'].includes(role)) update.role = role;
+    if (role && ['admin', 'user'].includes(role)) update.role = role;
     await db.collection('users').updateOne({ id }, { $set: update });
     res.json({ ok: true });
   } catch (e) {

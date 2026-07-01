@@ -413,7 +413,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
 .user-table tr:last-child td{border:none;}
 .user-table tr:hover td{background:var(--g1);}
 .role-badge{display:inline-block;border-radius:12px;padding:2px 9px;font-size:11px;font-weight:700;}
-.role-admin{background:#dbeafe;color:#1e40af;}.role-viewer{background:var(--g1);color:var(--g5);}
+.role-admin{background:#dbeafe;color:#1e40af;}.role-user{background:var(--g1);color:var(--g5);}
 .user-form{display:grid;grid-template-columns:1fr 1fr auto auto;gap:10px;align-items:end;margin-top:16px;padding:16px;background:var(--g1);border-radius:var(--r);}
 .user-form input,.user-form select{border:1px solid var(--g3);border-radius:7px;padding:7px 10px;font-size:13px;outline:none;font-family:inherit;width:100%;}
 .user-form input:focus,.user-form select:focus{border-color:var(--blue);}
@@ -526,7 +526,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
   </span>
   <div class="tb-sep"></div>
   <span style="font-size:11px;color:#a1a1a6;white-space:nowrap;">👤 <strong id="user-display" style="color:#f5f5f7;font-size:12px;"></strong></span>
-  <button class="btn-new-fy" onclick="showChangePasswordModal()" style="border-color:rgba(255,255,255,.2);color:#d1d5db;">Change Password</button>
+  <span id="dev-env-badge" style="display:none;background:#f59e0b;color:#1d1d1f;font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;letter-spacing:.06em;">DEV ENV</span>
   <button class="btn-new-fy" id="btn-signout" onclick="doSignOut()" style="border-color:rgba(255,120,120,.4);color:#ffb3b3;">Sign Out</button>
 </div>
 
@@ -1031,7 +1031,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
           <div>
             <label style="font-size:11px;font-weight:600;color:var(--g4);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px">Role</label>
             <select id="new-role">
-              <option value="viewer">Viewer (read-only)</option>
+              <option value="user">User</option>
               <option value="admin">Admin (full access)</option>
             </select>
           </div>
@@ -3684,18 +3684,24 @@ function buildDataManager(){
   // 2. Show user info in topbar
   const displayEl = document.getElementById('user-display');
   if (displayEl) displayEl.textContent = currentUser.username
-    + (currentUser.role === 'admin' ? '' : ' (viewer)');
+    + (currentUser.role === 'admin' ? '' : ' (user)');
 
-  // 3. Viewer mode — disable all mutating controls
+  if (currentUser.env === 'development') {
+    const badge = document.getElementById('dev-env-badge');
+    if (badge) badge.style.display = 'inline';
+  }
+
+  // 3. Viewer mode — restrict only FY management, awarded budget, and master data
   if (currentUser.role !== 'admin') {
-    document.querySelectorAll('.btn-new-fy,.btn-undo,.btn-redo,#awarded-input').forEach(el => {
-      el.disabled = true; el.title = 'Read-only — contact an admin';
+    // Block: New FY button, awarded budget input
+    document.querySelectorAll('.btn-new-fy,#awarded-input').forEach(el => {
+      el.disabled = true; el.title = 'Admin only';
     });
-    const addRowBtn = document.querySelector('.add-bar .btn-blue');
-    if (addRowBtn) addRowBtn.style.display = 'none';
-    const lock = document.createElement('div');
-    lock.className = 'viewer-lock'; lock.style.display = 'block';
-    document.querySelector('.tbl-wrap')?.appendChild(lock);
+    // Block: Master Data and Users tabs in Data Manager
+    ['dmnav-masterdata','dmnav-users'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
   }
 
   // 4. Show Users tab for admins
@@ -3789,7 +3795,7 @@ async function resetUserPassword(id, username) {
 }
 
 async function toggleUserRole(id, currentRole) {
-  const newRole = currentRole === 'admin' ? 'viewer' : 'admin';
+  const newRole = currentRole === 'admin' ? 'user' : 'admin';
   await fetch(`/api/users/${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({role: newRole}) });
   buildUsersPanel();
 }
