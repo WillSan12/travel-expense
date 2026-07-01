@@ -1,9 +1,75 @@
 {
-  "updatedAt": 1782861771073,
+  "updatedAt": 1782919337168,
   "updatedBy": "admin",
   "state": {
     "activeFY": "FY2026",
     "auditLog": [
+      {
+        "ts": 1782919336762,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Removed traveler Test 1223 from manager Rajiv Ranjan"
+      },
+      {
+        "ts": 1782919334223,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Removed from travelers master list: Test 1223"
+      },
+      {
+        "ts": 1782919321296,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "Assigned traveler Test 1223 to manager Rajiv Ranjan"
+      },
+      {
+        "ts": 1782919315961,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "Added to travelers master list: Test 1223"
+      },
+      {
+        "ts": 1782917970784,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Removed from regions master list: Africa"
+      },
+      {
+        "ts": 1782917948521,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Removed from purposes master list: Field Visit"
+      },
+      {
+        "ts": 1782917563731,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Removed from purposes master list: Customer Meeting"
+      },
+      {
+        "ts": 1782917560905,
+        "action": "delete",
+        "fy": "FY2026",
+        "detail": "Removed from purposes master list: Sales"
+      },
+      {
+        "ts": 1782917249294,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 107: manager changed from \"Maggie Leiker\" to \"Rajiv Ranjan\""
+      },
+      {
+        "ts": 1782917240677,
+        "action": "update",
+        "fy": "FY2026",
+        "detail": "Row 107: manager changed from \"\" to \"Maggie Leiker\""
+      },
+      {
+        "ts": 1782917237093,
+        "action": "create",
+        "fy": "FY2026",
+        "detail": "New row added (id 107)"
+      },
       {
         "ts": 1782861770664,
         "action": "delete",
@@ -509,13 +575,44 @@
       "Wayne Lawrence"
     ],
     "travelers": [
+      "Aditya Dave",
       "Ankita Vijayan",
+      "Arupa Banerjee",
       "Cebastian Chinolla",
       "Chandru Natarajan",
+      "David Jackson",
+      "Deepak Kumar",
+      "Diandra Hanna",
+      "Edgar Gabriel",
+      "Frank Firicano",
+      "Gaurav Rawal",
+      "Gayathri Shenoy",
+      "Guilherme Cervezao",
+      "Idan Bianco",
       "Isha Gummid",
+      "Jabbar Ahmad Shaik",
+      "Khushboo Pidwa",
+      "Kimiko Kuei",
+      "Kumar Kuppusamy",
+      "Laura Smart",
+      "Luisa Guenther",
       "Maggie Leiker",
+      "Martha Hubeny",
+      "Monika Dabrowski",
+      "Naveen Potluri",
       "Rajiv Ranjan",
+      "Sagata Das",
+      "Satheesh Waran",
+      "Satishkumar Varadarajulu",
+      "Satya Chekuri",
+      "Satyanarayana Bandaru",
+      "Sekar Krishnamurthy",
       "Shravan Koneru",
+      "Subhadeep Nandi",
+      "Teeracha Sinthavanarong",
+      "Umanand Jha",
+      "Valemia Njuh",
+      "Vinit Chalana",
       "Vipul Singh",
       "Wayne Lawrence",
       "William Sanchez"
@@ -1451,6 +1548,39 @@
             "htl_actual": 0,
             "food_actual": 0,
             "misc": 0
+          },
+          {
+            "id": 107,
+            "owner": "",
+            "imt": "",
+            "manager": "Rajiv Ranjan",
+            "traveler": "",
+            "city": "",
+            "country": "",
+            "description": "",
+            "region": "",
+            "purpose": "",
+            "quarter": "",
+            "depart": "",
+            "ret": "",
+            "airfare": 0,
+            "nights": 0,
+            "hrate": 0,
+            "visa": 0,
+            "taxi": 0,
+            "fpd": 75,
+            "days": 0,
+            "reg": 0,
+            "status": "Proposed",
+            "actual": 0,
+            "status_reason": "",
+            "archived": false,
+            "created": 1782917237093,
+            "modified": 1782917249294,
+            "htl_actual": 0,
+            "food_actual": 0,
+            "misc": 0,
+            "planned_budget": null
           }
         ],
         "created": 1782787859597,
@@ -1576,25 +1706,28 @@
       ],
       "Rajiv Ranjan": [
         "Aditya Dave",
+        "Arupa Banerjee",
         "Chandru Natarajan",
         "David Jackson",
+        "Deepak Kumar",
         "Diandra Hanna",
         "Edgar Gabriel",
+        "Gaurav Rawal",
         "Gayathri Shenoy",
         "Guilherme Cervezao",
         "Idan Bianco",
+        "Khushboo Pidwa",
         "Kimiko Kuei",
         "Kumar Kuppusamy",
-        "Kushboo Pidwa",
         "Laura Smart",
         "Luisa Guenther",
         "Monika Dabrowski",
         "Naveen Potluri",
-        "Rajiv Ranjan",
-        "Sagata Das",
         "Satheesh Waran",
+        "Satishkumar Varadarajulu",
         "Satya Chekuri",
         "Satyanarayana Bandaru",
+        "Sekar Krishnamurthy",
         "Subhadeep Nandi",
         "Teeracha Sinthavanarong",
         "Umanand Jha",
@@ -1608,33 +1741,25 @@
         "Frank Firicano",
         "Isha Gummid",
         "Jabbar Ahmad Shaik",
-        "Maggie Leiker",
-        "Martha Hubney",
+        "Martha Hubeny",
         "Sagata Das",
         "Shravan Koneru",
         "Vipul Singh"
-      ],
-      "David Champion": [
-        "Wayne Lawrence"
       ]
     },
     "regions": [
       "North America",
       "Europe",
       "Asia",
-      "Africa",
       "Latin America"
     ],
     "purposes": [
       "Conference",
       "Local Conference",
       "Team Offsite",
-      "Customer Meeting",
       "Internal Meeting",
       "External Meeting",
       "Training",
-      "Sales",
-      "Field Visit",
       "Recruiting",
       "Other"
     ]

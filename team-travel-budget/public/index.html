@@ -175,6 +175,8 @@ input[type=number]{-moz-appearance:textfield;}
 .row-df{opacity:.5;}
 .row-act{background:#f5f3ff!important;}
 .row-act td{color:var(--purple);}
+.row-pin{background:#fff8e1!important;outline:2px solid #f59e0b;outline-offset:-2px;}
+.row-pin td{color:#92400e!important;}
 .field-required{border-color:var(--red)!important;background:#fff5f5!important;}
 .field-required-sel select,.td-required-sel select{border:1px solid var(--red)!important;background:#fff5f5!important;}
 .td-req input,.td-req select{border:1px solid var(--red)!important;background:#fff5f5!important;}
@@ -606,18 +608,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
     <div class="card-body">
       <div class="tbl-wrap">
         <table class="budget-table">
-          <thead><tr>
-            <th style="width:28px">#</th>
-            <th style="width:95px">STATUS</th>
-            <th>IS&amp;T UNIT</th><th style="width:260px">TRIP DESCRIPTION</th><th>IMT</th><th>MANAGER</th><th>TRAVELER</th>
-            <th>REGION</th><th>PURPOSE</th><th style="width:80px">QTR</th>
-            <th class="r" style="width:52px">DAYS</th>
-            <th style="width:90px">APPROVED</th>
-            <th class="r" style="width:60px">VISA</th>
-            <th class="r" style="width:75px">REG FEES</th>
-            <th class="r" style="width:95px;background:#1a3050!important;">EST TOTAL</th>
-            <th style="width:28px"></th>
-          </tr></thead>
+          <thead><tr></tr></thead>
           <tbody id="budget-tbody"></tbody>
           <tfoot id="budget-tfoot"></tfoot>
         </table>
@@ -1115,7 +1106,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
 // ═══════════════════════════════════════════════════════
 function REGIONS()  { return (typeof db!=='undefined'&&db.regions&&db.regions.length) ? db.regions : ['North America','Europe','Asia','Africa','Latin America']; }
 const QUARTERS = ['Q1','Q2','Q3','Q4'];
-function PURPOSES() { return (typeof db!=='undefined'&&db.purposes&&db.purposes.length) ? db.purposes : ['Conference','Local Conference','Team Offsite','Customer Meeting','Internal Meeting','External Meeting','Training','Sales','Field Visit','Recruiting','Other']; }
+function PURPOSES() { return (typeof db!=='undefined'&&db.purposes) ? db.purposes : ['Conference','Local Conference','Team Offsite','Customer Meeting','Internal Meeting','External Meeting','Training','Sales','Field Visit','Recruiting','Other']; }
 const STATUSES = ['Proposed','Approved','Cancelled','Deferred','Actualize'];
 const REGION_BADGE = {
   'North America':'r-na','Europe':'r-eu','Asia':'r-as','Africa':'r-af','Latin America':'r-la'};
@@ -1133,14 +1124,15 @@ const DEST_CITIES = {
 
 const MANAGER_TRAVELERS = {
   'Wayne Lawrence': ['Maggie Leiker','Rajiv Ranjan'],
-  'Rajiv Ranjan': ['Aditya Dave','Chandru Natarajan','David Jackson','Diandra Hanna',
-    'Edgar Gabriel','Gayathri Shenoy','Guilherme Cervezao','Idan Bianco','Kimiko Kuei',
-    'Kumar Kuppusamy','Kushboo Pidwa','Laura Smart','Luisa Guenther','Monika Dabrowski',
-    'Naveen Potluri','Rajiv Ranjan','Sagata Das','Satheesh Waran','Satya Chekuri',
-    'Satyanarayana Bandaru','Subhadeep Nandi','Teeracha Sinthavanarong','Umanand Jha',
-    'Valemia Njuh','Vinit Chalana','William Sanchez'],
+  'Rajiv Ranjan': ['Aditya Dave','Arupa Banerjee','Chandru Natarajan','David Jackson',
+    'Deepak Kumar','Diandra Hanna','Edgar Gabriel','Gaurav Rawal','Gayathri Shenoy',
+    'Guilherme Cervezao','Idan Bianco','Khushboo Pidwa','Kimiko Kuei','Kumar Kuppusamy',
+    'Laura Smart','Luisa Guenther','Monika Dabrowski','Naveen Potluri','Satheesh Waran',
+    'Satishkumar Varadarajulu','Satya Chekuri','Satyanarayana Bandaru','Sekar Krishnamurthy',
+    'Subhadeep Nandi','Teeracha Sinthavanarong','Umanand Jha','Valemia Njuh','Vinit Chalana',
+    'William Sanchez'],
   'Maggie Leiker': ['Ankita Vijayan','Cebastian Chinolla','Frank Firicano','Isha Gummid',
-    'Jabbar Ahmad Shaik','Maggie Leiker','Martha Hubney','Sagata Das','Shravan Koneru','Vipul Singh'],
+    'Jabbar Ahmad Shaik','Martha Hubeny','Sagata Das','Shravan Koneru','Vipul Singh'],
 };
 
 const IMT_TRAVELERS = {
@@ -1546,12 +1538,26 @@ function stSel(status,rid){
 }
 
 function renderTable(){
+  // Update status column sort icon
+  const thead = document.querySelector('#budget-tbody')?.closest('table')?.querySelector('thead tr');
+  if(thead) thead.innerHTML = `
+    <th style="width:28px">#</th>
+    <th style="width:95px;cursor:pointer;user-select:none" onclick="setBudgetSort('status')">STATUS <span style="font-size:11px">${budgetSort.field==='status' ? (budgetSort.dir==='asc' ? '▲' : '▼') : '↕'}</span></th>
+    <th>IS&amp;T UNIT</th>
+    <th style="width:260px">TRIP DESCRIPTION</th>
+    <th>IMT</th><th>MANAGER</th><th>TRAVELER</th>
+    <th>REGION</th><th>PURPOSE</th><th style="width:80px">QTR</th>
+    <th class="r" style="width:52px">DAYS</th>
+    <th style="width:90px">APPROVED</th>
+    <th class="r" style="width:60px">VISA</th>
+    <th class="r" style="width:75px">REG FEES</th>
+    <th class="r" style="width:95px;background:#1a3050!important;">EST TOTAL</th>
+    <th style="width:28px"></th>`;
   const rows = currentRows().filter(r => !r.archived && (budgetStatusFilter==='all' || r.status===budgetStatusFilter));
   if(budgetSort.field){
     rows.sort((a,b)=>{
-      let av=a[budgetSort.field]??'', bv=b[budgetSort.field]??'';
-      if(!isNaN(num(av))&&!isNaN(num(bv))){av=num(av);bv=num(bv);}
-      else{av=String(av).toLowerCase();bv=String(bv).toLowerCase();}
+      let av=String(a[budgetSort.field]??'').toLowerCase();
+      let bv=String(b[budgetSort.field]??'').toLowerCase();
       return(budgetSort.dir==='asc'?1:-1)*(av<bv?-1:av>bv?1:0);
     });
   }
@@ -1568,12 +1574,12 @@ function renderTable(){
     if(actual>0&&active) tA+=actual;
     if(r.status==='Cancelled') tCx+=planned;
     if(r.status==='Deferred')  tDf+=planned;
-    const rcls = r.status==='Cancelled'?'row-cx':r.status==='Deferred'?'row-df':r.status==='Actualize'?'row-act':'';
+    const rcls = (r.status==='Cancelled'?'row-cx':r.status==='Deferred'?'row-df':r.status==='Actualize'?'row-act':'') + (pinnedRowId===r.id?' row-pin':'');
     const vc = vari==null?'vr-neu':vari<=0?'vr-pos':'vr-neg';
     const delCell = `<td class="td-del"><button class="del-btn" onclick="requestDelRow(${r.id})" title="Delete row">✕</button></td>`;
     const req = (val) => !val ? 'class="td-req"' : '';
     const reqSel = (val) => !val ? 'class="td-req"' : '';
-    return `<tr class="${rcls}">
+    return `<tr class="${rcls}" data-rid="${r.id}" onclick="pinRow(${r.id})" style="cursor:pointer">
       <td style="text-align:center;color:var(--g4);font-size:11px">${i+1}</td>
       <td class="td-st">${stSel(r.status,r.id)}${(r.status==='Cancelled'||r.status==='Deferred')&&r.status_reason?`<div style="font-size:9px;color:#888;margin-top:3px;padding:0 2px;white-space:normal;max-width:130px;" title="${escH(r.status_reason)}">📝 ${escH(r.status_reason.length>40?r.status_reason.slice(0,40)+'…':r.status_reason)}</div>`:''}</td>
       <td ${reqSel(r.owner)}>${mkMasterSel(r.owner,'owner',r.id,'owners')}</td>
@@ -2616,10 +2622,30 @@ function shiftDateByYear(dateStr){
 // ═══════════════════════════════════════════════════════
 let budgetStatusFilter = 'all';
 let budgetSort = {field: null, dir: 'asc'};
+let pinnedRowId = null;
 function setBudgetSort(field){
-  budgetSort = budgetSort.field===field && budgetSort.dir==='asc'
-    ? {field, dir:'desc'} : {field, dir:'asc'};
+  if(budgetSort.field===field && budgetSort.dir==='asc')
+    budgetSort = {field, dir:'desc'};
+  else if(budgetSort.field===field && budgetSort.dir==='desc')
+    budgetSort = {field:null, dir:'asc'};  // third click — back to original order
+  else
+    budgetSort = {field, dir:'asc'};
   renderTable();
+}
+function pinRow(id){
+  if(pinnedRowId === id){
+    pinnedRowId = null;
+  } else {
+    pinnedRowId = id;
+  }
+  document.querySelectorAll('#budget-tbody tr, #actualize-tbody tr').forEach(tr => {
+    tr.classList.remove('row-pin');
+  });
+  if(pinnedRowId !== null){
+    document.querySelectorAll(`#budget-tbody tr[data-rid="${pinnedRowId}"], #actualize-tbody tr[data-rid="${pinnedRowId}"]`).forEach(tr => {
+      tr.classList.add('row-pin');
+    });
+  }
 }
 function sortIcon(field){
   if(budgetSort.field!==field) return '<span style="opacity:.4;font-size:9px;">↕</span>';
@@ -2658,8 +2684,9 @@ function renderActualizeTable(){
     if(autoActual > 0) tA += autoActual;
     const vc = vari==null?'vr-neu':vari<=0?'vr-pos':'vr-neg';
     const delCell = `<td class="td-del"><button class="del-btn" onclick="requestDelRow(${r.id})" title="Delete row">✕</button></td>`;
+    const actRcls = (pinnedRowId===r.id ? 'row-pin' : '');
     const gStyle = 'background:#f0faf5;';
-    return `<tr>
+    return `<tr class="${actRcls}" data-rid="${r.id}" onclick="pinRow(${r.id})" style="cursor:pointer">
       <td style="text-align:center;color:var(--g4);font-size:11px">${i+1}</td>
       <td class="td-st">${stSel(r.status,r.id)}${(r.status==='Cancelled'||r.status==='Deferred')&&r.status_reason?`<div style="font-size:9px;color:#888;margin-top:3px;padding:0 2px;white-space:normal;max-width:130px;" title="${escH(r.status_reason)}">📝 ${escH(r.status_reason.length>40?r.status_reason.slice(0,40)+'…':r.status_reason)}</div>`:''}</td>
       <td>${mkMasterSel(r.owner,'owner',r.id,'owners')}</td>
@@ -3545,13 +3572,13 @@ function addMasterEntry(key, inputEl){
   if(!db[key]) db[key]=[];
   if(!db[key].includes(val)){ db[key].push(val); db[key].sort(); saveDB(); renderDataLists(); logAudit('create',db.activeFY,`Added to ${key} master list: ${val}`); }
   inputEl.value=''; buildMasterData();
-  if(key==='regions'||key==='purposes') renderTable();
+  renderTable(); renderActualizeTable();
 }
 function removeMasterEntry(key, val){
   if(!db[key]) return;
   db[key]=db[key].filter(v=>v!==val);
   saveDB(); renderDataLists(); logAudit('delete',db.activeFY,`Removed from ${key} master list: ${val}`); buildMasterData();
-  if(key==='regions'||key==='purposes') renderTable();
+  renderTable(); renderActualizeTable();
 }
 
 function buildMgrTravelerPanel(){

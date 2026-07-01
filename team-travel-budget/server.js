@@ -1,67 +1,72 @@
 'use strict';
 
-require('dotenv').config();
+const ENV = process.env.NODE_ENV || 'development';
+require('dotenv').config({ path: `.env.${ENV}` });
 
 const express        = require('express');
 const session        = require('express-session');
 const bcrypt         = require('bcryptjs');
 const path           = require('path');
-const fs             = require('fs');
+const { MongoClient } = require('mongodb');
 
 // ── Config ────────────────────────────────────────────────────────────────────
 const PORT           = parseInt(process.env.PORT || '3000', 10);
 const SESSION_SECRET = process.env.SESSION_SECRET || 'ttb-dev-secret';
-const DATA_DIR       = path.resolve(process.env.DATA_DIR || './data');
-const USERS_FILE     = path.join(DATA_DIR, 'users.json');
-const STATE_FILE     = path.join(DATA_DIR, 'travel_budget.json');
 const ADMIN_USER     = process.env.ADMIN_USERNAME || 'admin';
 const ADMIN_PASS     = process.env.ADMIN_PASSWORD || 'changeme';
+const MONGODB_URI    = process.env.MONGODB_URI;
+const MONGODB_DB     = process.env.MONGODB_DB || 'travel_budget_dev';
 
-fs.mkdirSync(DATA_DIR, { recursive: true });
-
-// ── JSON file helpers ─────────────────────────────────────────────────────────
-function readJSON(file, fallback) {
-  try   { return JSON.parse(fs.readFileSync(file, 'utf8')); }
-  catch { return fallback; }
+if (!MONGODB_URI) {
+  console.error('ERROR: MONGODB_URI is not set. Check your .env file.');
+  process.exit(1);
 }
 
-function writeJSON(file, data) {
-  fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf8');
+// ── MongoDB connection ────────────────────────────────────────────────────────
+const client = new MongoClient(MONGODB_URI);
+let db;
+
+async function connectDB() {
+  await client.connect();
+  db = client.db(MONGODB_DB);
+  console.log(`  ✓  MongoDB connected (${MONGODB_DB})`);
 }
 
-// ── User store ────────────────────────────────────────────────────────────────
-// Schema: { users: [{ id, username, passwordHash, role, createdAt }] }
-function loadUsers()       { return readJSON(USERS_FILE, { users: [] }); }
-function saveUsers(store)  { writeJSON(USERS_FILE, store); }
+// Collections:
+//   users  — { _id, id, username, passwordHash, role, createdAt }
+//   state  — { _id: 'main', updatedAt, updatedBy, state: { ...app db... } }
 
-function findUser(username) {
-  return loadUsers().users.find(u => u.username === username) || null;
+// ── User helpers ──────────────────────────────────────────────────────────────
+async function findUser(username) {
+  return db.collection('users').findOne({ username });
 }
 
-// Seed admin user on first run
-(function seedAdmin() {
-  const store = loadUsers();
-  if (store.users.length === 0) {
-    store.users.push({
+async function seedAdmin() {
+  const count = await db.collection('users').countDocuments();
+  if (count === 0) {
+    await db.collection('users').insertOne({
       id:           1,
       username:     ADMIN_USER,
       passwordHash: bcrypt.hashSync(ADMIN_PASS, 10),
       role:         'admin',
       createdAt:    Date.now(),
     });
-    saveUsers(store);
-    console.log(`[seed] Created admin user "${ADMIN_USER}"`);
+    console.log(`  ✓  Seeded admin user "${ADMIN_USER}"`);
   }
-})();
+}
 
-// ── App state store ───────────────────────────────────────────────────────────
-// A single JSON blob representing the entire travel-budget DB (same shape as
-// the old localStorage payload).  Wrapped in metadata for audit.
-// Schema: { updatedAt, updatedBy, state: { ...app db... } }
+// ── State helpers ─────────────────────────────────────────────────────────────
+async function loadState() {
+  const doc = await db.collection('state').findOne({ _id: 'main' });
+  return doc ? doc.state : null;
+}
 
-function loadState()               { return readJSON(STATE_FILE, null); }
-function saveState(state, username) {
-  writeJSON(STATE_FILE, { updatedAt: Date.now(), updatedBy: username, state });
+async function saveState(state, username) {
+  await db.collection('state').updateOne(
+    { _id: 'main' },
+    { $set: { updatedAt: Date.now(), updatedBy: username, state } },
+    { upsert: true }
+  );
 }
 
 // ── Express setup ─────────────────────────────────────────────────────────────
@@ -75,9 +80,9 @@ app.use(session({
   resave:            false,
   saveUninitialized: false,
   cookie: {
-    maxAge:     8 * 60 * 60 * 1000,  // 8 hours
-    httpOnly:   true,
-    sameSite:  'lax',
+    maxAge:   8 * 60 * 60 * 1000,
+    httpOnly: true,
+    sameSite: 'lax',
   },
 }));
 
@@ -95,31 +100,30 @@ function requireAdmin(req, res, next) {
 // ── Static files ──────────────────────────────────────────────────────────────
 const PUBLIC = path.join(__dirname, 'public');
 
-// /login  — no auth
 app.get('/login', (_req, res) => res.sendFile(path.join(PUBLIC, 'login.html')));
-
-// /app/*  — auth-gated
 app.use('/app', requireAuth, express.static(PUBLIC));
-
-// Root redirect
 app.get('/', (req, res) => {
   res.redirect(req.session && req.session.userId ? '/app/' : '/login');
 });
 
 // ── Auth routes ───────────────────────────────────────────────────────────────
-app.post('/api/auth/login', (req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password)
-    return res.status(400).json({ error: 'Username and password are required' });
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    if (!username || !password)
+      return res.status(400).json({ error: 'Username and password are required' });
 
-  const user = findUser(username);
-  if (!user || !bcrypt.compareSync(password, user.passwordHash))
-    return res.status(401).json({ error: 'Invalid username or password' });
+    const user = await findUser(username);
+    if (!user || !bcrypt.compareSync(password, user.passwordHash))
+      return res.status(401).json({ error: 'Invalid username or password' });
 
-  req.session.userId   = user.id;
-  req.session.username = user.username;
-  req.session.role     = user.role;
-  res.json({ ok: true, username: user.username, role: user.role });
+    req.session.userId   = user.id;
+    req.session.username = user.username;
+    req.session.role     = user.role;
+    res.json({ ok: true, username: user.username, role: user.role });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
 app.post('/api/auth/logout', (req, res) => {
@@ -133,94 +137,125 @@ app.get('/api/auth/me', (req, res) => {
 });
 
 // ── App state routes ──────────────────────────────────────────────────────────
-// GET  /api/state  — load the app's full database (authenticated)
-app.get('/api/state', requireAuth, (req, res) => {
-  const record = loadState();
-  res.json(record ? record.state : null);
+app.get('/api/state', requireAuth, async (req, res) => {
+  try {
+    const state = await loadState();
+    res.json(state);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
-// PUT  /api/state  — save the full database (admin only)
-app.put('/api/state', requireAuth, requireAdmin, (req, res) => {
-  const state = req.body;
-  if (!state || typeof state !== 'object')
-    return res.status(400).json({ error: 'Body must be a JSON object' });
-
-  saveState(state, req.session.username);
-  res.json({ ok: true, savedAt: Date.now() });
+app.put('/api/state', requireAuth, requireAdmin, async (req, res) => {
+  try {
+    const state = req.body;
+    if (!state || typeof state !== 'object')
+      return res.status(400).json({ error: 'Body must be a JSON object' });
+    await saveState(state, req.session.username);
+    res.json({ ok: true, savedAt: Date.now() });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
 // ── User management routes (admin only) ──────────────────────────────────────
-app.get('/api/users', requireAuth, requireAdmin, (_req, res) => {
-  const users = loadUsers().users.map(({ id, username, role, createdAt }) =>
-    ({ id, username, role, createdAt })
-  );
-  res.json(users);
+app.get('/api/users', requireAuth, requireAdmin, async (_req, res) => {
+  try {
+    const users = await db.collection('users')
+      .find({}, { projection: { passwordHash: 0, _id: 0 } })
+      .toArray();
+    res.json(users);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
-app.post('/api/users', requireAuth, requireAdmin, (req, res) => {
-  const { username, password, role = 'viewer' } = req.body;
-  if (!username || !password)
-    return res.status(400).json({ error: 'username and password required' });
-  if (!['admin', 'viewer'].includes(role))
-    return res.status(400).json({ error: 'role must be admin or viewer' });
+app.post('/api/users', requireAuth, requireAdmin, async (req, res) => {
+  try {
+    const { username, password, role = 'viewer' } = req.body;
+    if (!username || !password)
+      return res.status(400).json({ error: 'username and password required' });
+    if (!['admin', 'viewer'].includes(role))
+      return res.status(400).json({ error: 'role must be admin or viewer' });
 
-  const store = loadUsers();
-  if (store.users.find(u => u.username === username))
-    return res.status(409).json({ error: 'Username already taken' });
+    const existing = await db.collection('users').findOne({ username });
+    if (existing) return res.status(409).json({ error: 'Username already taken' });
 
-  const newUser = {
-    id:           (store.users.reduce((m, u) => Math.max(m, u.id), 0)) + 1,
-    username,
-    passwordHash: bcrypt.hashSync(password, 10),
-    role,
-    createdAt:    Date.now(),
-  };
-  store.users.push(newUser);
-  saveUsers(store);
-  res.status(201).json({ id: newUser.id, username, role });
+    const last = await db.collection('users').find().sort({ id: -1 }).limit(1).toArray();
+    const newId = last.length ? last[0].id + 1 : 1;
+
+    const newUser = {
+      id:           newId,
+      username,
+      passwordHash: bcrypt.hashSync(password, 10),
+      role,
+      createdAt:    Date.now(),
+    };
+    await db.collection('users').insertOne(newUser);
+    res.status(201).json({ id: newId, username, role });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
-app.put('/api/users/:id', requireAuth, requireAdmin, (req, res) => {
-  const id    = parseInt(req.params.id, 10);
-  const store = loadUsers();
-  const user  = store.users.find(u => u.id === id);
-  if (!user) return res.status(404).json({ error: 'User not found' });
-
-  const { password, role } = req.body;
-  if (password) user.passwordHash = bcrypt.hashSync(password, 10);
-  if (role && ['admin', 'viewer'].includes(role)) user.role = role;
-  saveUsers(store);
-  res.json({ ok: true });
+app.put('/api/users/:id', requireAuth, requireAdmin, async (req, res) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    const { password, role } = req.body;
+    const update = {};
+    if (password) update.passwordHash = bcrypt.hashSync(password, 10);
+    if (role && ['admin', 'viewer'].includes(role)) update.role = role;
+    await db.collection('users').updateOne({ id }, { $set: update });
+    res.json({ ok: true });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
-app.delete('/api/users/:id', requireAuth, requireAdmin, (req, res) => {
-  const id    = parseInt(req.params.id, 10);
-  // Prevent deleting your own account
-  if (id === req.session.userId)
-    return res.status(400).json({ error: 'Cannot delete your own account' });
-  const store = loadUsers();
-  store.users = store.users.filter(u => u.id !== id);
-  saveUsers(store);
-  res.json({ ok: true });
+app.delete('/api/users/:id', requireAuth, requireAdmin, async (req, res) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (id === req.session.userId)
+      return res.status(400).json({ error: 'Cannot delete your own account' });
+    await db.collection('users').deleteOne({ id });
+    res.json({ ok: true });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
 // ── Health check ──────────────────────────────────────────────────────────────
-app.get('/api/health', (_req, res) => {
-  const record = loadState();
-  res.json({
-    status:    'ok',
-    ts:        Date.now(),
-    stateFile: fs.existsSync(STATE_FILE),
-    stateAge:  record ? Date.now() - record.updatedAt : null,
-    users:     loadUsers().users.length,
-  });
+app.get('/api/health', async (_req, res) => {
+  try {
+    const doc = await db.collection('state').findOne({ _id: 'main' });
+    res.json({
+      status:  'ok',
+      env:     ENV,
+      db:      MONGODB_DB,
+      ts:      Date.now(),
+      hasData: !!doc,
+      stateAge: doc ? Date.now() - doc.updatedAt : null,
+    });
+  } catch (e) {
+    res.status(500).json({ status: 'error', error: e.message });
+  }
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log('');
-  console.log('  ✈  Team Travel Budget');
-  console.log(`  →  http://localhost:${PORT}`);
-  console.log(`  →  Login: ${ADMIN_USER} / ${ADMIN_PASS}`);
-  console.log('');
-});
+connectDB()
+  .then(() => seedAdmin())
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log('');
+      console.log('  ✈  Team Travel Budget');
+      console.log(`  →  ENV:  ${ENV}`);
+      console.log(`  →  DB:   ${MONGODB_DB}`);
+      console.log(`  →  http://localhost:${PORT}`);
+      console.log(`  →  Login: ${ADMIN_USER} / ${ADMIN_PASS}`);
+      console.log('');
+    });
+  })
+  .catch(err => {
+    console.error('Failed to connect to MongoDB:', err.message);
+    process.exit(1);
+  });

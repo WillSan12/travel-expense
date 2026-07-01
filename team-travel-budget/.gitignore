@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# Environment files — production secrets never committed
+.env
+.env.production
+.env.local
+
+# Data files — live data never overwritten by deploys
+data/travel_budget.json
+data/users.json
+
+# OS
+.DS_Store
