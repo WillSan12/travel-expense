@@ -3726,7 +3726,7 @@ function buildDataManager(){
   };
 
   // Force password change if flagged
-  if (me.mustChangePassword) {
+  if (currentUser.mustChangePassword) {
     showChangePasswordModal(true);
   }
 })();
