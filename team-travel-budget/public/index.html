@@ -687,7 +687,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
   <div class="card">
     <div class="card-head">
       <h2>By Manager</h2>
-      <span class="hint">Org hierarchy — Estimated · Actualized · Variance</span>
+      <span class="hint">Org hierarchy — Proposed · Approved · Actualized · Remaining</span>
     </div>
     <div class="card-body" style="overflow-x:auto">
       <table style="width:100%;border-collapse:collapse;font-size:12px;">
@@ -701,9 +701,10 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
           <span style="font-size:9px;font-weight:400;"><span style="display:inline-block;width:8px;height:8px;background:#5b21b6;border-radius:2px;margin-right:3px;vertical-align:middle;"></span>Actualized</span>
         </div>
       </th>
-          <th style="background:#1a3050;color:#f5f5f7;padding:8px 12px;text-align:right;font-size:11px;letter-spacing:.05em;">ESTIMATED</th>
+          <th style="background:#2d1a5e;color:#f5f5f7;padding:8px 12px;text-align:right;font-size:11px;letter-spacing:.05em;">PROPOSED</th>
+          <th style="background:#0c3a5e;color:#f5f5f7;padding:8px 12px;text-align:right;font-size:11px;letter-spacing:.05em;">APPROVED</th>
           <th style="background:#1a2a3a;color:#f5f5f7;padding:8px 12px;text-align:right;font-size:11px;letter-spacing:.05em;">ACTUALIZED</th>
-          <th style="background:#2a1a3a;color:#f5f5f7;padding:8px 12px;text-align:right;font-size:11px;letter-spacing:.05em;">VARIANCE</th>
+          <th style="background:#1a3050;color:#f5f5f7;padding:8px 12px;text-align:right;font-size:11px;letter-spacing:.05em;">REMAINING</th>
         </tr></thead>
         <tbody id="dash-mgr"></tbody>
       </table>
@@ -1858,22 +1859,28 @@ function buildPieChart(containerId, slices) {
     el.innerHTML = '<p style="color:var(--g4);text-align:center;padding:30px;font-size:13px">No data available</p>';
     return;
   }
-  const cx = 110, cy = 110, r = 90, hole = 52;
+  const cx = 110, cy = 110, r = 90, hole = 52, labelR = 73;
   let angle = -Math.PI / 2;
-  const paths = slices.filter(sl => sl.value > 0).map(sl => {
+  const segments = slices.filter(sl => sl.value > 0).map(sl => {
     const sweep = (sl.value / total) * 2 * Math.PI;
-    if (sweep < 0.001) return '';
-    const a1 = angle, a2 = angle + sweep;
+    if (sweep < 0.001) return { path: '', label: '' };
+    const a1 = angle, a2 = angle + sweep, mid = (a1 + a2) / 2;
     angle += sweep;
     const cos1 = Math.cos(a1), sin1 = Math.sin(a1);
     const cos2 = Math.cos(a2), sin2 = Math.sin(a2);
     const large = sweep > Math.PI ? 1 : 0;
     const pct = Math.round(sl.value / total * 100);
-    const tip = `${sl.label}: ${fmt(sl.value)} (${pct}%)`;
-    return `<path d="M ${(cx+r*cos1).toFixed(1)} ${(cy+r*sin1).toFixed(1)} A ${r} ${r} 0 ${large} 1 ${(cx+r*cos2).toFixed(1)} ${(cy+r*sin2).toFixed(1)} L ${(cx+hole*cos2).toFixed(1)} ${(cy+hole*sin2).toFixed(1)} A ${hole} ${hole} 0 ${large} 0 ${(cx+hole*cos1).toFixed(1)} ${(cy+hole*sin1).toFixed(1)} Z"
+    const tip = sl.tip || `${sl.label}: ${fmt(sl.value)} (${pct}%)`;
+    const path = `<path d="M ${(cx+r*cos1).toFixed(1)} ${(cy+r*sin1).toFixed(1)} A ${r} ${r} 0 ${large} 1 ${(cx+r*cos2).toFixed(1)} ${(cy+r*sin2).toFixed(1)} L ${(cx+hole*cos2).toFixed(1)} ${(cy+hole*sin2).toFixed(1)} A ${hole} ${hole} 0 ${large} 0 ${(cx+hole*cos1).toFixed(1)} ${(cy+hole*sin1).toFixed(1)} Z"
       fill="${sl.color}" stroke="#fff" stroke-width="2.5" data-tip="${escH(tip)}"
       style="cursor:pointer;transition:opacity .15s" onmouseover="this.style.opacity='.72'" onmouseout="this.style.opacity='1'"/>`;
-  }).join('');
+    const lx = (cx + labelR * Math.cos(mid)).toFixed(1);
+    const ly = (cy + labelR * Math.sin(mid)).toFixed(1);
+    const label = pct >= 8 ? `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" fill="#fff" font-size="11" font-weight="700" pointer-events="none">${pct}%</text>` : '';
+    return { path, label };
+  });
+  const paths = segments.map(s => s.path).join('');
+  const labels = segments.map(s => s.label).join('');
   const legend = slices.filter(sl => sl.value > 0).map(sl => {
     const pct = Math.round(sl.value / total * 100);
     return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
@@ -1886,7 +1893,7 @@ function buildPieChart(containerId, slices) {
   el.innerHTML = `
     <div style="display:flex;align-items:center;gap:28px;flex-wrap:wrap;justify-content:center;padding:8px 0">
       <div style="position:relative;flex-shrink:0">
-        <svg width="220" height="220" viewBox="0 0 220 220">${paths}</svg>
+        <svg width="220" height="220" viewBox="0 0 220 220">${paths}${labels}</svg>
         <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none">
           <div style="font-size:10px;color:var(--g4);font-weight:600;letter-spacing:.05em;text-transform:uppercase">Total</div>
           <div style="font-size:17px;font-weight:800;color:var(--navy);white-space:nowrap">${fmt(total)}</div>
@@ -1906,23 +1913,33 @@ function buildDashboard(){
   const actualize= allRows.filter(r => r.status === 'Actualize');
   const aw = yd.awarded || 0;
 
-  const tEstimated       = active.reduce((s,r) => s + calcP(r), 0);
-  const tActualized      = actualize.reduce((s,r) => s + (num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)), 0);
-  const tRemainingActual = aw - tActualized;                          // Awarded - Actualized
-  const tRemainingEst    = aw - (tEstimated + tActualized);           // Awarded - (Estimated + Actualized)
+  const tActivePlanned    = active.reduce((s,r) => s + calcP(r), 0);
+  const tActualizePlanned = actualize.reduce((s,r) => s + (num(r.planned_budget) || calcP({...r,status:'Approved'})), 0);
+  const tAllPlanned       = tActivePlanned + tActualizePlanned;       // all trips' planned budgets
+  const tActualized       = actualize.reduce((s,r) => s + (num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)), 0);
+  const tEstimated        = tActivePlanned;                           // alias — active trips only
+  const tRemainingActual  = aw - tActualized;                         // Awarded - Actual Spend
+  const tRemainingEst     = aw - tAllPlanned;                         // Awarded - All Planned (KPIs)
+  const tRemainingPie     = aw - tActualized - tActivePlanned;        // pie slice: unspoken budget
 
   // ── KPIs ──────────────────────────────────────────────
   const kpis = [
-    {cls:'kpi-aw', lbl:'Awarded Budget',         val:fmt(aw),                         sub:`FY ${db.activeFY}`,                        tip:`Awarded Budget\n= ${fmt(aw)}\n\nTotal budget allocated for ${db.activeFY}`},
-    {cls:'kpi-pl', lbl:'Total Estimated',        val:fmt(tEstimated),                 sub:`${active.length} active trip${active.length!==1?'s':''}`,  tip:`Total Estimated\n= Airfare (high) + (Hotel avg + Food + Taxi) × Days + Reg Fees + Visa\n\nSum of all Proposed + Approved trips\n= ${fmt(tEstimated)}`},
-    {cls:'kpi-vr', lbl:'Total Actualized',       val:tActualized?fmt(tActualized):'—',sub: actualize.length ? `${actualize.length} actualized` : 'No actuals yet', tip:`Total Actualized\n= Airfare + Hotel + Taxi + Food + Misc\nfor all Actualize-status trips\n= ${tActualized?fmt(tActualized):'No actuals yet'}`},
-    {cls:'kpi-rm', lbl:'Remaining (Actualized)', val:fmt(Math.max(tRemainingActual,0)),
-      sub:'Awarded − Actualized',
-      tip:`Remaining (Actualized)\n= Awarded − Actualized\n= ${fmt(aw)} − ${fmt(tActualized)}\n= ${fmt(Math.max(tRemainingActual,0))}`,
+    {cls:'kpi-aw', lbl:'Awarded Budget',    val:fmt(aw),
+      sub:`FY ${db.activeFY}`,
+      tip:`Awarded Budget\n= ${fmt(aw)}\n\nTotal budget allocated for ${db.activeFY}`},
+    {cls:'kpi-pl', lbl:'Total Planned',     val:fmt(tAllPlanned),
+      sub:`${active.length + actualize.length} trip${(active.length+actualize.length)!==1?'s':''} total`,
+      tip:`Total Planned\n= Proposed + Approved trips (est) + Actualized trips (planned budget)\n= ${fmt(tActivePlanned)} active + ${fmt(tActualizePlanned)} actualized planned\n= ${fmt(tAllPlanned)}`},
+    {cls:'kpi-vr', lbl:'Total Actualized',  val:tActualized?fmt(tActualized):'—',
+      sub: actualize.length ? `${actualize.length} actualized` : 'No actuals yet',
+      tip:`Total Actualized\n= Airfare + Hotel + Taxi + Food + Misc\nfor all Actualize-status trips\n= ${tActualized?fmt(tActualized):'No actuals yet'}`},
+    {cls:'kpi-rm', lbl:'Remaining (Actual)',val:fmt(Math.max(tRemainingActual,0)),
+      sub:'Awarded − Actual Spend',
+      tip:`Remaining (Actual)\n= Awarded − Actualized\n= ${fmt(aw)} − ${fmt(tActualized)}\n= ${fmt(Math.max(tRemainingActual,0))}`,
       tag: tRemainingActual >= 0 ? {t:'On Track',s:'background:#d1ede0;color:#0f5132'} : {t:'Over Budget',s:'background:#fde8e6;color:#c0392b'}},
-    {cls:'kpi-rm', lbl:'Remaining (Estimated)',  val:fmt(Math.max(tRemainingEst,0)),
-      sub:'Awarded − (Estimated + Actualized)',
-      tip:`Remaining (Estimated)\n= Awarded − (Estimated + Actualized)\n= ${fmt(aw)} − (${fmt(tEstimated)} + ${fmt(tActualized)})\n= ${fmt(Math.max(tRemainingEst,0))}`,
+    {cls:'kpi-rm', lbl:'Remaining (Planned)',val:fmt(Math.max(tRemainingEst,0)),
+      sub:'Awarded − All Planned',
+      tip:`Remaining (Planned)\n= Awarded − Total Planned\n= ${fmt(aw)} − ${fmt(tAllPlanned)}\n= ${fmt(Math.max(tRemainingEst,0))}`,
       tag: tRemainingEst >= 0 ? {t:'On Track',s:'background:#d1ede0;color:#0f5132'} : {t:'Over Budget',s:'background:#fde8e6;color:#c0392b'}},
   ];
   document.getElementById('kpi-grid').innerHTML = kpis.map(k=>`
@@ -1934,7 +1951,8 @@ function buildDashboard(){
     </div>`).join('');
 
   // ── Stacked Bar Chart ──────────────────────────────────
-  const tProposed   = allRows.filter(r=>r.status==='Proposed').reduce((s,r)=>s+calcP(r),0);
+  const tProposed  = allRows.filter(r=>r.status==='Proposed').reduce((s,r)=>s+calcP(r),0);
+  const tApproved  = allRows.filter(r=>r.status==='Approved').reduce((s,r)=>s+calcP(r),0);
   const tBase = Math.max(aw, tEstimated + tActualized, 1);
   const pct = v => Math.min(v/tBase*100,100).toFixed(1);
 
@@ -1963,33 +1981,32 @@ function buildDashboard(){
       ${bar('Actualized', tActualized, '#5b21b6', null, `Actualized\n= Airfare + Hotel + Taxi + Food + Misc\nfor Actualize-status trips\n= ${fmt(tActualized)}\n${Math.round(tActualized/Math.max(aw,1)*100)}% of Awarded`)}
       ${bar('Proposed', tProposed, '#3b82f6', null, `Proposed\n= Est. cost of all Proposed trips\n= ${fmt(tProposed)}\n${Math.round(tProposed/Math.max(aw,1)*100)}% of Awarded`)}
       ${bar('Remaining (Act)', Math.max(tRemainingActual,0), '#34d399', [
-          {h: remActH, color:'#34d399', label:'Remaining (Actualized): '+fmt(Math.max(tRemainingActual,0))}
-        ], `Remaining (Actualized)\n= Awarded − Actualized\n= ${fmt(aw)} − ${fmt(tActualized)}\n= ${fmt(Math.max(tRemainingActual,0))}`)}
-      ${bar('Remaining (Est)', Math.max(tRemainingEst,0), '#93c5fd', [
-          {h: remEstH, color:'#93c5fd', label:'Remaining (Estimated): '+fmt(Math.max(tRemainingEst,0))}
-        ], `Remaining (Estimated)\n= Awarded − (Estimated + Actualized)\n= ${fmt(aw)} − (${fmt(tEstimated)} + ${fmt(tActualized)})\n= ${fmt(Math.max(tRemainingEst,0))}`)}
+          {h: remActH, color:'#34d399', label:'Remaining (Actual): '+fmt(Math.max(tRemainingActual,0))}
+        ], `Remaining (Actual)\n= Awarded − Actualized\n= ${fmt(aw)} − ${fmt(tActualized)}\n= ${fmt(Math.max(tRemainingActual,0))}`)}
+      ${bar('Remaining (Plan)', Math.max(tRemainingEst,0), '#93c5fd', [
+          {h: remEstH, color:'#93c5fd', label:'Remaining (Planned): '+fmt(Math.max(tRemainingEst,0))}
+        ], `Remaining (Planned)\n= Awarded − Total Planned\n= ${fmt(aw)} − ${fmt(tAllPlanned)}\n= ${fmt(Math.max(tRemainingEst,0))}`)}
     </div>
     <div style="display:flex;gap:16px;flex-wrap:wrap;padding:14px 16px 4px;font-size:11px;">
       <span><span style="display:inline-block;width:10px;height:10px;background:#1d1d1f;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Awarded</span>
       <span><span style="display:inline-block;width:10px;height:10px;background:#5b21b6;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Actualized</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#0ea5e9;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Approved</span>
       <span><span style="display:inline-block;width:10px;height:10px;background:#3b82f6;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Proposed</span>
       <span><span style="display:inline-block;width:10px;height:10px;background:#34d399;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Remaining (Act)</span>
-      <span><span style="display:inline-block;width:10px;height:10px;background:#93c5fd;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Remaining (Est)</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#93c5fd;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Remaining (Plan)</span>
     </div>`;
 
   // ── By Manager (Org Hierarchy) ─────────────────────────
   // Aggregate spend per person/group
   function aggSpend(filterFn){
-    const r = {est:0, actual:0, trips:0};
+    const r = {est:0, proposed:0, approved:0, actual:0, trips:0};
     allRows.forEach(row => {
       if(!filterFn(row)) return;
-      if(isActive(row)){
-        r.est += calcP(row); r.trips++;
-      }
-      if(row.status==='Actualize'){
-        // Include planned_budget in est so actualized trips still show in totals
-        r.est += num(row.planned_budget) || calcP({...row, status:'Approved'});
-        r.actual += num(row.airfare)+num(row.hrate)+num(row.taxi)+num(row.fpd)+num(row.misc);
+      if(row.status==='Proposed')  { const c=calcP(row); r.proposed+=c; r.est+=c; r.trips++; }
+      if(row.status==='Approved')  { const c=calcP(row); r.approved+=c; r.est+=c; r.trips++; }
+      if(row.status==='Actualize') {
+        r.est    += num(row.planned_budget)||calcP({...row,status:'Approved'});
+        r.actual += num(row.airfare)+num(row.hrate)+num(row.taxi)+num(row.fpd)+num(row.misc)+num(row.visa);
         r.trips++;
       }
     });
@@ -2012,10 +2029,11 @@ function buildDashboard(){
   const mgrMax = Math.max(...hierarchy.map(h=>h.data.est), 1);
   document.getElementById('dash-mgr').innerHTML = hierarchy.map((h,i) => {
     const v = h.data;
-    const vari = v.actual > 0 ? v.actual - v.est : null;
-    const variColor = vari===null?'var(--g4)':vari<=0?'var(--green)':'var(--red)';
-    const estPct  = aw > 0 ? Math.round(v.est/aw*100)    : 0;
-    const actPct  = aw > 0 ? Math.round(v.actual/aw*100) : 0;
+    const remaining = v.actual > 0 ? Math.max(v.est - v.actual, 0) : null;  // only meaningful when actuals exist
+    const propPct  = aw > 0 ? Math.round(v.proposed/aw*100) : 0;
+    const apprPct  = aw > 0 ? Math.round(v.approved/aw*100) : 0;
+    const actPct   = aw > 0 ? Math.round(v.actual/aw*100)   : 0;
+    const remPct   = aw > 0 && remaining !== null ? Math.round(remaining/aw*100) : 0;
     const bg = h.highlight ? 'var(--blue-lt)' : i%2 ? 'var(--g1)' : '#fff';
     const border = h.highlight ? 'border-top:2px solid var(--blue);border-bottom:1px solid var(--g2)' : 'border-bottom:1px solid var(--g2)';
     return `<tr style="background:${bg};${border}">
@@ -2027,9 +2045,14 @@ function buildDashboard(){
           ${v.actual?`<div class="bf2" style="background:#f59e0b;height:6px;border-radius:4px;width:${v.actual/mgrMax*100}%"></div>`:''}
         </div>
       </td>
-      <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--blue)" data-tip="Estimated\n= Est. cost of all active trips\n= ${fmt(v.est)}\n${estPct}% of Awarded (${fmt(aw)})">${fmt(v.est)} <span style="font-size:10px;font-weight:600;color:#3b82f6;background:#e0ecff;border-radius:8px;padding:1px 5px;">${estPct}%</span></td>
-      <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--green)" data-tip="Actualized\n= Airfare + Hotel + Taxi + Food + Misc\n= ${v.actual?fmt(v.actual):'—'}\n${actPct}% of Awarded (${fmt(aw)})">${v.actual?`${fmt(v.actual)} <span style="font-size:10px;font-weight:600;color:#5b21b6;background:#ede9fe;border-radius:8px;padding:1px 5px;">${actPct}%</span>`:'—'}</td>
-      <td style="padding:9px 12px;text-align:right;font-weight:700;color:${variColor}" data-tip="Variance\n= Actualized − Estimated\n= ${v.actual?fmt(v.actual):'—'} − ${fmt(v.est)}\n= ${vari!==null?fmtD(vari):'No actuals yet'}">${vari!==null?fmtD(vari):'—'}</td>
+      <td style="padding:9px 12px;text-align:right;font-weight:700;color:#6366f1"
+          data-tip="Proposed\n= Planned cost of trips in Proposed status\n= ${fmt(v.proposed)}\n${propPct}% of Awarded (${fmt(aw)})">${v.proposed?`${fmt(v.proposed)} <span style="font-size:10px;font-weight:600;color:#6366f1;background:#ede9fe;border-radius:8px;padding:1px 5px;">${propPct}%</span>`:'—'}</td>
+      <td style="padding:9px 12px;text-align:right;font-weight:700;color:#0ea5e9"
+          data-tip="Approved\n= Planned cost of trips in Approved status\n= ${fmt(v.approved)}\n${apprPct}% of Awarded (${fmt(aw)})">${v.approved?`${fmt(v.approved)} <span style="font-size:10px;font-weight:600;color:#0ea5e9;background:#e0f2fe;border-radius:8px;padding:1px 5px;">${apprPct}%</span>`:'—'}</td>
+      <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--green)"
+          data-tip="Actualized\n= Airfare + Hotel + Taxi + Food + Misc\n= ${v.actual?fmt(v.actual):'—'}\n${actPct}% of Awarded (${fmt(aw)})">${v.actual?`${fmt(v.actual)} <span style="font-size:10px;font-weight:600;color:#5b21b6;background:#ede9fe;border-radius:8px;padding:1px 5px;">${actPct}%</span>`:'—'}</td>
+      <td style="padding:9px 12px;text-align:right;font-weight:700;color:${remaining!==null&&remaining>0?'var(--blue)':'var(--g4)'}"
+          data-tip="Remaining\n= Total Planned − Actualized\n= ${fmt(v.est)} − ${v.actual?fmt(v.actual):'$0'}\n= ${remaining!==null?fmt(remaining):'No actuals yet'}\n${remPct>0?remPct+'% of Awarded ('+fmt(aw)+')':''}">${remaining!==null?`${fmt(remaining)} <span style="font-size:10px;font-weight:600;color:var(--blue);background:#e0ecff;border-radius:8px;padding:1px 5px;">${remPct}%</span>`:'—'}</td>
     </tr>`;
   }).join('');
 
@@ -2099,9 +2122,10 @@ function buildDashboard(){
 
   // ── Pie Chart: Budget Overview ─────────────────────────
   buildPieChart('dash-pie-budget', [
-    { label:'Actualized',       value: tActualized,               color:'#5b21b6' },
-    { label:'Proposed',         value: tProposed,                 color:'#3b82f6' },
-    { label:'Remaining (Est)',  value: Math.max(tRemainingEst,0), color:'#34d399' },
+    { label:'Actualized',          value: tActualized,                color:'#5b21b6' },
+    { label:'Approved',            value: tApproved,                  color:'#0ea5e9' },
+    { label:'Proposed',            value: tProposed,                  color:'#3b82f6' },
+    { label:'Remaining',           value: Math.max(tRemainingPie, 0), color:'#34d399' },
   ]);
 
   // ── Pie Chart: By Manager (dynamic — all managers with active trips) ─
@@ -2109,14 +2133,27 @@ function buildDashboard(){
   const byMgrPie = {};
   allRows.forEach(r => {
     const mgr = r.manager || '(Unassigned)';
-    if (!byMgrPie[mgr]) byMgrPie[mgr] = 0;
-    if (isActive(r)) byMgrPie[mgr] += calcP(r);
-    else if (r.status === 'Actualize') byMgrPie[mgr] += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa);
+    if (!byMgrPie[mgr]) byMgrPie[mgr] = { est: 0, proposed: 0, approved: 0, actual: 0, trips: 0 };
+    if (r.status === 'Proposed')  { const c = calcP(r); byMgrPie[mgr].proposed += c; byMgrPie[mgr].est += c; byMgrPie[mgr].trips++; }
+    if (r.status === 'Approved')  { const c = calcP(r); byMgrPie[mgr].approved += c; byMgrPie[mgr].est += c; byMgrPie[mgr].trips++; }
+    if (r.status === 'Actualize') {
+      byMgrPie[mgr].est    += num(r.planned_budget) || calcP({...r, status:'Approved'});
+      byMgrPie[mgr].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa);
+      byMgrPie[mgr].trips++;
+    }
   });
   const mgrSlices = Object.entries(byMgrPie)
-    .filter(([, v]) => v > 0)
-    .sort((a, b) => b[1] - a[1])
-    .map(([label, value], i) => ({ label, value, color: mgrSliceColors[i % mgrSliceColors.length] }));
+    .filter(([, v]) => v.est > 0 || v.actual > 0)
+    .sort((a, b) => b[1].est - a[1].est)
+    .map(([label, v], i) => {
+      const tipLines = [
+        label,
+        `Proposed:   ${fmt(v.est)}`,
+        `Actualized: ${v.actual > 0 ? fmt(v.actual) : '—'}`,
+        `${v.trips} trip${v.trips !== 1 ? 's' : ''}`
+      ];
+      return { label, value: v.est, tip: tipLines.join('\n'), color: mgrSliceColors[i % mgrSliceColors.length] };
+    });
   buildPieChart('dash-pie-mgr', mgrSlices);
 }
 
@@ -2525,7 +2562,11 @@ function confirmNewFY(){
     const srcFY=document.getElementById('mfy-copy-from').value;
     const srcRows=(getYD(srcFY).rows||[]).map(r=>({
       ...JSON.parse(JSON.stringify(r)),
-      status:'Proposed', actual:0,
+      status:'Proposed',
+      // clear all financial/actual data so new FY starts fresh
+      planned_budget: null,
+      airfare: '', hrate: '', taxi: '', fpd: '', misc: '', visa: '',
+      actual: 0, approved_at: null, status_reason: '',
       depart: r.depart?shiftDateByYear(r.depart):'',
       ret:    r.ret?shiftDateByYear(r.ret):'',
     }));
@@ -2693,12 +2734,13 @@ function printDashboard(){
 
   // By Manager hierarchy (same as live)
   function aggSpend(filterFn){
-    const res={est:0, actual:0, trips:0};
+    const res={est:0, proposed:0, approved:0, actual:0, trips:0};
     allRows.forEach(row => {
       if(!filterFn(row)) return;
-      if(isActive(row)){ res.est += calcP(row); res.trips++; }
-      if(row.status==='Actualize'){
-        res.est    += num(row.planned_budget) || calcP({...row, status:'Approved'});
+      if(row.status==='Proposed')  { const c=calcP(row); res.proposed+=c; res.est+=c; res.trips++; }
+      if(row.status==='Approved')  { const c=calcP(row); res.approved+=c; res.est+=c; res.trips++; }
+      if(row.status==='Actualize') {
+        res.est    += num(row.planned_budget)||calcP({...row,status:'Approved'});
         res.actual += num(row.airfare)+num(row.hrate)+num(row.taxi)+num(row.fpd)+num(row.misc)+num(row.visa);
         res.trips++;
       }
