@@ -162,12 +162,7 @@ tbody td input[type=number]{text-align:right;}
 #budget-tbody td:nth-child(10){min-width:80px;}  /* QTR */
 #budget-tbody td:nth-child(11){min-width:90px;}  /* Approved date */
 /* Actualize tab column min-widths */
-#actualize-tbody td:nth-child(3){min-width:90px;}   /* IS&T Unit */
 #actualize-tbody td:nth-child(4){min-width:260px;}  /* Trip Description */
-#actualize-tbody td:nth-child(5){min-width:140px;}  /* Manager */
-#actualize-tbody td:nth-child(6){min-width:155px;}  /* Traveler */
-#actualize-tbody td:nth-child(7){min-width:130px;}  /* Region */
-#actualize-tbody td:nth-child(8){min-width:140px;}  /* Purpose */
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0;}
 input[type=number]{-moz-appearance:textfield;}
@@ -175,8 +170,9 @@ input[type=number]{-moz-appearance:textfield;}
 .row-df{opacity:.5;}
 .row-act{background:#f5f3ff!important;}
 .row-act td{color:var(--purple);}
-.row-pin{background:#fff8e1!important;outline:2px solid #f59e0b;outline-offset:-2px;}
-.row-pin td{color:#92400e!important;}
+.row-pin{background:#fffbeb!important;outline:2px solid #f59e0b;outline-offset:-2px;box-shadow:0 2px 8px rgba(245,158,11,.18);}
+.row-pin td{color:#78350f!important;}
+.row-pin input,.row-pin select{border-color:#f59e0b!important;}
 .field-required{border-color:var(--red)!important;background:#fff5f5!important;}
 .field-required-sel select,.td-required-sel select{border:1px solid var(--red)!important;background:#fff5f5!important;}
 .td-req input,.td-req select{border:1px solid var(--red)!important;background:#fff5f5!important;}
@@ -569,7 +565,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
 <!-- BUDGET OVERVIEW BAR -->
 <div class="bov" id="bov-bar">
   <div class="bov-pct-col">
-    <span class="bov-label">Utilization</span>
+    <span class="bov-label">Planned</span>
     <span class="bov-big-pct" id="bov-big-pct">—</span>
   </div>
   <div class="bov-bar-col">
@@ -592,13 +588,21 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
 <!-- ACTUALIZE OVERVIEW BAR -->
 <div class="bov" id="bov-act-bar" style="display:none;">
   <div class="bov-pct-col">
-    <span class="bov-label">Actualized</span>
+    <span class="bov-label">Actualize</span>
     <span class="bov-big-pct" id="bov-act-pct">—</span>
   </div>
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 4px;color:var(--g3);font-size:18px;font-weight:300;line-height:1;">vs</div>
+  <div class="bov-pct-col" style="min-width:80px;">
+    <span class="bov-label">Proposed</span>
+    <span class="bov-big-pct" id="bov-prop-pct" style="color:#3b82f6;">—</span>
+  </div>
   <div class="bov-bar-col">
-    <div class="bov-track">
-      <div class="bov-bar bov-actual" id="bov-act-bar-fill" style="width:0%;top:0;height:100%;border-radius:11px;">
-        <span class="bov-bar-lbl" id="bov-act-lbl"></span>
+    <div class="bov-track" style="height:28px;">
+      <div class="bov-bar" id="bov-act-bar-fill" style="width:0%;top:0;height:14px;border-radius:7px;background:var(--green);">
+        <span class="bov-bar-lbl" id="bov-act-lbl" style="font-size:10px;"></span>
+      </div>
+      <div class="bov-bar" id="bov-prop-bar-fill" style="width:0%;top:14px;height:14px;border-radius:7px;background:#3b82f6;">
+        <span class="bov-bar-lbl" id="bov-prop-lbl" style="font-size:10px;"></span>
       </div>
       <span class="bov-tick-line" style="left:25%"></span>
       <span class="bov-tick-line" style="left:50%"></span>
@@ -657,21 +661,7 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
     <div class="card-body">
       <div class="tbl-wrap">
         <table class="budget-table">
-          <thead><tr>
-            <th style="width:28px">#</th>
-            <th style="width:95px">STATUS</th>
-            <th style="width:72px">IS&amp;T UNIT</th><th style="width:260px">TRIP DESCRIPTION</th><th style="width:140px">MANAGER</th><th style="width:155px">TRAVELER</th>
-            <th style="width:135px">REGION</th><th style="width:100px">PURPOSE</th><th style="width:70px">QTR</th>
-            <th class="r" style="width:46px">DAYS</th>
-            <th class="r" style="width:65px">AIRFARE</th><th class="r" style="width:70px">HOTEL</th>
-            <th class="r" style="width:120px">TRANSPORTATION</th>
-            <th class="r" style="width:58px">FOOD</th>
-            <th class="r" style="width:65px">MISC</th>
-            <th class="r" style="width:78px;background:#1a3050!important;">PLANNED $</th>
-            <th class="r" style="width:78px;background:#1a3a2a!important;">ACTUAL $</th>
-            <th class="r" style="width:78px;background:#2a1a3a!important;">VARIANCE</th>
-            <th style="width:28px"></th>
-          </tr></thead>
+          <thead><tr></tr></thead>
           <tbody id="actualize-tbody"></tbody>
           <tfoot id="actualize-tfoot"></tfoot>
         </table>
@@ -737,6 +727,12 @@ input[list]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3
   </div>
   <div class="card"><div class="card-head"><h2>Top Trips by Estimated Cost</h2></div>
     <div class="card-body"><table class="bar-table" id="dash-top"></table></div></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div class="card"><div class="card-head"><h2>Top Travelers by Trip Count</h2><span class="hint">All statuses</span></div>
+      <div class="card-body"><table class="bar-table" id="dash-traveler-count"></table></div></div>
+    <div class="card"><div class="card-head"><h2>Top Travelers by Actualized Total</h2><span class="hint">Actualize-status trips only</span></div>
+      <div class="card-body"><table class="bar-table" id="dash-traveler-actual"></table></div></div>
+  </div>
 </div>
 
 <!-- PAGE: YEAR COMPARISON -->
@@ -1441,13 +1437,13 @@ function getInitials(username){
 function isActive(r){ return r.status==='Proposed'||r.status==='Approved'; }
 function calcP(r){
   if(r.status === 'Actualize'){
-    return num(r.planned_budget) || 0;
+    return num(r.planned_budget) || calcP({...r, status:'Approved'});
   }
   const est = isLocalTrip(r) ? getEstDayLocal(r.region) : getEstDay(r.region);
   const days = Math.max(num(r.days), 1);
   const daily = est ? est.dailyHi * days : 0;
   const airfare = est ? est.airfareHi : 0;
-  return airfare + daily + num(r.reg) + num(r.visa);
+  return airfare + daily + num(r.reg) + num(r.visa) + num(r.misc);
 }
 function parseAmt(s){ return parseFloat(String(s||'').replace(/[$,\s]/g,''))||0; }
 function getFYRates(fy){ return getYD(fy).rates || DEFAULT_RATES; }
@@ -1541,9 +1537,9 @@ function mkIn(val,type,field,rid,w,extra=''){
 }
 function mkTxt(val,field,rid){ return `<input type="text" value="${escH(val)}" onchange="upd(${rid},'${field}',this.value)"/>`; }
 function mkDL(val,field,rid,listId){ return `<input type="text" value="${escH(val)}" list="${listId}" onchange="upd(${rid},'${field}',this.value)" autocomplete="off"/>`; }
-function mkMasterSel(val,field,rid,listKey){
+function mkMasterSel(val,field,rid,listKey,style=''){
   const opts=db[listKey]||[];
-  return `<select onchange="upd(${rid},'${field}',this.value)"><option value="">—</option>`
+  return `<select style="${style}" onchange="upd(${rid},'${field}',this.value)"><option value="">—</option>`
     +opts.map(o=>`<option value="${escH(o)}"${o===val?' selected':''}>${escH(o)}</option>`).join('')+'</select>';
 }
 function mkIMTSel(val,rid){
@@ -1551,13 +1547,13 @@ function mkIMTSel(val,rid){
   return `<select onchange="upd(${rid},'imt',this.value)"><option value="">—</option>`
     +opts.map(o=>`<option value="${escH(o)}"${o===val?' selected':''}>${escH(o)}</option>`).join('')+'</select>';
 }
-function mkTravelerSel(val,rid,manager,imt){
+function mkTravelerSel(val,rid,manager,imt,style=''){
   let opts;
   const mt = db.managerTravelers || MANAGER_TRAVELERS;
   if(manager && mt[manager])         opts = mt[manager];
   else if(imt && IMT_TRAVELERS[imt]) opts = IMT_TRAVELERS[imt];
   else opts = db.travelers||[];
-  return `<select onchange="upd(${rid},'traveler',this.value)"><option value="">—</option>`
+  return `<select style="${style}" onchange="upd(${rid},'traveler',this.value)"><option value="">—</option>`
     +opts.map(o=>`<option value="${escH(o)}"${o===val?' selected':''}>${escH(o)}</option>`).join('')+'</select>';
 }
 function mkCountrySel(val,rid,region){
@@ -1591,6 +1587,7 @@ function renderTable(){
     <th class="r" style="width:52px">DAYS</th>
     <th style="width:90px">APPROVED</th>
     <th class="r" style="width:60px">VISA</th>
+    <th class="r" style="width:65px">MISC</th>
     <th class="r" style="width:75px">REG FEES</th>
     <th class="r" style="width:95px;background:#1a3050!important;">EST TOTAL</th>
     <th style="width:28px"></th>`;
@@ -1608,7 +1605,7 @@ function renderTable(){
   let tP=0,tA=0,tCx=0,tDf=0,tAir=0,tVis=0,tRg=0;
 
   tbody.innerHTML = rows.map((r,i)=>{
-    const planned=calcP(r), actual=r.status==='Actualize'?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa):num(r.actual), active=isActive(r);
+    const planned=calcP(r), actual=r.status==='Actualize'?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)+num(r.reg):num(r.actual), active=isActive(r);
     const vari = (actual>0&&active)?actual-planned:null;
     if(active){ tP+=planned; tAir+=num(r.airfare); tVis+=num(r.visa); tRg+=num(r.reg); }
     if(r.status==='Actualize'){ tP+=planned; tVis+=num(r.visa); tRg+=num(r.reg); }
@@ -1634,6 +1631,7 @@ function renderTable(){
       <td ${req(num(r.days))}>${mkIn(r.days,'number','days',r.id,'50px')}</td>
       <td style="padding:4px 6px;font-size:11px;color:var(--g4);white-space:nowrap;">${r.approved_at ? new Date(r.approved_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'}) + (r.approved_by ? ' · '+getInitials(r.approved_by) : '') : '—'}</td>
       <td>${mkIn(r.visa,'number','visa',r.id,'48px')}</td>
+      <td>${mkIn(r.misc,'number','misc',r.id,'55px','placeholder="0"')}</td>
       <td>${mkIn(r.reg,'number','reg',r.id,'62px')}</td>
       <td class="col-pl" style="${(active||r.status==='Actualize')?'':'opacity:.38'};${isLocalTrip(r)?'border-left:3px solid var(--amber);':''}">${fmt(planned)}</td>
       ${delCell}
@@ -1648,6 +1646,7 @@ function renderTable(){
     <td></td>
     <td></td>
     <td></td>
+    <td></td>
     <td class="tf-pl" style="text-align:right;">
       <div>${fmt(tP)}</div>
       <div style="font-size:10px;font-weight:600;margin-top:2px;color:${vPA>=0?'var(--green)':'var(--red)'};">${fmtD(vPA)} ${vPA>=0?'remaining':'over'}</div>
@@ -1656,7 +1655,7 @@ function renderTable(){
   </tr>`;
 
   document.getElementById('tb-planned').textContent = fmt(tP);
-  const actualSpent = currentRows().filter(r => r.status === 'Actualize').reduce((s,r) => s + (num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)), 0);
+  const actualSpent = currentRows().filter(r => r.status === 'Actualize').reduce((s,r) => s + (num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)+num(r.reg)), 0);
   document.getElementById('tb-actual').textContent = actualSpent ? fmt(actualSpent) : '—';
   const pill = document.getElementById('tb-var-pill');
   const d = awarded - tP;
@@ -1676,7 +1675,7 @@ function updateBOV(pl,ac,ex,aw){
   document.getElementById('bov-pl').style.width = Math.min(pl/base*100,100)+'%';
   document.getElementById('bov-ac').style.width = Math.min(ac/base*100,100)+'%';
 
-  const plTip = `Utilization\n= Planned ÷ Awarded\n= ${fmt(pl)} ÷ ${fmt(aw)}\n= ${plPct}%\n\nPlanned: ${fmt(pl)}\nAwarded: ${fmt(aw)}${ac?'\nActual Spent: '+fmt(ac):''}${ex?'\nExcluded (Cancelled/Deferred): '+fmt(ex):''}`;
+  const plTip = `Planned\n= Planned ÷ Awarded\n= ${fmt(pl)} ÷ ${fmt(aw)}\n= ${plPct}%\n\nPlanned: ${fmt(pl)}\nAwarded: ${fmt(aw)}${ac?'\nActual Spent: '+fmt(ac):''}${ex?'\nExcluded (Cancelled/Deferred): '+fmt(ex):''}`;
   const bovTrack = document.querySelector('#bov-bar .bov-track');
   if(bovTrack) bovTrack.setAttribute('data-tip', plTip);
   const bigEl = document.getElementById('bov-big-pct');
@@ -1754,13 +1753,8 @@ function upd(id,field,value){
     // Set planned_budget BEFORE saveDB/renderTable so the table never flashes zero
     if(field==='status' && value==='Actualize'){
       r.planned_budget = calcP({...r, status: 'Approved'});
-      // Convert per-night/per-day rates to trip totals for actual tracking
-      const days   = Math.max(num(r.days), 1);
-      const nights = num(r.nights) > 0 ? num(r.nights) : Math.max(days-1, 0);
-      const txRate = (TAXI_PER_DAY && TAXI_PER_DAY[r.region]) || 50;
-      if(num(r.hrate) > 0 && num(r.hrate) <= 500) r.hrate = Math.round(num(r.hrate) * Math.max(nights,1));
-      if(num(r.fpd)   > 0 && num(r.fpd)   <= 200) r.fpd   = Math.round(num(r.fpd)   * days);
-      r.taxi = Math.round(txRate * days);
+      // Clear all cost fields so actuals can be entered manually
+      r.airfare = ''; r.hrate = ''; r.taxi = ''; r.fpd = ''; r.misc = ''; r.visa = ''; r.reg = '';
     }
     autoFillRow(id, field);
     if(field==='traveler'||field==='owner'||field==='manager') addToList(field, value);
@@ -1972,10 +1966,11 @@ function buildDashboard(){
   const tActivePlanned    = active.reduce((s,r) => s + calcP(r), 0);
   const tActualizePlanned = actualize.reduce((s,r) => s + (num(r.planned_budget) || calcP({...r,status:'Approved'})), 0);
   const tAllPlanned       = tActivePlanned + tActualizePlanned;       // all trips' planned budgets
-  const tActualized       = actualize.reduce((s,r) => s + (num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)), 0);
+  const tActualized       = actualize.reduce((s,r) => s + (num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)+num(r.reg)), 0);
+  const tTotal            = tActualized + tActivePlanned;             // Total = Actual spend + Active planned (no double-count)
   const tEstimated        = tActivePlanned;                           // alias — active trips only
   const tRemainingActual  = aw - tActualized;                         // Awarded - Actual Spend
-  const tRemainingEst     = aw - tAllPlanned;                         // Awarded - All Planned (KPIs)
+  const tRemainingEst     = aw - tTotal;                              // Awarded - Total (overallocation check)
   const tRemainingPie     = aw - tActualized - tActivePlanned;        // pie slice: unspoken budget
 
   // ── KPIs ──────────────────────────────────────────────
@@ -2009,8 +2004,8 @@ function buildDashboard(){
   // ── Stacked Bar Chart ──────────────────────────────────
   const tProposed  = allRows.filter(r=>r.status==='Proposed').reduce((s,r)=>s+calcP(r),0);
   const tApproved  = allRows.filter(r=>r.status==='Approved').reduce((s,r)=>s+calcP(r),0);
-  const tBase = Math.max(aw, tEstimated + tActualized, 1);
-  const pct = v => Math.min(v/tBase*100,100).toFixed(1);
+  const tBase = Math.max(aw, tTotal, 1);
+  const pct = v => Math.min(Math.max(v,0)/tBase*100,100).toFixed(1);
 
   const remActH = pct(Math.max(tRemainingActual,0));
   const remEstH = pct(Math.max(tRemainingEst,0));
@@ -2036,20 +2031,15 @@ function buildDashboard(){
       ${bar('Awarded', aw, '#1d1d1f', null, `Awarded Budget\n= ${fmt(aw)}\nTotal budget for ${db.activeFY}`)}
       ${bar('Actualized', tActualized, '#5b21b6', null, `Actualized\n= Airfare + Hotel + Taxi + Food + Misc\nfor Actualize-status trips\n= ${fmt(tActualized)}\n${Math.round(tActualized/Math.max(aw,1)*100)}% of Awarded`)}
       ${bar('Proposed', tProposed, '#3b82f6', null, `Proposed\n= Est. cost of all Proposed trips\n= ${fmt(tProposed)}\n${Math.round(tProposed/Math.max(aw,1)*100)}% of Awarded`)}
-      ${bar('Remaining (Act)', Math.max(tRemainingActual,0), '#34d399', [
-          {h: remActH, color:'#34d399', label:'Remaining (Actual): '+fmt(Math.max(tRemainingActual,0))}
-        ], `Remaining (Actual)\n= Awarded − Actualized\n= ${fmt(aw)} − ${fmt(tActualized)}\n= ${fmt(Math.max(tRemainingActual,0))}`)}
-      ${bar('Remaining (Plan)', Math.max(tRemainingEst,0), '#93c5fd', [
-          {h: remEstH, color:'#93c5fd', label:'Remaining (Planned): '+fmt(Math.max(tRemainingEst,0))}
-        ], `Remaining (Planned)\n= Awarded − Total Planned\n= ${fmt(aw)} − ${fmt(tAllPlanned)}\n= ${fmt(Math.max(tRemainingEst,0))}`)}
+      ${bar('Total', tTotal, '#f59e0b', null, `Total\n= Actualized + Active Planned\n= ${fmt(tActualized)} + ${fmt(tActivePlanned)}\n= ${fmt(tTotal)}\n${Math.round(tTotal/Math.max(aw,1)*100)}% of Awarded`)}
+      ${bar('Remaining', tRemainingEst, tRemainingEst >= 0 ? '#34d399' : '#ef4444', null, `Remaining\n= Awarded − Total\n= ${fmt(aw)} − ${fmt(tTotal)}\n= ${fmt(tRemainingEst)}`)}
     </div>
     <div style="display:flex;gap:16px;flex-wrap:wrap;padding:14px 16px 4px;font-size:11px;">
       <span><span style="display:inline-block;width:10px;height:10px;background:#1d1d1f;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Awarded</span>
       <span><span style="display:inline-block;width:10px;height:10px;background:#5b21b6;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Actualized</span>
-      <span><span style="display:inline-block;width:10px;height:10px;background:#0ea5e9;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Approved</span>
       <span><span style="display:inline-block;width:10px;height:10px;background:#3b82f6;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Proposed</span>
-      <span><span style="display:inline-block;width:10px;height:10px;background:#34d399;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Remaining (Act)</span>
-      <span><span style="display:inline-block;width:10px;height:10px;background:#93c5fd;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Remaining (Plan)</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#f59e0b;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Total</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#34d399;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Remaining</span>
     </div>`;
 
   // ── By Manager (Org Hierarchy) ─────────────────────────
@@ -2061,8 +2051,8 @@ function buildDashboard(){
       if(row.status==='Proposed')  { const c=calcP(row); r.proposed+=c; r.est+=c; r.trips++; }
       if(row.status==='Approved')  { const c=calcP(row); r.approved+=c; r.est+=c; r.trips++; }
       if(row.status==='Actualize') {
-        r.est    += num(row.planned_budget)||calcP({...row,status:'Approved'});
-        r.actual += num(row.airfare)+num(row.hrate)+num(row.taxi)+num(row.fpd)+num(row.misc)+num(row.visa);
+        r.est    += calcP(row);
+        r.actual += num(row.airfare)+num(row.hrate)+num(row.taxi)+num(row.fpd)+num(row.misc)+num(row.visa)+num(row.reg);
         r.trips++;
       }
     });
@@ -2070,28 +2060,32 @@ function buildDashboard(){
   }
 
   // Build hierarchy rows:
-  // Dave Champion (Total) = everyone under Dave
-  // ↳ Wayne Lawrence (Total) = Wayne as traveler + everyone under Wayne's managers
-  //   ↳ Rajiv Ranjan team = rows where manager = Rajiv
-  //   ↳ Maggie Leiker team = rows where manager = Maggie
+  // David Champion = org head (label only)
+  // ↳ Wayne Lawrence = budget owner, all trips
+  //   ↳ Wayne as Traveler = trips where Wayne is the traveler
+  //   ↳ Rajiv's Team = trips managed by Rajiv + Rajiv as traveler
+  //   ↳ Maggie's Team = trips managed by Maggie + Maggie as traveler
   const hierarchy = [
-    { label:'Dave Champion (Total)',    indent:0, bold:true,  highlight:true,  data: aggSpend(r => r.imt==='David Champion' || r.manager==='Rajiv Ranjan' || r.manager==='Maggie Leiker') },
-    { label:'↳ Wayne Lawrence (Total)',  indent:1, bold:true,  highlight:false, data: aggSpend(r => r.imt==='David Champion') },
-    { label:'   ↳ Wayne as Traveler',    indent:2, bold:false, highlight:false, data: aggSpend(r => r.traveler==='Wayne Lawrence') },
-    { label:'   ↳ Rajiv Ranjan\'s Team', indent:2, bold:false, highlight:false, data: aggSpend(r => r.manager==='Rajiv Ranjan') },
-    { label:'   ↳ Maggie Leiker\'s Team',indent:2, bold:false, highlight:false, data: aggSpend(r => r.manager==='Maggie Leiker') },
+    { label:'David Champion',              indent:0, bold:true,  highlight:true,  labelOnly:true,  data: {est:0,proposed:0,approved:0,actual:0,trips:0} },
+    { label:'↳ Wayne Lawrence',            indent:1, bold:true,  highlight:false, data: aggSpend(() => true) },
+    { label:'   ↳ Wayne as Traveler',      indent:2, bold:false, highlight:false, data: aggSpend(r => r.traveler==='Wayne Lawrence') },
+    { label:'   ↳ Rajiv Ranjan\'s Team',   indent:2, bold:false, highlight:false, data: aggSpend(r => r.manager==='Rajiv Ranjan' || r.traveler==='Rajiv Ranjan') },
+    { label:'   ↳ Maggie Leiker\'s Team',  indent:2, bold:false, highlight:false, data: aggSpend(r => r.manager==='Maggie Leiker' || r.traveler==='Maggie Leiker') },
   ];
 
-  const mgrMax = Math.max(...hierarchy.map(h=>h.data.est), 1);
+  const mgrMax = Math.max(...hierarchy.filter(h=>!h.labelOnly).map(h=>h.data.est), 1);
   document.getElementById('dash-mgr').innerHTML = hierarchy.map((h,i) => {
     const v = h.data;
-    const remaining = v.actual > 0 ? Math.max(v.est - v.actual, 0) : null;  // only meaningful when actuals exist
+    const bg = h.highlight ? 'var(--blue-lt)' : i%2 ? 'var(--g1)' : '#fff';
+    const border = h.highlight ? 'border-top:2px solid var(--blue);border-bottom:1px solid var(--g2)' : 'border-bottom:1px solid var(--g2)';
+    if(h.labelOnly) return `<tr style="background:${bg};${border}">
+      <td colspan="7" style="padding:9px 12px;padding-left:${12+h.indent*16}px;font-weight:800;color:var(--blue);font-family:monospace;font-style:italic;letter-spacing:.01em;">${h.label} <span style="font-size:10px;font-weight:500;color:var(--g4);font-style:normal;">— Org Head</span></td>
+    </tr>`;
+    const remaining = v.actual > 0 ? Math.max(v.est - v.actual, 0) : null;
     const propPct  = aw > 0 ? Math.round(v.proposed/aw*100) : 0;
     const apprPct  = aw > 0 ? Math.round(v.approved/aw*100) : 0;
     const actPct   = aw > 0 ? Math.round(v.actual/aw*100)   : 0;
     const remPct   = aw > 0 && remaining !== null ? Math.round(remaining/aw*100) : 0;
-    const bg = h.highlight ? 'var(--blue-lt)' : i%2 ? 'var(--g1)' : '#fff';
-    const border = h.highlight ? 'border-top:2px solid var(--blue);border-bottom:1px solid var(--g2)' : 'border-bottom:1px solid var(--g2)';
     return `<tr style="background:${bg};${border}">
       <td style="padding:9px 12px;padding-left:${12+h.indent*16}px;font-weight:${h.bold?'800':'500'};color:${h.highlight?'var(--blue)':'inherit'};font-family:monospace;">${h.label}</td>
       <td style="padding:9px 12px;text-align:center;color:var(--g4)">${v.trips}</td>
@@ -2126,49 +2120,49 @@ function buildDashboard(){
 
   // ── By Quarter ─────────────────────────────────────────
   const byQ = {}; QUARTERS.forEach(q => byQ[q] = {est:0, actual:0, n:0});
-  active.forEach(r   => { if(byQ[r.quarter]){ byQ[r.quarter].est += calcP(r); byQ[r.quarter].n++; }});
-  actualize.forEach(r=> { if(byQ[r.quarter])  byQ[r.quarter].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa); });
-  const qMax = Math.max(...QUARTERS.map(q => byQ[q].est), 1);
+  active.forEach(r    => { if(byQ[r.quarter]){ byQ[r.quarter].est += calcP(r); byQ[r.quarter].n++; }});
+  actualize.forEach(r => { if(byQ[r.quarter]){ byQ[r.quarter].est += calcP(r); byQ[r.quarter].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)+num(r.reg); byQ[r.quarter].n++; }});
+  const qMax = Math.max(...QUARTERS.map(q => Math.max(byQ[q].est, byQ[q].actual)), 1);
   document.getElementById('dash-q').innerHTML = QUARTERS.map(q=>`
     <tr><td class="lbl">${q}</td>
     <td><div class="bw" data-tip="Q${q.slice(1)} · Estimated: ${fmt(byQ[q].est)}${byQ[q].actual?' · Actualized: '+fmt(byQ[q].actual):''}">
-      <div class="bf ${QBAR[q]}" style="width:${byQ[q].est/qMax*100}%"></div>
-      ${byQ[q].actual?`<div class="bf2 bac" style="width:${byQ[q].actual/qMax*100}%"></div>`:''}
+      <div class="bf ${QBAR[q]}" style="width:${Math.min(byQ[q].est/qMax*100,100)}%"></div>
+      ${byQ[q].actual?`<div class="bf2 bac" style="width:${Math.min(byQ[q].actual/qMax*100,100)}%"></div>`:''}
     </div></td>
-    <td class="amt" data-tip="${q} Estimated: ${fmt(byQ[q].est)}">${fmt(byQ[q].est)}</td>
+    <td class="amt" data-tip="${q} Estimated: ${fmt(byQ[q].est)}">${byQ[q].est?fmt(byQ[q].est):'—'}</td>
     <td class="${byQ[q].actual?'amt2':'cnt'}" data-tip="${q} Actualized: ${byQ[q].actual?fmt(byQ[q].actual):'—'}">${byQ[q].actual?fmt(byQ[q].actual):'—'}</td>
     </tr>`).join('');
 
   // ── By Region ──────────────────────────────────────────
   const byR = {}; REGIONS().forEach(r => byR[r] = {est:0, actual:0, n:0});
   active.forEach(r    => { if(byR[r.region]){ byR[r.region].est += calcP(r); byR[r.region].n++; }});
-  actualize.forEach(r => { if(byR[r.region])  byR[r.region].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa); });
-  const rMax = Math.max(...REGIONS().map(r => byR[r] ? byR[r].est : 0), 1);
+  actualize.forEach(r => { if(byR[r.region]){ byR[r.region].est += calcP(r); byR[r.region].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)+num(r.reg); byR[r.region].n++; }});
+  const rMax = Math.max(...REGIONS().map(r => byR[r] ? Math.max(byR[r].est, byR[r].actual) : 0), 1);
   document.getElementById('dash-r').innerHTML = REGIONS().map(r=>`
     <tr><td class="lbl"><span class="badge ${REGION_BADGE[r]}">${r}</span></td>
     <td><div class="bw" data-tip="${r} · Estimated: ${fmt(byR[r].est)}${byR[r].actual?' · Actualized: '+fmt(byR[r].actual):''}">
-      <div class="bf ${REGION_BAR[r]}" style="width:${byR[r].est/rMax*100}%"></div>
-      ${byR[r].actual?`<div class="bf2 bac" style="width:${byR[r].actual/rMax*100}%"></div>`:''}
+      <div class="bf ${REGION_BAR[r]}" style="width:${Math.min(byR[r].est/rMax*100,100)}%"></div>
+      ${byR[r].actual?`<div class="bf2 bac" style="width:${Math.min(byR[r].actual/rMax*100,100)}%"></div>`:''}
     </div></td>
-    <td class="amt" data-tip="${r} Estimated: ${fmt(byR[r].est)}">${fmt(byR[r].est)}</td>
+    <td class="amt" data-tip="${r} Estimated: ${fmt(byR[r].est)}">${byR[r].est?fmt(byR[r].est):'—'}</td>
     <td class="${byR[r].actual?'amt2':'cnt'}" data-tip="${r} Actualized: ${byR[r].actual?fmt(byR[r].actual):'—'}">${byR[r].actual?fmt(byR[r].actual):'—'}</td>
     <td class="cnt" data-tip="${r}: ${byR[r].n} trip${byR[r].n!==1?'s':''}">${byR[r].n}t</td></tr>`).join('');
 
   // ── Top Trips ──────────────────────────────────────────
   const topRows = [...active, ...actualize].sort((a,b) => calcP(b)-calcP(a)).slice(0,10);
   document.getElementById('dash-top').innerHTML = `
-    <thead><tr>${['Traveler','Manager','Region','Purpose','Qtr','Status','Estimated','Actualized','Variance'].map((h,i)=>`
+    <thead><tr>${['Trip Description','Traveler','Manager','Region','Qtr','Status','Estimated','Actualized','Variance'].map((h,i)=>`
       <th style="background:var(--navy);color:#f5f5f7;padding:7px 9px;font-size:10px;letter-spacing:.05em;
         text-align:${i>=6?'right':'left'}">${h}</th>`).join('')}</tr></thead>
     <tbody>${topRows.map((r,i)=>{
       const est = calcP(r);
-      const act  = r.status==='Actualize' ? num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa) : num(r.actual);
+      const act  = r.status==='Actualize' ? num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)+num(r.reg) : num(r.actual);
       const vari = act > 0 ? act - est : null;
       return `<tr style="background:${i%2?'var(--g1)':'#fff'}">
-        <td style="padding:7px 9px;font-weight:600">${r.traveler||'—'}</td>
+        <td style="padding:7px 9px;font-weight:600;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escH(r.description||'')}">${r.description||'—'}</td>
+        <td style="padding:7px 9px">${r.traveler||'—'}</td>
         <td style="padding:7px 9px">${r.manager||'—'}</td>
         <td style="padding:7px 9px"><span class="badge ${REGION_BADGE[r.region]||''}">${r.region||'—'}</span></td>
-        <td style="padding:7px 9px">${r.purpose||'—'}</td>
         <td style="padding:7px 9px;text-align:center">${r.quarter||'—'}</td>
         <td style="padding:7px 9px"><span class="badge st-${r.status}">${r.status}</span></td>
         <td style="padding:7px 9px;text-align:right;font-weight:700;color:var(--blue)">${fmt(est)}</td>
@@ -2194,12 +2188,12 @@ function buildDashboard(){
     if (r.status === 'Approved')  { const c = calcP(r); byMgrPie[mgr].approved += c; byMgrPie[mgr].est += c; byMgrPie[mgr].trips++; }
     if (r.status === 'Actualize') {
       byMgrPie[mgr].est    += num(r.planned_budget) || calcP({...r, status:'Approved'});
-      byMgrPie[mgr].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa);
+      byMgrPie[mgr].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)+num(r.reg);
       byMgrPie[mgr].trips++;
     }
   });
   const mgrSlices = Object.entries(byMgrPie)
-    .filter(([, v]) => v.est > 0 || v.actual > 0)
+    .filter(([name, v]) => (v.est > 0 || v.actual > 0) && name !== 'David Champion' && name !== 'Dave Champion')
     .sort((a, b) => b[1].est - a[1].est)
     .map(([label, v], i) => {
       const tipLines = [
@@ -2211,6 +2205,68 @@ function buildDashboard(){
       return { label, value: v.est, tip: tipLines.join('\n'), color: mgrSliceColors[i % mgrSliceColors.length] };
     });
   buildPieChart('dash-pie-mgr', mgrSlices);
+
+  // ── Top Travelers by Trip Count ────────────────────────
+  const byTravelerCount = {};
+  allRows.forEach(r => {
+    const t = r.traveler || '(Unassigned)';
+    if (!byTravelerCount[t]) byTravelerCount[t] = { trips: 0, est: 0, actual: 0 };
+    byTravelerCount[t].trips++;
+    byTravelerCount[t].est += calcP(r);
+    if (r.status === 'Actualize') byTravelerCount[t].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)+num(r.reg);
+  });
+  const topByCount = Object.entries(byTravelerCount)
+    .sort((a, b) => b[1].trips - a[1].trips)
+    .slice(0, 8);
+  const maxCount = Math.max(...topByCount.map(([,v]) => v.trips), 1);
+  document.getElementById('dash-traveler-count').innerHTML = `
+    <thead><tr>
+      <th style="background:var(--navy);color:#f5f5f7;padding:6px 10px;font-size:10px;text-align:left">TRAVELER</th>
+      <th style="background:var(--navy);color:#f5f5f7;padding:6px 10px;font-size:10px;text-align:center">TRIPS</th>
+      <th style="background:var(--navy);color:#f5f5f7;padding:6px 10px;font-size:10px;">BREAKDOWN</th>
+      <th style="background:var(--navy);color:#f5f5f7;padding:6px 10px;font-size:10px;text-align:right">EST TOTAL</th>
+    </tr></thead>
+    <tbody>${topByCount.map(([name, v], i) => `
+      <tr style="background:${i%2?'var(--g1)':'#fff'}">
+        <td style="padding:7px 10px;font-weight:600">${name}</td>
+        <td style="padding:7px 10px;text-align:center;font-weight:800;color:var(--blue);font-size:15px">${v.trips}</td>
+        <td style="padding:7px 10px;">
+          <div style="background:var(--g2);border-radius:4px;height:10px;overflow:hidden;">
+            <div style="height:10px;border-radius:4px;background:#3b82f6;width:${Math.round(v.trips/maxCount*100)}%;transition:width .4s;"></div>
+          </div>
+        </td>
+        <td style="padding:7px 10px;text-align:right;font-weight:700;color:var(--g5)">${fmt(v.est)}</td>
+      </tr>`).join('')}</tbody>`;
+
+  // ── Top Travelers by Actualized Total ─────────────────
+  const byTravelerActual = Object.entries(byTravelerCount)
+    .filter(([, v]) => v.actual > 0)
+    .sort((a, b) => b[1].actual - a[1].actual)
+    .slice(0, 8);
+  const maxActual = Math.max(...byTravelerActual.map(([,v]) => v.actual), 1);
+  const elTA = document.getElementById('dash-traveler-actual');
+  if (byTravelerActual.length === 0) {
+    elTA.innerHTML = `<tbody><tr><td style="padding:20px;color:var(--g4);text-align:center;font-size:13px">No actualized trips yet</td></tr></tbody>`;
+  } else {
+    elTA.innerHTML = `
+      <thead><tr>
+        <th style="background:var(--navy);color:#f5f5f7;padding:6px 10px;font-size:10px;text-align:left">TRAVELER</th>
+        <th style="background:var(--navy);color:#f5f5f7;padding:6px 10px;font-size:10px;text-align:center">TRIPS</th>
+        <th style="background:var(--navy);color:#f5f5f7;padding:6px 10px;font-size:10px;">ACTUALIZED TOTAL</th>
+        <th style="background:var(--navy);color:#f5f5f7;padding:6px 10px;font-size:10px;text-align:right">AMOUNT</th>
+      </tr></thead>
+      <tbody>${byTravelerActual.map(([name, v], i) => `
+        <tr style="background:${i%2?'var(--g1)':'#fff'}">
+          <td style="padding:7px 10px;font-weight:600">${name}</td>
+          <td style="padding:7px 10px;text-align:center;font-weight:700;color:var(--g4)">${v.trips}</td>
+          <td style="padding:7px 10px;">
+            <div style="background:var(--g2);border-radius:4px;height:10px;overflow:hidden;">
+              <div style="height:10px;border-radius:4px;background:#5b21b6;width:${Math.round(v.actual/maxActual*100)}%;transition:width .4s;"></div>
+            </div>
+          </td>
+          <td style="padding:7px 10px;text-align:right;font-weight:800;color:#5b21b6">${fmt(v.actual)}</td>
+        </tr>`).join('')}</tbody>`;
+  }
 }
 
 // ═══════════════════════════════════════════════════════
@@ -2222,7 +2278,7 @@ function summarizeFY(fy){
   const yd=getYD(fy); if(!yd) return null;
   const rows=yd.rows||[], active=rows.filter(isActive);
   const tP=active.reduce((s,r)=>s+calcP(r),0);
-  const tA=rows.filter(r=>r.status==='Actualize').reduce((s,r)=>s+num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa),0);
+  const tA=rows.filter(r=>r.status==='Actualize').reduce((s,r)=>s+num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)+num(r.reg),0);
   const aw=yd.awarded||0;
   const byQ={},byR={},byO={},bySt={};
   QUARTERS.forEach(q=>byQ[q]={p:0,a:0,n:0});
@@ -2231,7 +2287,7 @@ function summarizeFY(fy){
   rows.forEach(r=>{
     if(bySt[r.status]){bySt[r.status].n++;bySt[r.status].p+=calcP(r);}
     if(isActive(r)){
-      const p=calcP(r),a=r.status==='Actualize'?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa):num(r.actual);
+      const p=calcP(r),a=r.status==='Actualize'?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)+num(r.reg):num(r.actual);
       if(byQ[r.quarter]){byQ[r.quarter].p+=p;byQ[r.quarter].a+=a;byQ[r.quarter].n++;}
       if(byR[r.region]){byR[r.region].p+=p;byR[r.region].a+=a;byR[r.region].n++;}
       const o=r.owner||'(unassigned)';
@@ -2697,9 +2753,52 @@ function pinRow(id){
     });
   }
 }
+
+// Auto-pin the row being edited — fires after <tr onclick> so it always wins
+document.addEventListener('focusin', e => {
+  const tr = e.target.closest('#budget-tbody tr, #actualize-tbody tr');
+  if (!tr) return;
+  const rid = parseInt(tr.dataset.rid);
+  if (pinnedRowId === rid) return;
+  pinnedRowId = rid;
+  document.querySelectorAll('#budget-tbody tr, #actualize-tbody tr').forEach(r => r.classList.remove('row-pin'));
+  document.querySelectorAll(`#budget-tbody tr[data-rid="${rid}"], #actualize-tbody tr[data-rid="${rid}"]`).forEach(r => r.classList.add('row-pin'));
+});
+
+// Tab cycles through every input/select in the active row
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Tab') return;
+  const tr = e.target.closest('#budget-tbody tr, #actualize-tbody tr');
+  if (!tr) return;
+  const fields = [...tr.querySelectorAll('input:not([disabled]), select:not([disabled])')];
+  if (fields.length < 2) return;
+  const idx = fields.indexOf(e.target);
+  if (idx === -1) return;
+  e.preventDefault();
+  const next = e.shiftKey
+    ? fields[(idx - 1 + fields.length) % fields.length]
+    : fields[(idx + 1) % fields.length];
+  next.focus();
+  if (next.type === 'number' || next.type === 'text') next.select();
+});
 function sortIcon(field){
   if(budgetSort.field!==field) return '<span style="opacity:.4;font-size:9px;">↕</span>';
   return budgetSort.dir==='asc' ? '▲' : '▼';
+}
+
+let actualizeSort = {field: null, dir: 'asc'};
+function setActSort(field){
+  if(actualizeSort.field===field && actualizeSort.dir==='asc')
+    actualizeSort = {field, dir:'desc'};
+  else if(actualizeSort.field===field && actualizeSort.dir==='desc')
+    actualizeSort = {field:null, dir:'asc'};
+  else
+    actualizeSort = {field, dir:'asc'};
+  renderActualizeTable();
+}
+function actSortIcon(field){
+  if(actualizeSort.field!==field) return '<span style="opacity:.4;font-size:9px;">↕</span>';
+  return actualizeSort.dir==='asc' ? '▲' : '▼';
 }
 function toggleStatusFilterDropdown(){
   const dd = document.getElementById('status-filter-dropdown');
@@ -2723,14 +2822,52 @@ function renderActualizeTable(){
   const rows = currentRows().filter(r => !r.archived && r.status === 'Actualize');
   const tbody = document.getElementById('actualize-tbody');
   const tfoot = document.getElementById('actualize-tfoot');
-  let tP=0,tA=0,tAir=0,tTx=0,tFd=0,tMisc=0;
+
+  // Render sortable header dynamically
+  const thead = document.querySelector('#actualize-tbody')?.closest('table')?.querySelector('thead tr');
+  if(thead) thead.innerHTML = `
+    <th style="width:28px">#</th>
+    <th style="width:90px">STATUS</th>
+    <th style="min-width:90px;cursor:pointer;user-select:none" onclick="setActSort('owner')">IS&amp;T ${actSortIcon('owner')}</th>
+    <th style="width:260px">TRIP DESCRIPTION</th>
+    <th style="min-width:140px;cursor:pointer;user-select:none" onclick="setActSort('manager')">MANAGER ${actSortIcon('manager')}</th>
+    <th style="min-width:155px;cursor:pointer;user-select:none" onclick="setActSort('traveler')">TRAVELER ${actSortIcon('traveler')}</th>
+    <th style="cursor:pointer;user-select:none" onclick="setActSort('region')">REGION ${actSortIcon('region')}</th>
+    <th style="cursor:pointer;user-select:none" onclick="setActSort('purpose')">PURPOSE ${actSortIcon('purpose')}</th>
+    <th style="width:80px;cursor:pointer;user-select:none" onclick="setActSort('quarter')">QTR ${actSortIcon('quarter')}</th>
+    <th class="r" style="width:46px;cursor:pointer;user-select:none" onclick="setActSort('days')">DAYS ${actSortIcon('days')}</th>
+    <th class="r" style="width:75px;cursor:pointer;user-select:none" onclick="setActSort('airfare')">AIRFARE ${actSortIcon('airfare')}</th>
+    <th class="r" style="width:68px;cursor:pointer;user-select:none" onclick="setActSort('hrate')">HOTEL ${actSortIcon('hrate')}</th>
+    <th class="r" style="width:100px;cursor:pointer;user-select:none" onclick="setActSort('taxi')">TRANSPORT ${actSortIcon('taxi')}</th>
+    <th class="r" style="width:55px;cursor:pointer;user-select:none" onclick="setActSort('fpd')">FOOD ${actSortIcon('fpd')}</th>
+    <th class="r" style="width:55px;cursor:pointer;user-select:none" onclick="setActSort('misc')">MISC ${actSortIcon('misc')}</th>
+    <th class="r" style="width:55px;cursor:pointer;user-select:none" onclick="setActSort('visa')">VISA ${actSortIcon('visa')}</th>
+    <th class="r" style="width:65px;cursor:pointer;user-select:none" onclick="setActSort('reg')">REG FEE ${actSortIcon('reg')}</th>
+    <th class="r" style="width:78px;background:#1a3050!important;">PLANNED $</th>
+    <th class="r" style="width:78px;background:#1a3a2a!important;">ACTUAL $</th>
+    <th class="r" style="width:72px;background:#2a1a3a!important;">VARIANCE</th>
+    <th style="width:28px"></th>`;
+
+  let tP=0,tA=0,tAir=0,tTx=0,tFd=0,tMisc=0,tVis=0,tRg=0;
+
+  // Apply sort
+  if(actualizeSort.field){
+    rows.sort((a,b)=>{
+      let av=String(a[actualizeSort.field]??'').toLowerCase();
+      let bv=String(b[actualizeSort.field]??'').toLowerCase();
+      const an=parseFloat(a[actualizeSort.field])||0, bn=parseFloat(b[actualizeSort.field])||0;
+      if(!isNaN(an)&&!isNaN(bn)&&av!==''&&bv!=='') return(actualizeSort.dir==='asc'?1:-1)*(an-bn);
+      return(actualizeSort.dir==='asc'?1:-1)*(av<bv?-1:av>bv?1:0);
+    });
+  }
 
   tbody.innerHTML = rows.map((r,i)=>{
     const planned = calcP(r);
-    const autoActual = num(r.airfare) + num(r.hrate) + num(r.taxi) + num(r.fpd) + num(r.misc);
+    const autoActual = num(r.airfare) + num(r.hrate) + num(r.taxi) + num(r.fpd) + num(r.misc) + num(r.visa) + num(r.reg);
     const vari = autoActual > 0 ? autoActual - planned : null;
     tP += planned; tAir += num(r.airfare);
     tTx += num(r.taxi); tFd += num(r.fpd); tMisc += num(r.misc);
+    tVis += num(r.visa); tRg += num(r.reg);
     if(autoActual > 0) tA += autoActual;
     const vc = vari==null?'vr-neu':vari<=0?'vr-pos':'vr-neg';
     const delCell = `<td class="td-del"><button class="del-btn" onclick="requestDelRow(${r.id})" title="Delete row">✕</button></td>`;
@@ -2739,19 +2876,21 @@ function renderActualizeTable(){
     return `<tr class="${actRcls}" data-rid="${r.id}" onclick="pinRow(${r.id})" style="cursor:pointer">
       <td style="text-align:center;color:var(--g4);font-size:11px">${i+1}</td>
       <td class="td-st">${stSel(r.status,r.id)}${(r.status==='Cancelled'||r.status==='Deferred')&&r.status_reason?`<div style="font-size:9px;color:#888;margin-top:3px;padding:0 2px;white-space:normal;max-width:130px;" title="${escH(r.status_reason)}">📝 ${escH(r.status_reason.length>40?r.status_reason.slice(0,40)+'…':r.status_reason)}</div>`:''}</td>
-      <td>${mkMasterSel(r.owner,'owner',r.id,'owners')}</td>
+      <td>${mkMasterSel(r.owner,'owner',r.id,'owners','width:100%')}</td>
       <td><input type="text" value="${escH(r.description||'')}" placeholder="—" style="width:100%;border:1px solid var(--g3);border-radius:5px;padding:3px 6px;font-size:12px;font-family:inherit;background:var(--white);color:var(--navy);outline:none;" onchange="upd(${r.id},'description',this.value)"/></td>
-      <td>${mkMasterSel(r.manager,'manager',r.id,'managers')}</td>
-      <td>${mkTravelerSel(r.traveler,r.id,r.manager)}</td>
+      <td>${mkMasterSel(r.manager,'manager',r.id,'managers','width:100%')}</td>
+      <td>${mkTravelerSel(r.traveler,r.id,r.manager,null,'width:100%')}</td>
       <td style="padding:4px 8px;font-weight:600;color:var(--g5);">${r.region||'—'}</td>
       <td>${mkSelP(PURPOSES(),r.purpose,'purpose',r.id,'min-width:140px')}</td>
-      <td>${mkSelP(QUARTERS,r.quarter,'quarter',r.id)}</td>
+      <td style="padding:4px 8px;font-weight:600;color:var(--navy);text-align:center;">${r.quarter||'—'}</td>
       <td style="text-align:center;color:var(--g5);font-weight:600;">${num(r.days)||'—'}</td>
       <td style="${gStyle}">${mkIn(r.airfare,'number','airfare',r.id,'68px')}</td>
       <td style="${gStyle}">${mkIn(r.hrate,'number','hrate',r.id,'56px')}</td>
       <td style="${gStyle}">${mkIn(r.taxi,'number','taxi',r.id,'70px')}</td>
       <td style="${gStyle}">${mkIn(r.fpd,'number','fpd',r.id,'50px')}</td>
-      <td style="${gStyle}">${mkIn(r.misc||0,'number','misc',r.id,'58px','placeholder="0"')}</td>
+      <td style="${gStyle}">${mkIn(r.misc,'number','misc',r.id,'58px','placeholder="0"')}</td>
+      <td style="${gStyle}">${mkIn(r.visa,'number','visa',r.id,'56px','placeholder="0"')}</td>
+      <td style="${gStyle}">${mkIn(r.reg,'number','reg',r.id,'62px','placeholder="0"')}</td>
       <td class="col-pl">${fmt(planned)}</td>
       <td class="col-ac" style="font-weight:700;text-align:right;padding-right:7px;">${autoActual?fmt(autoActual):'—'}</td>
       <td class="col-vr ${vc}">${vari!=null?fmtD(vari):'—'}</td>
@@ -2767,6 +2906,8 @@ function renderActualizeTable(){
     <td style="text-align:right;background:#f0faf5">${fmt(tTx)}</td>
     <td style="text-align:right;background:#f0faf5">${fmt(tFd)}</td>
     <td style="text-align:right;background:#f0faf5">${fmt(tMisc)}</td>
+    <td style="text-align:right;background:#f0faf5">${tVis?fmt(tVis):''}</td>
+    <td style="text-align:right;background:#f0faf5">${tRg?fmt(tRg):''}</td>
     <td class="tf-pl">${fmt(tP)}</td>
     <td class="tf-ac">${tA?fmt(tA):'—'}</td>
     <td class="${tA?(vAP<=0?'tf-vp':'tf-vn'):''}">${tA?fmtD(vAP):'—'}</td><td></td>
@@ -2774,21 +2915,33 @@ function renderActualizeTable(){
 
   // ── Actualize BOV bar ──────────────────────────────────
   const aw = getYD().awarded || 0;
-  const actPct = aw > 0 ? Math.round(tA/aw*100) : 0;
-  const isOver = tA > aw;
-  const actTip = `Actualized\n= Airfare + Hotel + Taxi + Food + Misc\nfor all Actualize-status trips\n\n= ${fmt(tA)} ÷ ${fmt(aw)} Awarded\n= ${actPct}%\n\n${isOver?'▲ Over by '+fmt(tA-aw):'▼ '+fmt(aw-tA)+' remaining'}`;
+  const tProposed = currentRows().filter(r => !r.archived && isActive(r)).reduce((s,r) => s + calcP(r), 0);
+  const actPct  = aw > 0 ? Math.round(tA/aw*100) : 0;
+  const propPct = aw > 0 ? Math.round(tProposed/aw*100) : 0;
+  const isOver  = tA > aw;
+  const actTip  = `Actualize\n= Actual spend for Actualize-status trips\n= ${fmt(tA)}\n= ${actPct}% of Awarded (${fmt(aw)})`;
+  const propTip = `Proposed\n= Estimated cost of active (Proposed/Approved) trips\n= ${fmt(tProposed)}\n= ${propPct}% of Awarded (${fmt(aw)})`;
+
   const bigEl = document.getElementById('bov-act-pct');
   if(bigEl){ bigEl.textContent = aw>0 ? actPct+'%' : '—'; bigEl.className = 'bov-big-pct'+(isOver?' over':''); bigEl.setAttribute('data-tip', actTip); }
+  const propEl = document.getElementById('bov-prop-pct');
+  if(propEl){ propEl.textContent = aw>0 ? propPct+'%' : '—'; propEl.setAttribute('data-tip', propTip); }
+
   const fillEl = document.getElementById('bov-act-bar-fill');
-  if(fillEl){ fillEl.style.width = Math.min(tA/Math.max(aw,1)*100,100)+'%'; }
-  const actTrack = document.querySelector('#bov-act-bar .bov-track');
-  if(actTrack) actTrack.setAttribute('data-tip', actTip);
+  if(fillEl){ fillEl.style.width = Math.min(tA/Math.max(aw,1)*100,100)+'%'; fillEl.setAttribute('data-tip', actTip); }
+  const propFillEl = document.getElementById('bov-prop-bar-fill');
+  if(propFillEl){ propFillEl.style.width = Math.min(tProposed/Math.max(aw,1)*100,100)+'%'; propFillEl.setAttribute('data-tip', propTip); }
+
   const lblEl = document.getElementById('bov-act-lbl');
-  if(lblEl) lblEl.textContent = actPct>=18 ? actPct+'% actualized' : actPct+'%';
+  if(lblEl) lblEl.textContent = actPct>=18 ? actPct+'% actualized' : actPct>0 ? actPct+'%' : '';
+  const propLblEl = document.getElementById('bov-prop-lbl');
+  if(propLblEl) propLblEl.textContent = propPct>=18 ? propPct+'% proposed' : propPct>0 ? propPct+'%' : '';
+
   const statsEl = document.getElementById('bov-act-stats');
   if(statsEl) statsEl.innerHTML = `
     <span class="bov-stat"><span class="dot dot-aw"></span>Awarded <strong>${fmt(aw)}</strong></span>
     <span class="bov-stat"><span class="dot dot-ac"></span>Actualized <strong>${fmt(tA)}</strong><span class="bov-pct-tag actual">${actPct}%</span></span>
+    <span class="bov-stat"><span class="dot dot-pl"></span>Proposed <strong>${fmt(tProposed)}</strong><span class="bov-pct-tag">${propPct}%</span></span>
     <span class="bov-stat" style="margin-left:8px">${isOver
       ? `<span class="bov-over-badge">▲ Over by ${fmt(tA-aw)}</span>`
       : `<span class="bov-rem-badge">▼ ${fmt(aw-tA)} remaining</span>`}</span>`;
@@ -2803,7 +2956,7 @@ function printDashboard(){
   const actualize = allRows.filter(r => r.status === 'Actualize');
   const aw = yd.awarded || 0;
   const tEstimated      = active.reduce((s,r) => s + calcP(r), 0);
-  const tActualized     = actualize.reduce((s,r) => s + (num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)), 0);
+  const tActualized     = actualize.reduce((s,r) => s + (num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)+num(r.reg)), 0);
   const tRemainingActual= Math.max(aw - tActualized, 0);
   const tRemainingEst   = Math.max(aw - (tEstimated + tActualized), 0);
   const tProposed       = allRows.filter(r=>r.status==='Proposed').reduce((s,r)=>s+calcP(r),0);
@@ -2836,12 +2989,12 @@ function printDashboard(){
   // By Quarter
   const byQ = {}; QUARTERS.forEach(q => byQ[q] = {est:0, actual:0, n:0});
   active.forEach(r    => { if(byQ[r.quarter]){ byQ[r.quarter].est += calcP(r); byQ[r.quarter].n++; }});
-  actualize.forEach(r => { if(byQ[r.quarter])  byQ[r.quarter].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa); });
+  actualize.forEach(r => { if(byQ[r.quarter])  byQ[r.quarter].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)+num(r.reg); });
 
   // By Region
   const byR = {}; REGIONS().forEach(r => byR[r] = {est:0, actual:0, n:0});
   active.forEach(r    => { if(byR[r.region]){ byR[r.region].est += calcP(r); byR[r.region].n++; }});
-  actualize.forEach(r => { if(byR[r.region])  byR[r.region].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa); });
+  actualize.forEach(r => { if(byR[r.region])  byR[r.region].actual += num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)+num(r.reg); });
 
   // Status breakdown
   const bySt = {}; STATUSES.forEach(s => bySt[s] = {n:0, amt:0});
@@ -3072,7 +3225,7 @@ function printDashboard(){
       </tr></thead>
       <tbody>${topRows.map((r,i)=>{
         const est = calcP(r);
-        const act = r.status==='Actualize' ? num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa) : 0;
+        const act = r.status==='Actualize' ? num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)+num(r.reg) : 0;
         const vari = act > 0 ? act - est : null;
         return `<tr>
           <td><strong>${r.traveler||'—'}</strong></td>
@@ -3261,7 +3414,7 @@ function exportCSV(){
   const esc=v=>{ const s=String(v==null?'':v); return(s.includes(',')||s.includes('"')||s.includes('\n'))?`"${s.replace(/"/g,'""')}"`:`${s}`; };
   const csv=[hdrs.map(esc).join(','),...rows.map(r=>{
     const hotel=num(r.nights)*num(r.hrate), food=num(r.fpd)*num(r.days);
-    const planned=calcP(r), actual=r.status==='Actualize'?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa):num(r.actual);
+    const planned=calcP(r), actual=r.status==='Actualize'?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)+num(r.reg):num(r.actual);
     const vari=(actual>0&&isActive(r))?actual-planned:'';
     return[r.fy,r.status,r.owner,r.manager||'',r.traveler,r.city,r.country,r.region,r.purpose,
       r.quarter,r.depart,r.ret,r.airfare,r.nights,r.hrate,hotel,r.visa,
@@ -3469,7 +3622,7 @@ function buildRecordsBrowser(){
   dmPage=Math.min(dmPage,pages-1);
   const pageRows=rows.slice(dmPage*DM_PAGE_SIZE,(dmPage+1)*DM_PAGE_SIZE);
   const tP=pageRows.reduce((s,r)=>s+(isActive(r)?calcP(r):0),0);
-  const tA=pageRows.reduce((s,r)=>s+(isActive(r)?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa):0),0);
+  const tA=pageRows.reduce((s,r)=>s+(isActive(r)?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)+num(r.reg):0),0);
 
   function th(lbl,field,extra=''){
     const sorted=dmSort.field===field;
@@ -3480,7 +3633,7 @@ function buildRecordsBrowser(){
   tblEl.innerHTML=`<table class="dm-tbl">
     <thead><tr>${th('FY','_fy')}${th('STATUS','status')}${th('IS&T UNIT','owner')}${th('MANAGER','manager')}${th('TRAVELER','traveler')}${th('CITY','city')}${th('REGION','region')}${th('PURPOSE','purpose')}${th('QTR','quarter')}${th('DEPART','depart')}${th('PLANNED','airfare','r')}${th('ACTUAL','actual','r')}<th>ACTIONS</th></tr></thead>
     <tbody>${pageRows.map(r=>{
-      const planned=isActive(r)?calcP(r):0, actual=r.status==='Actualize'?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa):num(r.actual);
+      const planned=isActive(r)?calcP(r):0, actual=r.status==='Actualize'?num(r.airfare)+num(r.hrate)+num(r.taxi)+num(r.fpd)+num(r.misc)+num(r.visa)+num(r.reg):num(r.actual);
       return `<tr>
         <td><span class="badge r-na">${r._fy}</span></td>
         <td><span class="badge st-${r.status}" style="font-size:11px">${r.status}</span></td>
