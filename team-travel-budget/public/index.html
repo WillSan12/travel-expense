@@ -1583,17 +1583,37 @@ function stSel(status,rid){
     +STATUSES.map(s=>`<option value="${s}"${s===status?' selected':''}>${s}</option>`).join('')+'</select>';
 }
 
+function fixStickyOffsets(tbodyId, frozenCount){
+  const table = document.getElementById(tbodyId)?.closest('table');
+  if(!table) return;
+  const headerCells = [...table.querySelectorAll('thead tr th')];
+  let offset = 0;
+  headerCells.slice(0, frozenCount).forEach((th, i) => {
+    const w = th.getBoundingClientRect().width;
+    const isLast = i === frozenCount - 1;
+    th.style.left = offset + 'px';
+    // Apply to all body rows and tfoot
+    table.querySelectorAll(`tbody tr td:nth-child(${i+1}), tfoot tr td:nth-child(${i+1})`).forEach(td => {
+      td.classList.add('col-sticky');
+      if(isLast) td.classList.add('col-sticky-last'); else td.classList.remove('col-sticky-last');
+      td.style.left = offset + 'px';
+    });
+    if(isLast){ th.classList.add('col-sticky-last'); } else { th.classList.remove('col-sticky-last'); }
+    offset += w;
+  });
+}
+
 function renderTable(){
   // Update status column sort icon
   const thead = document.querySelector('#budget-tbody')?.closest('table')?.querySelector('thead tr');
   if(thead) thead.innerHTML = `
-    <th class="col-sticky" style="width:28px;left:0px">#</th>
-    <th class="col-sticky" style="width:95px;left:28px;cursor:pointer;user-select:none" onclick="setBudgetSort('status')">STATUS <span style="font-size:11px">${budgetSort.field==='status' ? (budgetSort.dir==='asc' ? '▲' : '▼') : '↕'}</span></th>
-    <th class="col-sticky" style="width:90px;left:123px">IS&amp;T UNIT</th>
-    <th class="col-sticky" style="width:260px;left:213px">TRIP DESCRIPTION</th>
-    <th class="col-sticky" style="width:130px;left:473px">IMT</th>
-    <th class="col-sticky" style="width:130px;left:603px">MANAGER</th>
-    <th class="col-sticky col-sticky-last" style="width:155px;left:733px">TRAVELER</th>
+    <th class="col-sticky" style="width:28px">#</th>
+    <th class="col-sticky" style="width:95px;cursor:pointer;user-select:none" onclick="setBudgetSort('status')">STATUS <span style="font-size:11px">${budgetSort.field==='status' ? (budgetSort.dir==='asc' ? '▲' : '▼') : '↕'}</span></th>
+    <th class="col-sticky" style="width:90px">IS&amp;T UNIT</th>
+    <th class="col-sticky" style="width:260px">TRIP DESCRIPTION</th>
+    <th class="col-sticky" style="width:130px">IMT</th>
+    <th class="col-sticky" style="width:130px">MANAGER</th>
+    <th class="col-sticky" style="width:155px">TRAVELER</th>
     <th>REGION</th><th>PURPOSE</th><th style="width:80px">QTR</th>
     <th class="r" style="width:52px">DAYS</th>
     <th style="width:90px">APPROVED</th>
@@ -1629,13 +1649,13 @@ function renderTable(){
     const req = (val) => !val ? 'class="td-req"' : '';
     const reqSel = (val) => !val ? 'class="td-req"' : '';
     return `<tr class="${rcls}" data-rid="${r.id}" onclick="pinRow(${r.id})" style="cursor:pointer">
-      <td class="col-sticky" style="text-align:center;color:var(--g4);font-size:11px;left:0px">${i+1}</td>
-      <td class="col-sticky td-st" style="left:28px">${stSel(r.status,r.id)}${(r.status==='Cancelled'||r.status==='Deferred')&&r.status_reason?`<div style="font-size:9px;color:#888;margin-top:3px;padding:0 2px;white-space:normal;max-width:130px;" title="${escH(r.status_reason)}">📝 ${escH(r.status_reason.length>40?r.status_reason.slice(0,40)+'…':r.status_reason)}</div>`:''}</td>
-      <td class="col-sticky" style="left:123px" ${reqSel(r.owner)}>${mkMasterSel(r.owner,'owner',r.id,'owners')}</td>
-      <td class="col-sticky" style="left:213px" ${reqSel((r.description||'').trim())}><input type="text" value="${escH(r.description||'')}" placeholder="Add description…" style="width:100%;border:1px solid var(--g3);border-radius:5px;padding:3px 6px;font-size:12px;font-family:inherit;background:var(--white);color:var(--navy);outline:none;" onchange="upd(${r.id},'description',this.value)"/></td>
-      <td class="col-sticky" style="left:473px" ${reqSel(r.imt)}>${mkIMTSel(r.imt,r.id)}</td>
-      <td class="col-sticky" style="left:603px" ${r.traveler==='Wayne Lawrence' ? '' : reqSel(r.manager)}>${mkMasterSel(r.manager,'manager',r.id,'managers')}</td>
-      <td class="col-sticky col-sticky-last" style="left:733px" ${reqSel(r.traveler)}>${mkTravelerSel(r.traveler,r.id,r.manager,r.imt)}</td>
+      <td class="col-sticky" style="text-align:center;color:var(--g4);font-size:11px">${i+1}</td>
+      <td class="col-sticky td-st">${stSel(r.status,r.id)}${(r.status==='Cancelled'||r.status==='Deferred')&&r.status_reason?`<div style="font-size:9px;color:#888;margin-top:3px;padding:0 2px;white-space:normal;max-width:130px;" title="${escH(r.status_reason)}">📝 ${escH(r.status_reason.length>40?r.status_reason.slice(0,40)+'…':r.status_reason)}</div>`:''}</td>
+      <td class="col-sticky" ${reqSel(r.owner)}>${mkMasterSel(r.owner,'owner',r.id,'owners')}</td>
+      <td class="col-sticky" ${reqSel((r.description||'').trim())}><input type="text" value="${escH(r.description||'')}" placeholder="Add description…" style="width:100%;border:1px solid var(--g3);border-radius:5px;padding:3px 6px;font-size:12px;font-family:inherit;background:var(--white);color:var(--navy);outline:none;" onchange="upd(${r.id},'description',this.value)"/></td>
+      <td class="col-sticky" ${reqSel(r.imt)}>${mkIMTSel(r.imt,r.id)}</td>
+      <td class="col-sticky" ${r.traveler==='Wayne Lawrence' ? '' : reqSel(r.manager)}>${mkMasterSel(r.manager,'manager',r.id,'managers')}</td>
+      <td class="col-sticky" ${reqSel(r.traveler)}>${mkTravelerSel(r.traveler,r.id,r.manager,r.imt)}</td>
       <td ${reqSel(r.region)}>${mkSelP(REGIONS(),r.region,'region',r.id)}</td>
       <td ${reqSel(r.purpose)}>${mkSelP(PURPOSES(),r.purpose,'purpose',r.id,'min-width:140px')}</td>
       <td ${reqSel(r.quarter)}>${mkSelP(QUARTERS,r.quarter,'quarter',r.id)}</td>
@@ -1673,6 +1693,7 @@ function renderTable(){
   pill.textContent = d>=0 ? fmt(d)+' under' : fmt(Math.abs(d))+' OVER';
   pill.className   = 'var-pill ' + (d>0?'var-under':d<0?'var-over':'var-zero');
   updateBOV(tP, tA, tCx+tDf, awarded);
+  fixStickyOffsets('budget-tbody', 7);
 }
 
 function updateBOV(pl,ac,ex,aw){
@@ -2838,12 +2859,12 @@ function renderActualizeTable(){
   // Render sortable header dynamically
   const thead = document.querySelector('#actualize-tbody')?.closest('table')?.querySelector('thead tr');
   if(thead) thead.innerHTML = `
-    <th class="col-sticky" style="width:28px;left:0px">#</th>
-    <th class="col-sticky" style="width:90px;left:28px">STATUS</th>
-    <th class="col-sticky" style="min-width:90px;left:118px;cursor:pointer;user-select:none" onclick="setActSort('owner')">IS&amp;T ${actSortIcon('owner')}</th>
-    <th class="col-sticky" style="width:260px;left:208px">TRIP DESCRIPTION</th>
-    <th class="col-sticky" style="min-width:140px;left:468px;cursor:pointer;user-select:none" onclick="setActSort('manager')">MANAGER ${actSortIcon('manager')}</th>
-    <th class="col-sticky col-sticky-last" style="min-width:155px;left:608px;cursor:pointer;user-select:none" onclick="setActSort('traveler')">TRAVELER ${actSortIcon('traveler')}</th>
+    <th class="col-sticky" style="width:28px">#</th>
+    <th class="col-sticky" style="width:90px">STATUS</th>
+    <th class="col-sticky" style="min-width:90px;cursor:pointer;user-select:none" onclick="setActSort('owner')">IS&amp;T ${actSortIcon('owner')}</th>
+    <th class="col-sticky" style="width:260px">TRIP DESCRIPTION</th>
+    <th class="col-sticky" style="min-width:140px;cursor:pointer;user-select:none" onclick="setActSort('manager')">MANAGER ${actSortIcon('manager')}</th>
+    <th class="col-sticky" style="min-width:155px;cursor:pointer;user-select:none" onclick="setActSort('traveler')">TRAVELER ${actSortIcon('traveler')}</th>
     <th style="cursor:pointer;user-select:none" onclick="setActSort('region')">REGION ${actSortIcon('region')}</th>
     <th style="cursor:pointer;user-select:none" onclick="setActSort('purpose')">PURPOSE ${actSortIcon('purpose')}</th>
     <th style="width:80px;cursor:pointer;user-select:none" onclick="setActSort('quarter')">QTR ${actSortIcon('quarter')}</th>
@@ -2886,12 +2907,12 @@ function renderActualizeTable(){
     const actRcls = (pinnedRowId===r.id ? 'row-pin' : '');
     const gStyle = 'background:#f0faf5;';
     return `<tr class="${actRcls}" data-rid="${r.id}" onclick="pinRow(${r.id})" style="cursor:pointer">
-      <td class="col-sticky" style="text-align:center;color:var(--g4);font-size:11px;left:0px">${i+1}</td>
-      <td class="col-sticky td-st" style="left:28px">${stSel(r.status,r.id)}${(r.status==='Cancelled'||r.status==='Deferred')&&r.status_reason?`<div style="font-size:9px;color:#888;margin-top:3px;padding:0 2px;white-space:normal;max-width:130px;" title="${escH(r.status_reason)}">📝 ${escH(r.status_reason.length>40?r.status_reason.slice(0,40)+'…':r.status_reason)}</div>`:''}</td>
-      <td class="col-sticky" style="left:118px">${mkMasterSel(r.owner,'owner',r.id,'owners','width:100%')}</td>
-      <td class="col-sticky" style="left:208px"><input type="text" value="${escH(r.description||'')}" placeholder="—" style="width:100%;border:1px solid var(--g3);border-radius:5px;padding:3px 6px;font-size:12px;font-family:inherit;background:var(--white);color:var(--navy);outline:none;" onchange="upd(${r.id},'description',this.value)"/></td>
-      <td class="col-sticky" style="left:468px">${mkMasterSel(r.manager,'manager',r.id,'managers','width:100%')}</td>
-      <td class="col-sticky col-sticky-last" style="left:608px">${mkTravelerSel(r.traveler,r.id,r.manager,null,'width:100%')}</td>
+      <td class="col-sticky" style="text-align:center;color:var(--g4);font-size:11px">${i+1}</td>
+      <td class="col-sticky td-st">${stSel(r.status,r.id)}${(r.status==='Cancelled'||r.status==='Deferred')&&r.status_reason?`<div style="font-size:9px;color:#888;margin-top:3px;padding:0 2px;white-space:normal;max-width:130px;" title="${escH(r.status_reason)}">📝 ${escH(r.status_reason.length>40?r.status_reason.slice(0,40)+'…':r.status_reason)}</div>`:''}</td>
+      <td class="col-sticky">${mkMasterSel(r.owner,'owner',r.id,'owners','width:100%')}</td>
+      <td class="col-sticky"><input type="text" value="${escH(r.description||'')}" placeholder="—" style="width:100%;border:1px solid var(--g3);border-radius:5px;padding:3px 6px;font-size:12px;font-family:inherit;background:var(--white);color:var(--navy);outline:none;" onchange="upd(${r.id},'description',this.value)"/></td>
+      <td class="col-sticky">${mkMasterSel(r.manager,'manager',r.id,'managers','width:100%')}</td>
+      <td class="col-sticky">${mkTravelerSel(r.traveler,r.id,r.manager,null,'width:100%')}</td>
       <td style="padding:4px 8px;font-weight:600;color:var(--g5);">${r.region||'—'}</td>
       <td>${mkSelP(PURPOSES(),r.purpose,'purpose',r.id,'min-width:140px')}</td>
       <td style="padding:4px 8px;font-weight:600;color:var(--navy);text-align:center;">${r.quarter||'—'}</td>
@@ -2957,6 +2978,7 @@ function renderActualizeTable(){
     <span class="bov-stat" style="margin-left:8px">${isOver
       ? `<span class="bov-over-badge">▲ Over by ${fmt(tA-aw)}</span>`
       : `<span class="bov-rem-badge">▼ ${fmt(aw-tA)} remaining</span>`}</span>`;
+  fixStickyOffsets('actualize-tbody', 6);
 }
 
 function printDashboard(){
