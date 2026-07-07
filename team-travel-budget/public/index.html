@@ -173,6 +173,15 @@ input[type=number]{-moz-appearance:textfield;}
 .row-pin{background:#fffbeb!important;outline:2px solid #f59e0b;outline-offset:-2px;box-shadow:0 2px 8px rgba(245,158,11,.18);}
 .row-pin td{color:#78350f!important;}
 .row-pin input,.row-pin select{border-color:#f59e0b!important;}
+/* Frozen (sticky-left) columns */
+.col-sticky{position:sticky;z-index:2;background:var(--white);}
+.col-sticky-last{box-shadow:4px 0 8px rgba(0,0,0,.13);}
+thead th.col-sticky{z-index:20;background:var(--navy);}
+thead th.col-sticky-last{box-shadow:4px 0 8px rgba(0,0,0,.28);}
+tbody tr:nth-child(even) .col-sticky{background:#f9f9fb;}
+tbody tr:hover:not(.row-cx):not(.row-df) .col-sticky{background:#fafafe;}
+.row-act .col-sticky{background:#f5f3ff;}
+.row-pin .col-sticky{background:#fffbeb!important;}
 .field-required{border-color:var(--red)!important;background:#fff5f5!important;}
 .field-required-sel select,.td-required-sel select{border:1px solid var(--red)!important;background:#fff5f5!important;}
 .td-req input,.td-req select{border:1px solid var(--red)!important;background:#fff5f5!important;}
@@ -1578,11 +1587,13 @@ function renderTable(){
   // Update status column sort icon
   const thead = document.querySelector('#budget-tbody')?.closest('table')?.querySelector('thead tr');
   if(thead) thead.innerHTML = `
-    <th style="width:28px">#</th>
-    <th style="width:95px;cursor:pointer;user-select:none" onclick="setBudgetSort('status')">STATUS <span style="font-size:11px">${budgetSort.field==='status' ? (budgetSort.dir==='asc' ? '▲' : '▼') : '↕'}</span></th>
-    <th>IS&amp;T UNIT</th>
-    <th style="width:260px">TRIP DESCRIPTION</th>
-    <th>IMT</th><th>MANAGER</th><th>TRAVELER</th>
+    <th class="col-sticky" style="width:28px;left:0px">#</th>
+    <th class="col-sticky" style="width:95px;left:28px;cursor:pointer;user-select:none" onclick="setBudgetSort('status')">STATUS <span style="font-size:11px">${budgetSort.field==='status' ? (budgetSort.dir==='asc' ? '▲' : '▼') : '↕'}</span></th>
+    <th class="col-sticky" style="width:90px;left:123px">IS&amp;T UNIT</th>
+    <th class="col-sticky" style="width:260px;left:213px">TRIP DESCRIPTION</th>
+    <th class="col-sticky" style="width:130px;left:473px">IMT</th>
+    <th class="col-sticky" style="width:130px;left:603px">MANAGER</th>
+    <th class="col-sticky col-sticky-last" style="width:155px;left:733px">TRAVELER</th>
     <th>REGION</th><th>PURPOSE</th><th style="width:80px">QTR</th>
     <th class="r" style="width:52px">DAYS</th>
     <th style="width:90px">APPROVED</th>
@@ -1618,13 +1629,13 @@ function renderTable(){
     const req = (val) => !val ? 'class="td-req"' : '';
     const reqSel = (val) => !val ? 'class="td-req"' : '';
     return `<tr class="${rcls}" data-rid="${r.id}" onclick="pinRow(${r.id})" style="cursor:pointer">
-      <td style="text-align:center;color:var(--g4);font-size:11px">${i+1}</td>
-      <td class="td-st">${stSel(r.status,r.id)}${(r.status==='Cancelled'||r.status==='Deferred')&&r.status_reason?`<div style="font-size:9px;color:#888;margin-top:3px;padding:0 2px;white-space:normal;max-width:130px;" title="${escH(r.status_reason)}">📝 ${escH(r.status_reason.length>40?r.status_reason.slice(0,40)+'…':r.status_reason)}</div>`:''}</td>
-      <td ${reqSel(r.owner)}>${mkMasterSel(r.owner,'owner',r.id,'owners')}</td>
-      <td ${reqSel((r.description||'').trim())}><input type="text" value="${escH(r.description||'')}" placeholder="Add description…" style="width:100%;border:1px solid var(--g3);border-radius:5px;padding:3px 6px;font-size:12px;font-family:inherit;background:var(--white);color:var(--navy);outline:none;" onchange="upd(${r.id},'description',this.value)"/></td>
-      <td ${reqSel(r.imt)}>${mkIMTSel(r.imt,r.id)}</td>
-      <td ${r.traveler==='Wayne Lawrence' ? '' : reqSel(r.manager)}>${mkMasterSel(r.manager,'manager',r.id,'managers')}</td>
-      <td ${reqSel(r.traveler)}>${mkTravelerSel(r.traveler,r.id,r.manager,r.imt)}</td>
+      <td class="col-sticky" style="text-align:center;color:var(--g4);font-size:11px;left:0px">${i+1}</td>
+      <td class="col-sticky td-st" style="left:28px">${stSel(r.status,r.id)}${(r.status==='Cancelled'||r.status==='Deferred')&&r.status_reason?`<div style="font-size:9px;color:#888;margin-top:3px;padding:0 2px;white-space:normal;max-width:130px;" title="${escH(r.status_reason)}">📝 ${escH(r.status_reason.length>40?r.status_reason.slice(0,40)+'…':r.status_reason)}</div>`:''}</td>
+      <td class="col-sticky" style="left:123px" ${reqSel(r.owner)}>${mkMasterSel(r.owner,'owner',r.id,'owners')}</td>
+      <td class="col-sticky" style="left:213px" ${reqSel((r.description||'').trim())}><input type="text" value="${escH(r.description||'')}" placeholder="Add description…" style="width:100%;border:1px solid var(--g3);border-radius:5px;padding:3px 6px;font-size:12px;font-family:inherit;background:var(--white);color:var(--navy);outline:none;" onchange="upd(${r.id},'description',this.value)"/></td>
+      <td class="col-sticky" style="left:473px" ${reqSel(r.imt)}>${mkIMTSel(r.imt,r.id)}</td>
+      <td class="col-sticky" style="left:603px" ${r.traveler==='Wayne Lawrence' ? '' : reqSel(r.manager)}>${mkMasterSel(r.manager,'manager',r.id,'managers')}</td>
+      <td class="col-sticky col-sticky-last" style="left:733px" ${reqSel(r.traveler)}>${mkTravelerSel(r.traveler,r.id,r.manager,r.imt)}</td>
       <td ${reqSel(r.region)}>${mkSelP(REGIONS(),r.region,'region',r.id)}</td>
       <td ${reqSel(r.purpose)}>${mkSelP(PURPOSES(),r.purpose,'purpose',r.id,'min-width:140px')}</td>
       <td ${reqSel(r.quarter)}>${mkSelP(QUARTERS,r.quarter,'quarter',r.id)}</td>
@@ -2765,11 +2776,12 @@ document.addEventListener('focusin', e => {
   document.querySelectorAll(`#budget-tbody tr[data-rid="${rid}"], #actualize-tbody tr[data-rid="${rid}"]`).forEach(r => r.classList.add('row-pin'));
 });
 
-// Tab cycles through every input/select in the active row
+// Tab cycles through every input/select in the active row; Enter keeps the row pinned
 document.addEventListener('keydown', e => {
-  if (e.key !== 'Tab') return;
   const tr = e.target.closest('#budget-tbody tr, #actualize-tbody tr');
   if (!tr) return;
+  if (e.key === 'Enter') { e.preventDefault(); return; }
+  if (e.key !== 'Tab') return;
   const fields = [...tr.querySelectorAll('input:not([disabled]), select:not([disabled])')];
   if (fields.length < 2) return;
   const idx = fields.indexOf(e.target);
@@ -2826,12 +2838,12 @@ function renderActualizeTable(){
   // Render sortable header dynamically
   const thead = document.querySelector('#actualize-tbody')?.closest('table')?.querySelector('thead tr');
   if(thead) thead.innerHTML = `
-    <th style="width:28px">#</th>
-    <th style="width:90px">STATUS</th>
-    <th style="min-width:90px;cursor:pointer;user-select:none" onclick="setActSort('owner')">IS&amp;T ${actSortIcon('owner')}</th>
-    <th style="width:260px">TRIP DESCRIPTION</th>
-    <th style="min-width:140px;cursor:pointer;user-select:none" onclick="setActSort('manager')">MANAGER ${actSortIcon('manager')}</th>
-    <th style="min-width:155px;cursor:pointer;user-select:none" onclick="setActSort('traveler')">TRAVELER ${actSortIcon('traveler')}</th>
+    <th class="col-sticky" style="width:28px;left:0px">#</th>
+    <th class="col-sticky" style="width:90px;left:28px">STATUS</th>
+    <th class="col-sticky" style="min-width:90px;left:118px;cursor:pointer;user-select:none" onclick="setActSort('owner')">IS&amp;T ${actSortIcon('owner')}</th>
+    <th class="col-sticky" style="width:260px;left:208px">TRIP DESCRIPTION</th>
+    <th class="col-sticky" style="min-width:140px;left:468px;cursor:pointer;user-select:none" onclick="setActSort('manager')">MANAGER ${actSortIcon('manager')}</th>
+    <th class="col-sticky col-sticky-last" style="min-width:155px;left:608px;cursor:pointer;user-select:none" onclick="setActSort('traveler')">TRAVELER ${actSortIcon('traveler')}</th>
     <th style="cursor:pointer;user-select:none" onclick="setActSort('region')">REGION ${actSortIcon('region')}</th>
     <th style="cursor:pointer;user-select:none" onclick="setActSort('purpose')">PURPOSE ${actSortIcon('purpose')}</th>
     <th style="width:80px;cursor:pointer;user-select:none" onclick="setActSort('quarter')">QTR ${actSortIcon('quarter')}</th>
@@ -2874,12 +2886,12 @@ function renderActualizeTable(){
     const actRcls = (pinnedRowId===r.id ? 'row-pin' : '');
     const gStyle = 'background:#f0faf5;';
     return `<tr class="${actRcls}" data-rid="${r.id}" onclick="pinRow(${r.id})" style="cursor:pointer">
-      <td style="text-align:center;color:var(--g4);font-size:11px">${i+1}</td>
-      <td class="td-st">${stSel(r.status,r.id)}${(r.status==='Cancelled'||r.status==='Deferred')&&r.status_reason?`<div style="font-size:9px;color:#888;margin-top:3px;padding:0 2px;white-space:normal;max-width:130px;" title="${escH(r.status_reason)}">📝 ${escH(r.status_reason.length>40?r.status_reason.slice(0,40)+'…':r.status_reason)}</div>`:''}</td>
-      <td>${mkMasterSel(r.owner,'owner',r.id,'owners','width:100%')}</td>
-      <td><input type="text" value="${escH(r.description||'')}" placeholder="—" style="width:100%;border:1px solid var(--g3);border-radius:5px;padding:3px 6px;font-size:12px;font-family:inherit;background:var(--white);color:var(--navy);outline:none;" onchange="upd(${r.id},'description',this.value)"/></td>
-      <td>${mkMasterSel(r.manager,'manager',r.id,'managers','width:100%')}</td>
-      <td>${mkTravelerSel(r.traveler,r.id,r.manager,null,'width:100%')}</td>
+      <td class="col-sticky" style="text-align:center;color:var(--g4);font-size:11px;left:0px">${i+1}</td>
+      <td class="col-sticky td-st" style="left:28px">${stSel(r.status,r.id)}${(r.status==='Cancelled'||r.status==='Deferred')&&r.status_reason?`<div style="font-size:9px;color:#888;margin-top:3px;padding:0 2px;white-space:normal;max-width:130px;" title="${escH(r.status_reason)}">📝 ${escH(r.status_reason.length>40?r.status_reason.slice(0,40)+'…':r.status_reason)}</div>`:''}</td>
+      <td class="col-sticky" style="left:118px">${mkMasterSel(r.owner,'owner',r.id,'owners','width:100%')}</td>
+      <td class="col-sticky" style="left:208px"><input type="text" value="${escH(r.description||'')}" placeholder="—" style="width:100%;border:1px solid var(--g3);border-radius:5px;padding:3px 6px;font-size:12px;font-family:inherit;background:var(--white);color:var(--navy);outline:none;" onchange="upd(${r.id},'description',this.value)"/></td>
+      <td class="col-sticky" style="left:468px">${mkMasterSel(r.manager,'manager',r.id,'managers','width:100%')}</td>
+      <td class="col-sticky col-sticky-last" style="left:608px">${mkTravelerSel(r.traveler,r.id,r.manager,null,'width:100%')}</td>
       <td style="padding:4px 8px;font-weight:600;color:var(--g5);">${r.region||'—'}</td>
       <td>${mkSelP(PURPOSES(),r.purpose,'purpose',r.id,'min-width:140px')}</td>
       <td style="padding:4px 8px;font-weight:600;color:var(--navy);text-align:center;">${r.quarter||'—'}</td>
