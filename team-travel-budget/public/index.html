@@ -170,8 +170,10 @@ input[type=number]{-moz-appearance:textfield;}
 .row-df{opacity:.5;}
 .row-act{background:#f5f3ff!important;}
 .row-act td{color:var(--purple);}
-.row-pin{background:#fffbeb!important;outline:2px solid #f59e0b;outline-offset:-2px;box-shadow:0 2px 8px rgba(245,158,11,.18);}
-.row-pin td{color:#78350f!important;}
+.row-pin{background:#fffbeb!important;box-shadow:0 2px 8px rgba(245,158,11,.18);}
+.row-pin td{color:#78350f!important;background:#fffbeb!important;border-top:2px solid #f59e0b!important;border-bottom:2px solid #f59e0b!important;}
+.row-pin td:first-child{border-left:2px solid #f59e0b!important;}
+.row-pin td:last-child{border-right:2px solid #f59e0b!important;}
 .row-pin input,.row-pin select{border-color:#f59e0b!important;}
 /* Frozen (sticky-left) columns */
 .col-sticky{position:sticky;z-index:2;background:var(--white);}
